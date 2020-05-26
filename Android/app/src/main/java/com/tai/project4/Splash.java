@@ -66,7 +66,6 @@ public class Splash extends FragmentActivity {
             });
             builder.show();
         }
-
     }
 
     private void flyIn() {
@@ -99,7 +98,7 @@ public class Splash extends FragmentActivity {
             public void onAnimationEnd(Animation arg0) {
 
                 Intent intent = new Intent(getApplicationContext(),
-                        StartActivity.class);
+                        LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -112,7 +111,6 @@ public class Splash extends FragmentActivity {
             public void onAnimationStart(Animation arg0) {
             }
         });
-
     }
 
     @Override
