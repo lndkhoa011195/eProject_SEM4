@@ -1,0 +1,5 @@
+MobileApp/app/build/
+MobileApp/.idea/libraries/
+MobileApp/.idea/caches/
+MobileApp/.gradle/
+MobileApp/local.properties
