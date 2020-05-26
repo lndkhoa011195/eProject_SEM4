@@ -36,6 +36,16 @@
             android:name=".Splash"
             android:noHistory="true"
             android:theme="@style/MyTheme.AppBarOverlay">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".RegisterActivity" />
+        <activity
+            android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,15 +53,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".HomeActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:theme="@style/MyTheme.home">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -62,11 +65,9 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".StartActivity"
-            android:screenOrientation="portrait" />
+            android:name=".StartActivity" />
         <activity
-            android:name=".ProductDetailActivity"
-            android:screenOrientation="portrait" />
+            android:name=".ProductDetailActivity" />
         <activity
             android:name=".MyCart"
             android:parentActivityName=".HomeActivity">
@@ -91,8 +92,7 @@
         </activity>
 
         <activity
-            android:name=".ProfileActivity"
-            android:screenOrientation="portrait" />
+            android:name=".ProfileActivity" />
         <activity
             android:name=".Category_wise_products"
             android:parentActivityName=".HomeActivity">
@@ -108,20 +108,15 @@
                 android:value="com.tai.project4.HomeActivity" />
         </activity>
         <activity
-            android:name=".ChangePassword"
-            android:screenOrientation="portrait" />
+            android:name=".ChangePassword" />
         <activity
-            android:name=".ChangeClientDetail"
-            android:screenOrientation="portrait" />
+            android:name=".ChangeClientDetail" />
         <activity
-            android:name=".ValidateOTP"
-            android:screenOrientation="portrait" />
+            android:name=".ValidateOTP" />
         <activity
-            android:name=".ForgetActivity"
-            android:screenOrientation="portrait" />
+            android:name=".ForgetActivity" />
         <activity
-            android:name=".OtpForgetActivity"
-            android:screenOrientation="portrait" />
+            android:name=".OtpForgetActivity" />
     </application>
 
 </manifest>

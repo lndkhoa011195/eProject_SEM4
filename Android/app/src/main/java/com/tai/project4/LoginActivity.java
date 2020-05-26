@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String PREFS = "PREFS";
     EditText etLogin_id, etPassword;
-    Button btnLogin;
+    Button btnLogin, btnSkip;
     String login_id, password;
     TextView signup, forget;
     SharedPreferences sp;
@@ -47,11 +47,20 @@ public class LoginActivity extends AppCompatActivity {
         etLogin_id = findViewById(R.id.loginid);
         etPassword = findViewById(R.id.password);
         btnLogin = findViewById(R.id.login);
+        btnSkip = findViewById(R.id.skip_login);
         forget = findViewById(R.id.forget);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 login();
+            }
+        });
+        btnSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
         signup.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +108,6 @@ public class LoginActivity extends AppCompatActivity {
                             JSONArray clientDetailArray = new JSONArray(s);
                             JSONObject json_data = new JSONObject();
                             json_data = clientDetailArray.getJSONObject(0);
-
 
                             edit.putString("loginid", json_data.getString("email"));
                             edit.putString("name", json_data.getString("name"));
