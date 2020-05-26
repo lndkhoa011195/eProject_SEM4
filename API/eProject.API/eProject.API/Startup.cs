@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eProject.API.Options;
+using eProject.DataAccess.EF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +31,8 @@ namespace eProject.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            string conn = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ShopDbContext>(op => op.UseSqlServer(conn),ServiceLifetime.Scoped, ServiceLifetime.Singleton);
             #region Swagger
 
             services.AddSwaggerGen(x =>
