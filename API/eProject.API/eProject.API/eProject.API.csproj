@@ -18,5 +18,11 @@
     <ProjectReference Include="..\eProject.DataAccess\eProject.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="eProject.API.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>
