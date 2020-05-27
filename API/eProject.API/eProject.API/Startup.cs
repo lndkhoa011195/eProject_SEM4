@@ -32,7 +32,8 @@ namespace eProject.API
         {
             services.AddControllers();
             string conn = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ShopDbContext>(op => op.UseSqlServer(conn),ServiceLifetime.Scoped, ServiceLifetime.Singleton);
+            //services.AddDbContext<ShopDbContext>(op => op.UseSqlServer(conn),ServiceLifetime.Scoped, ServiceLifetime.Singleton);
+            services.AddDbContext<ShopDbContext>(options =>  options.UseSqlServer(conn));
             #region Swagger
 
             services.AddSwaggerGen(x =>
