@@ -36,6 +36,7 @@ import java.net.URLEncoder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Body;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -56,23 +57,29 @@ public class LoginActivity extends AppCompatActivity {
 
         sp = getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE);
         edit = sp.edit();
-        apiInterface = APIClient.getClient().create(APIInterface.class);
         signup = findViewById(R.id.signup);
         etLogin_id = findViewById(R.id.loginid);
         etPassword = findViewById(R.id.password);
         btnLogin = findViewById(R.id.login);
         btnSkip = findViewById(R.id.skip_login);
         forget = findViewById(R.id.forget);
+
+        apiInterface = APIClient.getClient().create(APIInterface.class);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String txtEmail = etLogin_id.getText().toString();
                 final String txtPass = etPassword.getText().toString();
-                Call<Account> call3 = apiInterface.doPostLogin(txtEmail, txtPass);
+                if (txtEmail.isEmpty() || txtPass.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Đm nhập cho đủ vào", Toast.LENGTH_SHORT).show();
+                }
+                Call<Account> call3 = apiInterface.Login(new Account(){{ email = txtEmail; password = txtPass;}});
                 call3.enqueue(new Callback<Account>() {
                     @Override
                     public void onResponse(Call<Account> call, Response<Account> response) {
                         try {
+                            if (!response.isSuccessful())
+                                return;
                             Log.d("TAG", response.code() + "");
                             Account Account = response.body();
                             Data.userProfile = Account;
@@ -84,12 +91,12 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(i);
                                 finish();
                             } else {
-                                Toast.makeText(LoginActivity.this, "Invalid Login", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Login Invalid", Toast.LENGTH_SHORT).show();
                                 //edtPhone.setText("");
                                 etPassword.setText("");
                             }
                         } catch (Exception e) {
-                            Toast.makeText(LoginActivity.this, "Invalid Login", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Login Invalid", Toast.LENGTH_SHORT).show();
                             //edtPhone.setText("");
                             etPassword.setText("");
                         }

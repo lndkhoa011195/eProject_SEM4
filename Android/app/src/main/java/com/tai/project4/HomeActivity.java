@@ -239,7 +239,7 @@ public class HomeActivity extends AppCompatActivity
 //                    }
 //                    return result;
 
-                    String productUrl = "http://172.16.100.82:5544/api/Category/GetCategoryAndSubCategory/";
+                    String productUrl = "http://192.168.43.74:5656/api/Category/GetCategoryAndSubCategory/";
                     URL url = new URL(productUrl);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -420,7 +420,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             protected String doInBackground(Void... voids) {
                 try {
-                    String productUrl = "http://172.16.100.82:5544/api/Product/GetPromotionProducts/";
+                    String productUrl = "http://192.168.43.74:5656/api/Product/GetPromotionProducts/";
                     URL url = new URL(productUrl);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -522,7 +522,7 @@ public class HomeActivity extends AppCompatActivity
                 //String productUrl = getResources().getString(R.string.base_url) + "getBestSellingProducts/";
 
                 try {
-                    String productUrl = "http://172.16.100.82:5544/api/Product/GetRecentProducts/";
+                    String productUrl = "http://192.168.43.74:5656/api/Product/GetRecentProducts/";
                     URL url = new URL(productUrl);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();

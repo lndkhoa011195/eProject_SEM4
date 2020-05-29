@@ -5,12 +5,13 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Account implements Serializable {
-    @SerializedName("idAccount")
-    public String idAccount;
-    @SerializedName("nameAcc")
-    public String nameAcc;
-    @SerializedName("phone")
-    public String phone;
-    @SerializedName("email")
+
+    @SerializedName("Email")
     public String email;
+    @SerializedName("Password")
+    public String password;
+    @SerializedName("Name")
+    public String name;
+    @SerializedName("Phone")
+    public String phone;
 }
