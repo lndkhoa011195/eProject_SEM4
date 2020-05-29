@@ -46,6 +46,11 @@ namespace eProject.API.Controllers
         //    };
         //}
 
+
+        /// <summary>
+        /// Lấy danh sách tất cả Category
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetCategories")]
         public async Task<string> GetCategories()
         {
@@ -53,6 +58,10 @@ namespace eProject.API.Controllers
             return JsonConvert.SerializeObject(list);
         }
 
+        /// <summary>
+        /// Lấy danh sách tất cả SubCategory + Category
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetCategoryAndSubCategory")]
         public async Task<string> GetSubCategoryAndSubCategory()
         {

@@ -4,5 +4,70 @@
         <name>eProject.API</name>
     </assembly>
     <members>
+        <member name="M:eProject.API.Controllers.CategoryController.GetCategories">
+            <summary>
+            Lấy danh sách tất cả Category
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.CategoryController.GetSubCategoryAndSubCategory">
+            <summary>
+            Lấy danh sách tất cả SubCategory + Category
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.CustomerController.Authenticate(eProject.DataAccess.Models.Request.CustomerLoginRequest)">
+            <summary>
+            Chứng thực đăng nhập
+            </summary>
+            <param name="loginRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.CustomerController.GetProductsInCart(System.Int32)">
+            <summary>
+            Lấy danh sách sản phẩm trong giỏ hàng theo CustomerId
+            </summary>
+            <param name="_customerId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.CustomerController.AddToCart(eProject.DataAccess.Models.Request.CartRequest)">
+            <summary>
+            Thêm sản phẩm vào giỏ hàng
+            </summary>
+            <param name="addToCartRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.CustomerController.RemoveFromCart(eProject.DataAccess.Models.Request.CartRequest)">
+            <summary>
+            Giảm số lượng sản phẩm hoặc xoá sản phẩm khỏi giỏ hàng
+            </summary>
+            <param name="removeFromCartRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.ProductController.GetProducts">
+            <summary>
+            Lấy danh sách tất cả product
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.ProductController.GetProduct(System.Int32)">
+            <summary>
+            Lấy thông tin của product dựa vào id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.ProductController.GetRecentProducts">
+            <summary>
+            Lấy 12 sản phẩm được thêm vào gần nhất
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.ProductController.GetPromotionProducts">
+            <summary>
+            Lấy danh sách các sản phẩm quảng cáo
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

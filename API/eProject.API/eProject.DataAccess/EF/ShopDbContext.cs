@@ -23,6 +23,7 @@ namespace eProject.DataAccess.EF
         public DbSet<Product> Products { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Unit> Units { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,7 @@ namespace eProject.DataAccess.EF
             modelBuilder.Entity<Product>().ToTable("Product");
             modelBuilder.Entity<SubCategory>().ToTable("SubCategory");
             modelBuilder.Entity<Unit>().ToTable("Unit");
+            modelBuilder.Entity<Promotion>().ToTable("Promotion");
         }
     }
 }

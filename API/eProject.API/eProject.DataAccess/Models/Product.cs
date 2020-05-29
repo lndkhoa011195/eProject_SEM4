@@ -16,6 +16,8 @@ namespace eProject.DataAccess.Models
         public string Description { get; set; }
         public string MadeIn { get; set; }
         public string ImageURL { get; set; }
+
+        [JsonIgnore]
         public DateTime ModifiedDate { get; set; }
 
         [ForeignKey("CategoryId")]
