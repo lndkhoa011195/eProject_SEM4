@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -23,10 +24,12 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.google.gson.Gson;
 import com.mikepenz.itemanimators.AlphaCrossFadeAnimator;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -41,6 +44,10 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
+import com.tai.project4.adapter.ProductAdapter;
+import com.tai.project4.models.CategoryResult;
+import com.tai.project4.models.ProductResponse;
+import com.tai.project4.models.Promotion;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,18 +63,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomeActivity extends AppCompatActivity
-        implements BaseSliderView.OnSliderClickListener,AddorRemoveCallbacks {
+        implements BaseSliderView.OnSliderClickListener, AddorRemoveCallbacks {
 
     SliderLayout sliderShow;
-    private static int cart_count=0;
+    private static int cart_count = 0;
     HashMap<String, String> url_maps = new HashMap<>();
 
-        private GridView mGridView;
+    private GridView mGridView;
     private ProgressBar mProgressBar;
     List<String> bsp_id_list = new ArrayList<String>();
     private Bsp_Grid mGridAdapter;
@@ -89,7 +99,7 @@ public class HomeActivity extends AppCompatActivity
         sp = getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE);
         editor = sp.edit();
         l2 = findViewById(R.id.ll_best_selling);
-        mProgressBar =findViewById(R.id.progressBar);
+        mProgressBar = findViewById(R.id.progressBar);
 
 
         handleIntent(getIntent());
@@ -167,7 +177,7 @@ public class HomeActivity extends AppCompatActivity
                                 startActivity(i);
 
                             } else if (drawerItem.getTag().toString().equals("LOG_OUT")) {
-                                cart_count=0;
+                                cart_count = 0;
                                 invalidateOptionsMenu();
                                 editor.clear().apply();
                                 Intent i = new Intent(HomeActivity.this, StartActivity.class);
@@ -179,8 +189,8 @@ public class HomeActivity extends AppCompatActivity
                             } else if (drawerItem.getTag().toString().equals("SUB_CATEGORIES")) {
                                 Intent intent = new Intent(HomeActivity.this, Category_wise_products.class);
                                 intent.putExtra("sub_cat_id", String.valueOf(drawerItem.getIdentifier()));
-                                intent.putExtra("cart_count",""+cart_count);
-                                intent.putExtra("sub_category", ((Nameable)drawerItem).getName().toString());
+                                intent.putExtra("cart_count", "" + cart_count);
+                                intent.putExtra("sub_category", ((Nameable) drawerItem).getName().toString());
                                 startActivity(intent);
                             }
                         }
@@ -212,16 +222,29 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             protected String doInBackground(String... params) {
-                String productUrl = getResources().getString(R.string.base_url) + "getCategoryAndSubCategory/";
 
                 try {
+//                    String productUrl = getResources().getString(R.string.base_url) + "getCategoryAndSubCategory/";
+//                    URL url = new URL(productUrl);
+//
+//                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+//                    httpURLConnection.setRequestMethod("POST");
+//                    httpURLConnection.setDoInput(true);
+//                    httpURLConnection.setDoOutput(true);
+//
+//                    InputStream inputStream = httpURLConnection.getInputStream();
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//                    String result = "", line = "";
+//                    while ((line = bufferedReader.readLine()) != null) {
+//                        result += line;
+//                    }
+//                    return result;
+
+                    String productUrl = "http://172.16.100.82:5544/api/Category/GetCategoryAndSubCategory/";
                     URL url = new URL(productUrl);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoInput(true);
-                    httpURLConnection.setDoOutput(true);
-
+                    httpURLConnection.setRequestMethod("GET");
                     InputStream inputStream = httpURLConnection.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
                     String result = "", line = "";
@@ -229,6 +252,7 @@ public class HomeActivity extends AppCompatActivity
                         result += line;
                     }
                     return result;
+
                 } catch (Exception e) {
                     return e.toString();
                 }
@@ -240,25 +264,64 @@ public class HomeActivity extends AppCompatActivity
                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                 builder.setTitle("Received Message");
                 try {
+                    //Đổi json thành list
+                    Gson gson = new Gson();
+                    CategoryResult[] categoryResultsArray = gson.fromJson(s, CategoryResult[].class);
+                    List<CategoryResult> categoryResultList = new ArrayList<>(Arrays.asList(categoryResultsArray));
 
-                    JSONObject json_data = new JSONObject(s);
-                    Iterator<String> temp = json_data.keys();
-                    while (temp.hasNext()) {
-                        String key = temp.next();
-                        JSONArray sub_cat = json_data.getJSONArray(key);
-                        ExpandableDrawerItem item = new ExpandableDrawerItem().withName(key.replace("&amp;","&")).withIcon(R.drawable.ic_filter_list_black).withIdentifier(0).withSelectable(false).withTag("CATEGORIES");
-                        JSONObject sub_cat_json_data = new JSONObject();
-                        for (int i = 0; i < sub_cat.length(); i++) {
-                            sub_cat_json_data = sub_cat.getJSONObject(i);
-//                            product_ids[i] = json_data.getString("id");
-                            item.withSubItems(new SecondaryDrawerItem().withLevel(2).withName(sub_cat_json_data.getString("sub_category").replace("&amp;","&")).withIcon(R.drawable.ic_minus_black).withIdentifier(Integer.parseInt(sub_cat_json_data.getString("id"))).withTag("SUB_CATEGORIES"));
+                    //Tìm kiếm danh sách tên Category
+//                    List<CategoryResult> categoryListFiltered = categoryResultList.stream()
+//                            .filter(distinctByKey(p -> p.getCategoryName()))
+//                            .collect(Collectors.toList());
+                    List<String> categories = new ArrayList<>();
+                    for (CategoryResult cate : categoryResultList) {
+                        categories.add(cate.getCategoryName());
+                    }
 
+                    List<String> categoryListNoDup = new ArrayList<>(
+                            new HashSet<>(categories));
+
+                    for (String cate : categoryListNoDup){
+                        ExpandableDrawerItem item = new ExpandableDrawerItem().withName(cate).withIcon(R.drawable.ic_filter_list_black).withIdentifier(0).withSelectable(false).withTag("CATEGORIES");
+                        for (CategoryResult subcate : categoryResultList) {
+                            if (subcate.getCategoryName().equals(cate)) {
+                                item.withSubItems(new SecondaryDrawerItem().withLevel(2).withName(subcate.getSubCategoryName()).withIcon(R.drawable.ic_minus_black).withIdentifier(subcate.getSubCategoryID()).withTag("SUB_CATEGORIES"));
+                            }
                         }
                         result.addItem(item);
                     }
 
+
+
+//                    for (CategoryResult cate : categoryListFiltered) {
+//                        ExpandableDrawerItem item = new ExpandableDrawerItem().withName(cate.getCategoryName()).withIcon(R.drawable.ic_filter_list_black).withIdentifier(0).withSelectable(false).withTag("CATEGORIES");
+//                        for (CategoryResult subcate : categoryResultList) {
+//                            if (subcate.getCategoryName().equals(cate.getCategoryName())) {
+//                                item.withSubItems(new SecondaryDrawerItem().withLevel(2).withName(subcate.getSubCategoryName()).withIcon(R.drawable.ic_minus_black).withIdentifier(subcate.getSubCategoryID()).withTag("SUB_CATEGORIES"));
+//                            }
+//                        }
+//                        result.addItem(item);
+//                    }
+
+
+//                    JSONObject json_data = new JSONObject(s);
+//                    Iterator<String> temp = json_data.keys();
+//                    while (temp.hasNext()) {
+//                        String key = temp.next();
+//                        JSONArray sub_cat = json_data.getJSONArray(key);
+//                        ExpandableDrawerItem item = new ExpandableDrawerItem().withName(key.replace("&amp;","&")).withIcon(R.drawable.ic_filter_list_black).withIdentifier(0).withSelectable(false).withTag("CATEGORIES");
+//                        JSONObject sub_cat_json_data = new JSONObject();
+//                        for (int i = 0; i < sub_cat.length(); i++) {
+//                            sub_cat_json_data = sub_cat.getJSONObject(i);
+////                            product_ids[i] = json_data.getString("id");
+//                            item.withSubItems(new SecondaryDrawerItem().withLevel(2).withName(sub_cat_json_data.getString("sub_category").replace("&amp;","&")).withIcon(R.drawable.ic_minus_black).withIdentifier(Integer.parseInt(sub_cat_json_data.getString("id"))).withTag("SUB_CATEGORIES"));
+//
+//                        }
+//                        result.addItem(item);
+//                    }
+
 //                    Toast.makeText(HomeActivity.this, ""+json_data.length(), Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     builder.setCancelable(true);
                     builder.setTitle("No Internet Connection");
 //                    builder.setMessage(e.toString());
@@ -295,13 +358,17 @@ public class HomeActivity extends AppCompatActivity
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 try {
-                    JSONArray jArray = new JSONArray(s);
-                    JSONObject json_data = new JSONObject();
-                    for (int i = 0; i < jArray.length(); i++) {
-                        json_data = jArray.getJSONObject(i);
-                        String str = getResources().getString(R.string.img_base_url) + "slider_images/" + json_data.getString("image");
-                        url_maps.put("", str);
+
+
+                    //Đổi json thành list
+                    Gson gson = new Gson();
+                    Promotion[] PromotionResultsArray = gson.fromJson(s, Promotion[].class);
+                    List<Promotion> PromotionList = new ArrayList<>(Arrays.asList(PromotionResultsArray));
+
+                    for (int i = 0; i< PromotionList.size(); i++){
+                        url_maps.put("", PromotionList.get(i).getImageURL());
                         sliderShow = findViewById(R.id.slider);
+
                         for (String name : url_maps.keySet()) {
                             DefaultSliderView defaultSliderView = new DefaultSliderView(HomeActivity.this);
                             // initialize a SliderLayout
@@ -309,15 +376,40 @@ public class HomeActivity extends AppCompatActivity
                                     .image(url_maps.get(name))
                                     .setOnSliderClickListener(HomeActivity.this);
 
+
                             defaultSliderView.bundle(new Bundle());
                             defaultSliderView.getBundle()
-                                    .putString("extra",json_data.getString("product_id"));
+                                    .putString("extra",String.valueOf(PromotionList.get(i).getProductId()));
+
 
                             sliderShow.addSlider(defaultSliderView);
                         }
                         sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                         sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
                     }
+//                    JSONArray jArray = new JSONArray(s);
+//                    JSONObject json_data = new JSONObject();
+//                    for (int i = 0; i < jArray.length(); i++) {
+//                        json_data = jArray.getJSONObject(i);
+//                        String str = getResources().getString(R.string.img_base_url) + "slider_images/" + json_data.getString("image");
+//                        url_maps.put("", str);
+//                        sliderShow = findViewById(R.id.slider);
+//                        for (String name : url_maps.keySet()) {
+//                            DefaultSliderView defaultSliderView = new DefaultSliderView(HomeActivity.this);
+//                            // initialize a SliderLayout
+//                            defaultSliderView
+//                                    .image(url_maps.get(name))
+//                                    .setOnSliderClickListener(HomeActivity.this);
+//
+//                            defaultSliderView.bundle(new Bundle());
+//                            defaultSliderView.getBundle()
+//                                    .putString("extra", json_data.getString("product_id"));
+//
+//                            sliderShow.addSlider(defaultSliderView);
+//                        }
+//                        sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+//                        sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
+//                    }
 
                 } catch (Exception e) {
                     Toast.makeText(HomeActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
@@ -329,30 +421,44 @@ public class HomeActivity extends AppCompatActivity
             @Override
             protected String doInBackground(Void... voids) {
                 try {
-                    String urls = getResources().getString(R.string.base_url).concat("slider_images");
-                    URL url = new URL(urls);
+                    String productUrl = "http://172.16.100.82:5544/api/Product/GetPromotionProducts/";
+                    URL url = new URL(productUrl);
 
-                    //Opening the URL using HttpURLConnection
-                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-                    //StringBuilder object to read the string from the service
-                    StringBuilder sb = new StringBuilder();
-
-                    //We will use a buffered reader to read the string from service
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-                    //A simple string to read values from each line
-                    String json;
-
-                    //reading until we don't find null
-                    while ((json = bufferedReader.readLine()) != null) {
-
-                        //appending it to string builder
-                        sb.append(json + "\n");
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                    String result = "", line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result += line;
                     }
+                    return result;
 
-                    //finally returning the read string
-                    return sb.toString().trim();
+
+//                    String urls = getResources().getString(R.string.base_url).concat("slider_images");
+//                    URL url = new URL(urls);
+//
+//                    //Opening the URL using HttpURLConnection
+//                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//
+//                    //StringBuilder object to read the string from the service
+//                    StringBuilder sb = new StringBuilder();
+//
+//                    //We will use a buffered reader to read the string from service
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//
+//                    //A simple string to read values from each line
+//                    String json;
+//
+//                    //reading until we don't find null
+//                    while ((json = bufferedReader.readLine()) != null) {
+//
+//                        //appending it to string builder
+//                        sb.append(json + "\n");
+//                    }
+//
+//                    //finally returning the read string
+//                    return sb.toString().trim();
                 } catch (Exception e) {
                     return null;
                 }
@@ -414,16 +520,14 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             protected String doInBackground(String... params) {
-                String productUrl = getResources().getString(R.string.base_url) + "getBestSellingProducts/";
+                //String productUrl = getResources().getString(R.string.base_url) + "getBestSellingProducts/";
 
                 try {
+                    String productUrl = "http://172.16.100.82:5544/api/Product/GetRecentProducts/";
                     URL url = new URL(productUrl);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoInput(true);
-                    httpURLConnection.setDoOutput(true);
-
+                    httpURLConnection.setRequestMethod("GET");
                     InputStream inputStream = httpURLConnection.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
                     String result = "", line = "";
@@ -431,6 +535,20 @@ public class HomeActivity extends AppCompatActivity
                         result += line;
                     }
                     return result;
+//                    URL url = new URL(productUrl);
+//
+//                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+//                    httpURLConnection.setRequestMethod("POST");
+//                    httpURLConnection.setDoInput(true);
+//                    httpURLConnection.setDoOutput(true);
+//
+//                    InputStream inputStream = httpURLConnection.getInputStream();
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//                    String result = "", line = "";
+//                    while ((line = bufferedReader.readLine()) != null) {
+//                        result += line;
+//                    }
+//                    return result;
                 } catch (Exception e) {
                     return e.toString();
                 }
@@ -444,35 +562,10 @@ public class HomeActivity extends AppCompatActivity
 
                 try {
 
-                    JSONArray productArray = new JSONArray(s);
-
-                    String[] product_ids = new String[productArray.length()];
-                    String[] product_names = new String[productArray.length()];
-                    String[] product_descs = new String[productArray.length()];
-                    String[] product_imgs = new String[productArray.length()];
-                    String[] product_prices = new String[productArray.length()];
-                    String[] product_brands = new String[productArray.length()];
-                    String[] product_sps = new String[productArray.length()];
-                    String[] product_dps = new String[productArray.length()];
-
-
-                    JSONObject json_data = new JSONObject();
-                    for (int i = 0; i < productArray.length(); i++) {
-                        json_data = productArray.getJSONObject(i);
-                        product_ids[i] = json_data.getString("id");
-                        product_names[i] = json_data.getString("name");
-                        product_descs[i] = json_data.getString("description");
-                        product_imgs[i] = json_data.getString("image");
-                        product_prices[i] = json_data.getString("mrp") + " /-";
-                        product_brands[i] = json_data.getString("brand");
-                        product_sps[i] = "\u20B9" + json_data.getString("selling_price") + " /-";
-                        double p_mrp = Double.parseDouble(json_data.getString("mrp"));
-                        double p_sp = Double.parseDouble(json_data.getString("selling_price"));
-                        double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
-                        int p_dp_i = (int) p_dp;
-                        product_dps[i] = String.valueOf(p_dp_i);
-
-                    }
+                    //Đổi json thành list
+                    Gson gson = new Gson();
+                    ProductResponse[] BestSellingProducts = gson.fromJson(s, ProductResponse[].class);
+                    List<ProductResponse> BestSellingProductsList = new ArrayList<>(Arrays.asList(BestSellingProducts));
 
                     l2.setVisibility(View.VISIBLE);
                     mProgressBar.setVisibility(View.GONE);
@@ -480,8 +573,46 @@ public class HomeActivity extends AppCompatActivity
                     RecyclerView product_recyclerview = findViewById(R.id.recyclerview_best_deals);
                     product_recyclerview.setNestedScrollingEnabled(false);
                     product_recyclerview.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
-                    product_recyclerview.setAdapter(new Recent_Products_Adapter(product_ids, product_names, product_descs, product_imgs, product_prices, product_brands, product_sps, product_dps, HomeActivity.this));
-                } catch (JSONException e) {
+                    product_recyclerview.setAdapter(new ProductAdapter(BestSellingProductsList, HomeActivity.this));
+
+//                    JSONArray productArray = new JSONArray(s);
+//
+//                    String[] product_ids = new String[productArray.length()];
+//                    String[] product_names = new String[productArray.length()];
+//                    String[] product_descs = new String[productArray.length()];
+//                    String[] product_imgs = new String[productArray.length()];
+//                    String[] product_prices = new String[productArray.length()];
+//                    String[] product_brands = new String[productArray.length()];
+//                    String[] product_sps = new String[productArray.length()];
+//                    String[] product_dps = new String[productArray.length()];
+//
+//
+//                    JSONObject json_data = new JSONObject();
+//                    for (int i = 0; i < productArray.length(); i++) {
+//                        json_data = productArray.getJSONObject(i);
+//                        product_ids[i] = json_data.getString("id");
+//                        product_names[i] = json_data.getString("name");
+//                        product_descs[i] = json_data.getString("description");
+//                        product_imgs[i] = json_data.getString("image");
+//                        product_prices[i] = json_data.getString("mrp") + " /-";
+//                        product_brands[i] = json_data.getString("brand");
+//                        product_sps[i] = "\u20B9" + json_data.getString("selling_price") + " /-";
+//                        double p_mrp = Double.parseDouble(json_data.getString("mrp"));
+//                        double p_sp = Double.parseDouble(json_data.getString("selling_price"));
+//                        double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
+//                        int p_dp_i = (int) p_dp;
+//                        product_dps[i] = String.valueOf(p_dp_i);
+//
+//                    }
+//
+//                    l2.setVisibility(View.VISIBLE);
+//                    mProgressBar.setVisibility(View.GONE);
+//
+//                    RecyclerView product_recyclerview = findViewById(R.id.recyclerview_best_deals);
+//                    product_recyclerview.setNestedScrollingEnabled(false);
+//                    product_recyclerview.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+//                    product_recyclerview.setAdapter(new Recent_Products_Adapter(product_ids, product_names, product_descs, product_imgs, product_prices, product_brands, product_sps, product_dps, HomeActivity.this));
+                } catch (Exception e) {
                     builder.setCancelable(true);
                     builder.setTitle("No Internet Connection");
 //                    builder.setMessage(s);
@@ -619,10 +750,10 @@ public class HomeActivity extends AppCompatActivity
                 for (int i = 0; i < jArray.length(); i++) {
 
                     json_data = jArray.getJSONObject(i);
-                    String title="Nothing";
-                    if(json_data.getString("name").length()>20) {
+                    String title = "Nothing";
+                    if (json_data.getString("name").length() > 20) {
                         title = json_data.getString("name").substring(0, 19);
-                    }else{
+                    } else {
                         title = json_data.getString("name");
                     }
                     item = new GridItem();
@@ -704,9 +835,9 @@ public class HomeActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.home, menu);
 
         final MenuItem menuItem = menu.findItem(R.id.cart);
-        menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this,cart_count,R.drawable.ic_shopping_cart_white));
+        menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this, cart_count, R.drawable.ic_shopping_cart_white));
 
-        if(sp.getString("loginid",null)!=null){
+        if (sp.getString("loginid", null) != null) {
             class GetCartItemCount extends AsyncTask<String, Void, String> {
 
                 @Override
@@ -718,7 +849,7 @@ public class HomeActivity extends AppCompatActivity
                 protected void onPostExecute(String s) {
                     super.onPostExecute(s);
                     cart_count = Integer.parseInt(s);
-                    menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this,cart_count,R.drawable.ic_shopping_cart_white));
+                    menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this, cart_count, R.drawable.ic_shopping_cart_white));
                 }
 
                 @Override
@@ -753,7 +884,7 @@ public class HomeActivity extends AppCompatActivity
             }
             //creating asynctask object and executing it
             GetCartItemCount catItemObj = new GetCartItemCount();
-            catItemObj.execute(sp.getString("loginid",null));
+            catItemObj.execute(sp.getString("loginid", null));
         }
 
         SearchManager searchManager =
@@ -771,18 +902,18 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.cart) {
 
-            if(sp.getString("loginid",null)!=null) {
+            if (sp.getString("loginid", null) != null) {
                 Intent i = new Intent(this, MyCart.class);
                 startActivity(i);
                 return true;
-            }else{
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                 builder.setTitle("Heyy..")
                         .setMessage("To see your cart you have to login first. Do you want to login ")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent=new Intent(HomeActivity.this,LoginActivity.class);
+                                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             }
                         })
@@ -802,7 +933,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onSliderClick(BaseSliderView slider) {
 
-        String product_id=slider.getBundle().get("extra").toString();
+        String product_id = slider.getBundle().get("extra").toString();
         Product detail = new Product();
         detail.startProductDetailActivity(product_id, HomeActivity.this);
 
