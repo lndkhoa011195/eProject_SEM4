@@ -91,7 +91,6 @@ public class HomeActivity extends AppCompatActivity
         l2 = findViewById(R.id.ll_best_selling);
         mProgressBar =findViewById(R.id.progressBar);
 
-
         handleIntent(getIntent());
         final IProfile profile;
         if (sp.getString("loginid", null) == null) {
