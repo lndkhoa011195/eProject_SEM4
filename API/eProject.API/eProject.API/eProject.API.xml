@@ -16,11 +16,18 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:eProject.API.Controllers.CustomerController.Authenticate(eProject.DataAccess.Models.Request.CustomerLoginRequest)">
+        <member name="M:eProject.API.Controllers.CustomerController.Authenticate(eProject.DataAccess.Models.Request.LoginRequest)">
             <summary>
             Chứng thực đăng nhập
             </summary>
             <param name="loginRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.CustomerController.SignUp(eProject.DataAccess.Models.Request.SignUpRequest)">
+            <summary>
+            Đăng ký customer mới
+            </summary>
+            <param name="signUpRequest"></param>
             <returns></returns>
         </member>
         <member name="M:eProject.API.Controllers.CustomerController.GetProductsInCart(System.Int32)">
@@ -44,10 +51,24 @@
             <param name="removeFromCartRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:eProject.API.Controllers.CustomerController.GetCartCount(System.Int32)">
+            <summary>
+            Lấy số lượng sản phẩm trong cart dựa vào CustomerId
+            </summary>
+            <param name="_customerId"></param>
+            <returns></returns>
+        </member>
         <member name="M:eProject.API.Controllers.ProductController.GetProducts">
             <summary>
             Lấy danh sách tất cả product
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.ProductController.GetProductsByName(System.String)">
+            <summary>
+            Lấy danh sách sản phẩm có tên chứa chuỗi name tìm kiếm
+            </summary>
+            <param name="name"></param>
             <returns></returns>
         </member>
         <member name="M:eProject.API.Controllers.ProductController.GetProduct(System.Int32)">

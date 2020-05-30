@@ -28,7 +28,7 @@ namespace eProject.API.Controllers
         }
 
         [HttpGet]
-        public async Task<RequestResponse>  Get()
+        public async Task<RequestResult>  Get()
         {
             var rng = new Random();
    
@@ -39,7 +39,7 @@ namespace eProject.API.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
-            return new RequestResponse
+            return new RequestResult
             {
                 ErrorCode = ErrorCode.Success,
                 Content = JsonConvert.SerializeObject(list)

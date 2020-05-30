@@ -25,18 +25,16 @@ namespace eProject.API.Controllers
             _context = context;
         }
 
-
-
         /// <summary>
         /// Chứng thực đăng nhập
         /// </summary>
         /// <param name="loginRequest"></param>
         /// <returns></returns>
         [HttpPost("Authenticate")]
-        public async Task<string> Authenticate(CustomerLoginRequest loginRequest)
+        public async Task<string> Authenticate(LoginRequest loginRequest)
         {
             var cus = _context.Customers.FirstOrDefault(x => x.Email == loginRequest.Email && x.Password == loginRequest.Password);
-            CustomerLoginResponse response = new CustomerLoginResponse();
+            LoginResponse response = new LoginResponse();
             if (cus != null)
             {
                 response.Id = cus.Id;
@@ -51,6 +49,66 @@ namespace eProject.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Đăng ký customer mới
+        /// </summary>
+        /// <param name="signUpRequest"></param>
+        /// <returns></returns>
+        [HttpPost("SignUp")]
+        public async Task<RequestResult> SignUp(SignUpRequest signUpRequest)
+        {
+            var cus = _context.Customers.FirstOrDefault(x => x.Email == signUpRequest.Email);
+            if (cus != null)
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Email is existed."
+                };
+            cus = _context.Customers.FirstOrDefault(x => x.Phone == signUpRequest.Phone);
+            if (cus != null)
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Phone is existed."
+                };
+            Customer customer = new Customer()
+            {
+                Id = 0,
+                Name = signUpRequest.Name,
+                Email = signUpRequest.Email,
+                Phone = signUpRequest.Phone,
+                Password = signUpRequest.Password,
+                LoginAttemptCount = 0,
+                ModifiedDate = DateTime.Now,
+                IsActive = true
+            };
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+
+            cus = _context.Customers.FirstOrDefault(x => x.Email == signUpRequest.Email && x.Phone == signUpRequest.Phone);
+
+            LoginResponse response = new LoginResponse();
+            if (cus != null)
+            {
+                response.Id = cus.Id;
+                response.Name = cus.Name;
+                response.Email = cus.Email;
+                response.Phone = cus.Phone;
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Success,
+                    Content = JsonConvert.SerializeObject(response)
+                };
+            }
+            else
+            {
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Invalid information."
+                };
+            }
+        }
 
         /// <summary>
         /// Lấy danh sách sản phẩm trong giỏ hàng theo CustomerId
@@ -75,17 +133,24 @@ namespace eProject.API.Controllers
                         var cartDetails = _context.CartDetails.ToList();
                         var carts = _context.Carts.ToList();
                         var manufacturers = _context.Manufacturers.ToList();
+                        var units = _context.Units.ToList();
                         var list = from cartDetail in cartDetails
                                    join cart in carts on cartDetail.CartId equals cart.Id
                                    join product in products on cartDetail.ProductId equals product.Id
                                    join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                                   join unit in units on product.UnitId equals unit.Id
+                                   where product.IsActive == true
                                    select new CartResponse
                                    {
                                        Id = product.Id,
                                        Name = product.Name,
+                                       OriginalPrice = product.OriginalPrice,
+                                       SellingPrice = product.SellingPrice,
+                                       Description = product.Description,
+                                       MadeIn = product.MadeIn,
                                        ManufacturerName = manufacturer.Name,
-                                       Price = product.Price,
                                        ImageURL = product.ImageURL,
+                                       UnitName = unit.Name,
                                        Quantity = cartDetail.Quantity
                                    };
 
@@ -170,9 +235,6 @@ namespace eProject.API.Controllers
             }
 
         }
-
-
-
 
         /// <summary>
         /// Giảm số lượng sản phẩm hoặc xoá sản phẩm khỏi giỏ hàng

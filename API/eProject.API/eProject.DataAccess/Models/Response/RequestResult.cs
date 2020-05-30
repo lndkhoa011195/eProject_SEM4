@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eProject.DataAccess.Models.Response
 {
-    public class RequestResponse
+    public class RequestResult
     {
         public ErrorCode ErrorCode { get; set; }
         public string Content { get; set; }

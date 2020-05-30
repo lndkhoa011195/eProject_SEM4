@@ -12,13 +12,15 @@ namespace eProject.DataAccess.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Price { get; set; }
+        public double OriginalPrice { get; set; }
+        public double SellingPrice { get; set; }
         public string Description { get; set; }
         public string MadeIn { get; set; }
         public string ImageURL { get; set; }
 
         [JsonIgnore]
         public DateTime ModifiedDate { get; set; }
+        public bool IsActive { get; set; }
 
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }

@@ -26,27 +26,7 @@ namespace eProject.API.Controllers
         }
 
 
-        //List<Category> categories = new List<Category>()
-        //{
-        //    new Category(){Id = 1, Name = "Baby Care", CreatedDate= Convert.ToDateTime("2018-03-22 17:22:12")},
-        //    new Category(){Id = 2, Name = "Personal Care", CreatedDate= Convert.ToDateTime("2018-03-22 17:22:21")},
-        //    new Category(){Id = 3, Name = "Grocery", CreatedDate= Convert.ToDateTime("2018-03-22 17:27:23")},
-        //    new Category(){Id = 4, Name = "Household", CreatedDate= Convert.ToDateTime("2019-05-06 19:00:00")},
-        //    new Category(){Id = 5, Name = "Women", CreatedDate= Convert.ToDateTime("2019-05-06 19:00:18")},
-        //    new Category(){Id = 6, Name = "Men", CreatedDate= Convert.ToDateTime("2019-05-06 19:00:18")},
-        //};
-
-        //[HttpGet("GetCategories")]
-        //public async Task<RequestResponse> GetCategories()
-        //{
-        //    return new RequestResponse
-        //    {
-        //        ErrorCode = ErrorCode.Success,
-        //        Content = JsonConvert.SerializeObject(categories)
-        //    };
-        //}
-
-
+        
         /// <summary>
         /// Lấy danh sách tất cả Category
         /// </summary>

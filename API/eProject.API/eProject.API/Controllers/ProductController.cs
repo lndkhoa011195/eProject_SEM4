@@ -30,8 +30,83 @@ namespace eProject.API.Controllers
         [HttpGet("GetProducts")]
         public async Task<string> GetProducts()
         {
-            var list = await _context.Products.ToListAsync();
+            var products = await _context.Products.ToListAsync();
+            var manufacturers = await _context.Manufacturers.ToListAsync();
+            var units = await _context.Units.ToListAsync();
+
+            var list = from product in products
+                       join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                       join unit in units on product.UnitId equals unit.Id
+                       where product.IsActive == true
+                       select new ProductResponse
+                       {
+                           Id = product.Id,
+                           Name = product.Name,
+                           OriginalPrice = product.OriginalPrice,
+                           SellingPrice = product.SellingPrice,
+                           Description = product.Description,
+                           MadeIn = product.MadeIn,
+                           ManufacturerName = manufacturer.Name,
+                           ImageURL = product.ImageURL,
+                           UnitName = unit.Name
+                       };
+
             return JsonConvert.SerializeObject(list);
+        }
+
+        /// <summary>
+        /// Lấy danh sách sản phẩm có tên chứa chuỗi name tìm kiếm
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("GetProductsByName")]
+        public async Task<string> GetProductsByName(string name)
+        {
+            var products = await _context.Products.ToListAsync();
+            var manufacturers = await _context.Manufacturers.ToListAsync();
+            var units = await _context.Units.ToListAsync();
+            
+            if (string.IsNullOrEmpty(name))
+            {
+                  var list = from product in products
+                           join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                           join unit in units on product.UnitId equals unit.Id
+                           where product.IsActive == true
+                           select new ProductResponse
+                           {
+                               Id = product.Id,
+                               Name = product.Name,
+                               OriginalPrice = product.OriginalPrice,
+                               SellingPrice = product.SellingPrice,
+                               Description = product.Description,
+                               MadeIn = product.MadeIn,
+                               ManufacturerName = manufacturer.Name,
+                               ImageURL = product.ImageURL,
+                               UnitName = unit.Name
+                           };
+                return JsonConvert.SerializeObject(list);
+            }
+            else
+            {
+                var list = from product in products
+                           join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                           join unit in units on product.UnitId equals unit.Id
+                           where product.IsActive == true
+                           where product.Name.ToLower().Contains(name.ToLower())
+                           select new ProductResponse
+                           {
+                               Id = product.Id,
+                               Name = product.Name,
+                               OriginalPrice = product.OriginalPrice,
+                               SellingPrice = product.SellingPrice,
+                               Description = product.Description,
+                               MadeIn = product.MadeIn,
+                               ManufacturerName = manufacturer.Name,
+                               ImageURL = product.ImageURL,
+                               UnitName = unit.Name
+                           };
+                return JsonConvert.SerializeObject(list);
+            }
         }
 
 
@@ -45,16 +120,23 @@ namespace eProject.API.Controllers
         {
             var products = await _context.Products.ToListAsync();
             var manufacturers = await _context.Manufacturers.ToListAsync();
+            var units = await _context.Units.ToListAsync();
 
             var list = from product in products
                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                       join unit in units on product.UnitId equals unit.Id
+                       where product.IsActive == true
                        select new ProductResponse
                        {
                            Id = product.Id,
                            Name = product.Name,
+                           OriginalPrice = product.OriginalPrice,
+                           SellingPrice = product.SellingPrice,
+                           Description = product.Description,
+                           MadeIn = product.MadeIn,
                            ManufacturerName = manufacturer.Name,
-                           Price = product.Price,
-                           ImageURL = product.ImageURL
+                           ImageURL = product.ImageURL,
+                           UnitName = unit.Name
                        };
             var response = list.FirstOrDefault(x => x.Id == id);
             if (response != null)
@@ -72,17 +154,24 @@ namespace eProject.API.Controllers
         {
             var products = await _context.Products.ToListAsync();
             var manufacturers = await _context.Manufacturers.ToListAsync();
+            var units = await _context.Units.ToListAsync();
 
             var list = from product in products
                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                       join unit in units on product.UnitId equals unit.Id
+                       where product.IsActive == true
                        orderby product.Id descending
                        select new ProductResponse
                        {
                            Id = product.Id,
                            Name = product.Name,
+                           OriginalPrice = product.OriginalPrice,
+                           SellingPrice = product.SellingPrice,
+                           Description = product.Description,
+                           MadeIn = product.MadeIn,
                            ManufacturerName = manufacturer.Name,
-                           Price = product.Price,
-                           ImageURL = product.ImageURL
+                           ImageURL = product.ImageURL,
+                           UnitName = unit.Name
                        };
             return JsonConvert.SerializeObject(list.Take(12));
         }

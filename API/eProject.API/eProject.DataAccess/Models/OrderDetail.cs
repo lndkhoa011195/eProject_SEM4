@@ -9,8 +9,6 @@ namespace eProject.DataAccess.Models
     {
         public int Id { get; set; }
 
-        public int Quantity { get; set; }
-
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
         public int OrderId { get; set; }
@@ -18,5 +16,14 @@ namespace eProject.DataAccess.Models
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
         public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public double OriginalPrice { get; set; }
+        public double SellingPrice { get; set; }
+        public string Description { get; set; }
+        public string UnitName { get; set; }
+        public string ManufacturerName { get; set; }
+        public string MadeIn { get; set; }
+        public string ImageURL { get; set; }
+        public int Quantity { get; set; }
     }
 }

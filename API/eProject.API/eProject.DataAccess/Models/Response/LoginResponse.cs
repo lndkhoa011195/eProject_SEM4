@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eProject.DataAccess.Models.Response
 {
-    public class CustomerLoginResponse
+    public class LoginResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }
