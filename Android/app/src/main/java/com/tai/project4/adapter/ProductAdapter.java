@@ -50,12 +50,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
     public void onBindViewHolder(ProductAdapter.ProductsViewHolder holder, int position) {
         String id = String.valueOf(list.get(position).getId());
         String name = list.get(position).getName();
-        String desc = "";
+        String desc = list.get(position).getDescription();
         String img = list.get(position).getImageURL();
-        String price = String.valueOf(list.get(position).getPrice());
-        String selling_price = String.valueOf(list.get(position).getPrice());
+        String price = String.valueOf(list.get(position).getOriginalPrice());
+        String selling_price = String.valueOf(list.get(position).getSellingPrice());
         String brand = list.get(position).getManufacturerName();
-        String discount = "5";
+        double p_mrp = Double.parseDouble(price);
+        double p_sp = Double.parseDouble(selling_price);
+        double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
+        int p_dp_i = (int) p_dp;
+        String discount = String.valueOf(p_dp_i);
 
         holder.pro_id.setText(id);
         holder.pro_name.setText(name);
@@ -68,10 +72,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
         if (Integer.parseInt(discount) <= 0) {
             holder.pro_discount.setVisibility(View.GONE);
         }
-        if (selling_price.trim().equals("\u20B9" + price.trim())) {
+        if (selling_price.trim().equals(price.trim())) {
             holder.pro_price.setVisibility(View.GONE);
         }
-
 
         Picasso.with(context).load(img).placeholder(R.drawable.watermark_icon).into(holder.pro_img);
 

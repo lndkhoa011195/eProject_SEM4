@@ -3,9 +3,25 @@ package com.tai.project4.models;
 public class ProductResponse {
     private int Id;
     private String Name;
+    private double OriginalPrice;
+    private double SellingPrice;
+    private String Description;
+    private String MadeIn;
     private String ManufacturerName;
-    private double Price;
+    private String UnitName;
     private String ImageURL;
+
+    public ProductResponse(int id, String name, double originalPrice, double sellingPrice, String description, String madeIn, String manufacturerName, String unitName, String imageURL) {
+        Id = id;
+        Name = name;
+        OriginalPrice = originalPrice;
+        SellingPrice = sellingPrice;
+        Description = description;
+        MadeIn = madeIn;
+        ManufacturerName = manufacturerName;
+        UnitName = unitName;
+        ImageURL = imageURL;
+    }
 
     public int getId() {
         return Id;
@@ -23,6 +39,38 @@ public class ProductResponse {
         Name = name;
     }
 
+    public double getOriginalPrice() {
+        return OriginalPrice;
+    }
+
+    public void setOriginalPrice(double originalPrice) {
+        OriginalPrice = originalPrice;
+    }
+
+    public double getSellingPrice() {
+        return SellingPrice;
+    }
+
+    public void setSellingPrice(double sellingPrice) {
+        SellingPrice = sellingPrice;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    public String getMadeIn() {
+        return MadeIn;
+    }
+
+    public void setMadeIn(String madeIn) {
+        MadeIn = madeIn;
+    }
+
     public String getManufacturerName() {
         return ManufacturerName;
     }
@@ -31,12 +79,12 @@ public class ProductResponse {
         ManufacturerName = manufacturerName;
     }
 
-    public double getPrice() {
-        return Price;
+    public String getUnitName() {
+        return UnitName;
     }
 
-    public void setPrice(double price) {
-        Price = price;
+    public void setUnitName(String unitName) {
+        UnitName = unitName;
     }
 
     public String getImageURL() {
@@ -44,14 +92,6 @@ public class ProductResponse {
     }
 
     public void setImageURL(String imageURL) {
-        ImageURL = imageURL;
-    }
-
-    public ProductResponse(int id, String name, String manufacturerName, double price, String imageURL) {
-        Id = id;
-        Name = name;
-        ManufacturerName = manufacturerName;
-        Price = price;
         ImageURL = imageURL;
     }
 }
