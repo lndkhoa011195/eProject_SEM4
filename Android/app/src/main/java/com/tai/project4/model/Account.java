@@ -6,14 +6,12 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
 
-    @SerializedName("Id")
     public Integer Id;
-    @SerializedName("Name")
     public String Name;
-    @SerializedName("Email")
     public String Email;
-    @SerializedName("Phone")
     public String Phone;
+    public String Password;
+    public String Address;
 
     public Integer getId() {
         return Id;
@@ -47,13 +45,28 @@ public class Account implements Serializable {
         Phone = phone;
     }
 
-    public Account(Integer id, String name, String email, String phone) {
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public Account(Integer id, String name, String email, String phone, String password, String address) {
         Id = id;
         Name = name;
         Email = email;
         Phone = phone;
-    }
-
-    public Account() {
+        Password = password;
+        Address = address;
     }
 }

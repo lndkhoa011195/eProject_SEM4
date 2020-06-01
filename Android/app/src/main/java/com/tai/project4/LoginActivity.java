@@ -87,11 +87,13 @@ public class LoginActivity extends AppCompatActivity {
                                     return;
                                 Log.d("TAG", response.code() + "");
                                 Account Account = response.body();
-                                Data.userProfile = Account;
-                                if (txtEmail.equalsIgnoreCase(Data.userProfile.Email)) {
+
+                                if (txtEmail.equalsIgnoreCase(Account.getEmail())) {
                                     edit.putString("Id", String.valueOf(Account.getId()));
                                     edit.putString("Name", Account.getName());
+                                    edit.putString("Email", Account.getEmail());
                                     edit.putString("Phone", Account.getPhone());
+                                    edit.putString("Address", Account.getAddress());
                                     edit.apply();
                                     Intent i = new Intent(LoginActivity.this, HomeActivity.class);
 //                                i.putExtras(bundle);
