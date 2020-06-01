@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (txtEmail.equalsIgnoreCase(Data.userProfile.email)) {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("Account", Account);
-//                                edit.putString("loginid", .getString("email"));
+//                                edit.putString("loginid", json_data.getString("email"));
 //                                edit.putString("name", json_data.getString("name"));
 //                                edit.putString("mobile", json_data.getString("mobile"));
 //                                edit.putString("city", json_data.getString("city"));
