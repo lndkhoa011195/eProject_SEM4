@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +46,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.tai.project4.adapter.ProductAdapter;
+import com.tai.project4.interfaces.APIClient;
+import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CategoryResult;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
@@ -70,6 +73,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeActivity extends AppCompatActivity
         implements BaseSliderView.OnSliderClickListener, AddorRemoveCallbacks {
 
@@ -89,7 +96,7 @@ public class HomeActivity extends AppCompatActivity
 
     private Drawer result = null;
     private AccountHeader headerResult = null;
-
+    APIInterface apiInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,61 +224,18 @@ public class HomeActivity extends AppCompatActivity
         result.addItem(new SecondaryDrawerItem().withName("Shop By Category").withTag("CATEGORY_LABEL").withSelectable(false).withSetSelected(false).withTextColor(getResources().getColor(R.color.material)));
         result.addItem(new DividerDrawerItem());
 
-        class Categories extends AsyncTask<String, Void, String> {
 
-            @Override
-            protected String doInBackground(String... params) {
-
-                try {
-//                    String productUrl = getResources().getString(R.string.base_url) + "getCategoryAndSubCategory/";
-//                    URL url = new URL(productUrl);
-//
-//                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                    httpURLConnection.setRequestMethod("POST");
-//                    httpURLConnection.setDoInput(true);
-//                    httpURLConnection.setDoOutput(true);
-//
-//                    InputStream inputStream = httpURLConnection.getInputStream();
-//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//                    String result = "", line = "";
-//                    while ((line = bufferedReader.readLine()) != null) {
-//                        result += line;
-//                    }
-//                    return result;
-
-                    String productUrl = "http://192.168.43.74:5656/api/Category/GetCategoryAndSubCategory/";
-                    URL url = new URL(productUrl);
-
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("GET");
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-                    String result = "", line = "";
-                    while ((line = bufferedReader.readLine()) != null) {
-                        result += line;
-                    }
-                    return result;
-
-                } catch (Exception e) {
-                    return e.toString();
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                builder.setTitle("Received Message");
-                try {
-                    //Đổi json thành list
-                    Gson gson = new Gson();
-                    CategoryResult[] categoryResultsArray = gson.fromJson(s, CategoryResult[].class);
-                    List<CategoryResult> categoryResultList = new ArrayList<>(Arrays.asList(categoryResultsArray));
-
-                    //Tìm kiếm danh sách tên Category
-//                    List<CategoryResult> categoryListFiltered = categoryResultList.stream()
-//                            .filter(distinctByKey(p -> p.getCategoryName()))
-//                            .collect(Collectors.toList());
+        //SetCategoryAndSubCategory
+        try {
+            apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<List<CategoryResult>> promotionCall = apiInterface.GetCategoryAndSubCategory();
+            promotionCall.enqueue(new Callback<List<CategoryResult>>() {
+                @Override
+                public void onResponse(Call<List<CategoryResult>> call, Response<List<CategoryResult>> response) {
+                    if (!response.isSuccessful())
+                        return;
+                    Log.d("TAG", response.code() + "");
+                    List<CategoryResult> categoryResultList = response.body();
                     List<String> categories = new ArrayList<>();
                     for (CategoryResult cate : categoryResultList) {
                         categories.add(cate.getCategoryName());
@@ -289,41 +253,15 @@ public class HomeActivity extends AppCompatActivity
                         }
                         result.addItem(item);
                     }
+                }
 
-
-
-//                    for (CategoryResult cate : categoryListFiltered) {
-//                        ExpandableDrawerItem item = new ExpandableDrawerItem().withName(cate.getCategoryName()).withIcon(R.drawable.ic_filter_list_black).withIdentifier(0).withSelectable(false).withTag("CATEGORIES");
-//                        for (CategoryResult subcate : categoryResultList) {
-//                            if (subcate.getCategoryName().equals(cate.getCategoryName())) {
-//                                item.withSubItems(new SecondaryDrawerItem().withLevel(2).withName(subcate.getSubCategoryName()).withIcon(R.drawable.ic_minus_black).withIdentifier(subcate.getSubCategoryID()).withTag("SUB_CATEGORIES"));
-//                            }
-//                        }
-//                        result.addItem(item);
-//                    }
-
-
-//                    JSONObject json_data = new JSONObject(s);
-//                    Iterator<String> temp = json_data.keys();
-//                    while (temp.hasNext()) {
-//                        String key = temp.next();
-//                        JSONArray sub_cat = json_data.getJSONArray(key);
-//                        ExpandableDrawerItem item = new ExpandableDrawerItem().withName(key.replace("&amp;","&")).withIcon(R.drawable.ic_filter_list_black).withIdentifier(0).withSelectable(false).withTag("CATEGORIES");
-//                        JSONObject sub_cat_json_data = new JSONObject();
-//                        for (int i = 0; i < sub_cat.length(); i++) {
-//                            sub_cat_json_data = sub_cat.getJSONObject(i);
-////                            product_ids[i] = json_data.getString("id");
-//                            item.withSubItems(new SecondaryDrawerItem().withLevel(2).withName(sub_cat_json_data.getString("sub_category").replace("&amp;","&")).withIcon(R.drawable.ic_minus_black).withIdentifier(Integer.parseInt(sub_cat_json_data.getString("id"))).withTag("SUB_CATEGORIES"));
-//
-//                        }
-//                        result.addItem(item);
-//                    }
-
-//                    Toast.makeText(HomeActivity.this, ""+json_data.length(), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
+                @Override
+                public void onFailure(Call<List<CategoryResult>> call, Throwable t) {
+                    call.cancel();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                    builder.setTitle("Received Message");
                     builder.setCancelable(true);
                     builder.setTitle("No Internet Connection");
-//                    builder.setMessage(e.toString());
                     builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -332,37 +270,38 @@ public class HomeActivity extends AppCompatActivity
                     });
                     builder.show();
                 }
-            }
+            });
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
         }
-        Categories categories = new Categories();
-        categories.execute();
+        catch (Exception ex){
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("Received Message");
+            builder.setCancelable(true);
+            builder.setTitle("No Internet Connection");
+            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            builder.show();
+        }
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
-        @SuppressLint("StaticFieldLeak")
-        class LoadSliderImages extends AsyncTask<Void, Void, String> {
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                try {
-
-
-                    //Đổi json thành list
-                    Gson gson = new Gson();
-                    Promotion[] PromotionResultsArray = gson.fromJson(s, Promotion[].class);
-                    List<Promotion> PromotionList = new ArrayList<>(Arrays.asList(PromotionResultsArray));
+        //get promotion slider
+        try {
+            apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<List<Promotion>> promotionCall = apiInterface.GetPromotionProducts();
+            promotionCall.enqueue(new Callback<List<Promotion>>() {
+                @Override
+                public void onResponse(Call<List<Promotion>> call, Response<List<Promotion>> response) {
+                    if (!response.isSuccessful())
+                        return;
+                    Log.d("TAG", response.code() + "");
+                    List<Promotion> PromotionList = response.body();
 
                     for (int i = 0; i< PromotionList.size(); i++){
                         url_maps.put("", PromotionList.get(i).getImageURL());
@@ -386,85 +325,43 @@ public class HomeActivity extends AppCompatActivity
                         sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                         sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
                     }
-//                    JSONArray jArray = new JSONArray(s);
-//                    JSONObject json_data = new JSONObject();
-//                    for (int i = 0; i < jArray.length(); i++) {
-//                        json_data = jArray.getJSONObject(i);
-//                        String str = getResources().getString(R.string.img_base_url) + "slider_images/" + json_data.getString("image");
-//                        url_maps.put("", str);
-//                        sliderShow = findViewById(R.id.slider);
-//                        for (String name : url_maps.keySet()) {
-//                            DefaultSliderView defaultSliderView = new DefaultSliderView(HomeActivity.this);
-//                            // initialize a SliderLayout
-//                            defaultSliderView
-//                                    .image(url_maps.get(name))
-//                                    .setOnSliderClickListener(HomeActivity.this);
-//
-//                            defaultSliderView.bundle(new Bundle());
-//                            defaultSliderView.getBundle()
-//                                    .putString("extra", json_data.getString("product_id"));
-//
-//                            sliderShow.addSlider(defaultSliderView);
-//                        }
-//                        sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-//                        sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
-//                    }
 
-                } catch (Exception e) {
-                    Toast.makeText(HomeActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+
                 }
-//                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-            }
 
-            //in this method we are fetching the json string
-            @Override
-            protected String doInBackground(Void... voids) {
-                try {
-                    String productUrl = "http://192.168.43.74:5656/api/Product/GetPromotionProducts/";
-                    URL url = new URL(productUrl);
+                @Override
+                public void onFailure(Call<List<Promotion>> call, Throwable t) {
+                    call.cancel();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                    builder.setTitle("Received Message");
+                    builder.setCancelable(true);
+                    builder.setTitle("No Internet Connection");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("GET");
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-                    String result = "", line = "";
-                    while ((line = bufferedReader.readLine()) != null) {
-                        result += line;
-                    }
-                    return result;
-
-
-//                    String urls = getResources().getString(R.string.base_url).concat("slider_images");
-//                    URL url = new URL(urls);
-//
-//                    //Opening the URL using HttpURLConnection
-//                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//
-//                    //StringBuilder object to read the string from the service
-//                    StringBuilder sb = new StringBuilder();
-//
-//                    //We will use a buffered reader to read the string from service
-//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//
-//                    //A simple string to read values from each line
-//                    String json;
-//
-//                    //reading until we don't find null
-//                    while ((json = bufferedReader.readLine()) != null) {
-//
-//                        //appending it to string builder
-//                        sb.append(json + "\n");
-//                    }
-//
-//                    //finally returning the read string
-//                    return sb.toString().trim();
-                } catch (Exception e) {
-                    return null;
+                        }
+                    });
+                    builder.show();
                 }
-            }
+            });
+
         }
-        LoadSliderImages sliderImgLoaderObj = new LoadSliderImages();
-        sliderImgLoaderObj.execute();
+        catch (Exception ex){
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("Received Message");
+            builder.setCancelable(true);
+            builder.setTitle("No Internet Connection");
+            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            builder.show();
+        }
+
+
 
         /*  Grid View Best Selling Product  */
 
@@ -512,59 +409,21 @@ public class HomeActivity extends AppCompatActivity
         });
 
         //Start download
-        new LoadGridImages().execute();
+
 
         mProgressBar.setVisibility(View.VISIBLE);
-        class BestDeals extends AsyncTask<String, Void, String> {
 
-            @Override
-            protected String doInBackground(String... params) {
-                //String productUrl = getResources().getString(R.string.base_url) + "getBestSellingProducts/";
-
-                try {
-                    String productUrl = "http://192.168.43.74:5656/api/Product/GetRecentProducts/";
-                    URL url = new URL(productUrl);
-
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("GET");
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-                    String result = "", line = "";
-                    while ((line = bufferedReader.readLine()) != null) {
-                        result += line;
-                    }
-                    return result;
-//                    URL url = new URL(productUrl);
-//
-//                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                    httpURLConnection.setRequestMethod("POST");
-//                    httpURLConnection.setDoInput(true);
-//                    httpURLConnection.setDoOutput(true);
-//
-//                    InputStream inputStream = httpURLConnection.getInputStream();
-//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//                    String result = "", line = "";
-//                    while ((line = bufferedReader.readLine()) != null) {
-//                        result += line;
-//                    }
-//                    return result;
-                } catch (Exception e) {
-                    return e.toString();
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                builder.setTitle("Received Message");
-
-                try {
-
-                    //Đổi json thành list
-                    Gson gson = new Gson();
-                    ProductResponse[] BestSellingProducts = gson.fromJson(s, ProductResponse[].class);
-                    List<ProductResponse> BestSellingProductsList = new ArrayList<>(Arrays.asList(BestSellingProducts));
+        //GetBestDeals
+        try {
+            apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<List<ProductResponse>> promotionCall = apiInterface.GetBestDealProducts();
+            promotionCall.enqueue(new Callback<List<ProductResponse>>() {
+                @Override
+                public void onResponse(Call<List<ProductResponse>> call, Response<List<ProductResponse>> response) {
+                    if (!response.isSuccessful())
+                        return;
+                    Log.d("TAG", response.code() + "");
+                    List<ProductResponse> BestSellingProductsList = response.body();
 
                     l2.setVisibility(View.VISIBLE);
                     mProgressBar.setVisibility(View.GONE);
@@ -574,47 +433,16 @@ public class HomeActivity extends AppCompatActivity
                     product_recyclerview.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
                     product_recyclerview.setAdapter(new ProductAdapter(BestSellingProductsList, HomeActivity.this));
 
-//                    JSONArray productArray = new JSONArray(s);
-//
-//                    String[] product_ids = new String[productArray.length()];
-//                    String[] product_names = new String[productArray.length()];
-//                    String[] product_descs = new String[productArray.length()];
-//                    String[] product_imgs = new String[productArray.length()];
-//                    String[] product_prices = new String[productArray.length()];
-//                    String[] product_brands = new String[productArray.length()];
-//                    String[] product_sps = new String[productArray.length()];
-//                    String[] product_dps = new String[productArray.length()];
-//
-//
-//                    JSONObject json_data = new JSONObject();
-//                    for (int i = 0; i < productArray.length(); i++) {
-//                        json_data = productArray.getJSONObject(i);
-//                        product_ids[i] = json_data.getString("id");
-//                        product_names[i] = json_data.getString("name");
-//                        product_descs[i] = json_data.getString("description");
-//                        product_imgs[i] = json_data.getString("image");
-//                        product_prices[i] = json_data.getString("mrp") + " /-";
-//                        product_brands[i] = json_data.getString("brand");
-//                        product_sps[i] = "\u20B9" + json_data.getString("selling_price") + " /-";
-//                        double p_mrp = Double.parseDouble(json_data.getString("mrp"));
-//                        double p_sp = Double.parseDouble(json_data.getString("selling_price"));
-//                        double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
-//                        int p_dp_i = (int) p_dp;
-//                        product_dps[i] = String.valueOf(p_dp_i);
-//
-//                    }
-//
-//                    l2.setVisibility(View.VISIBLE);
-//                    mProgressBar.setVisibility(View.GONE);
-//
-//                    RecyclerView product_recyclerview = findViewById(R.id.recyclerview_best_deals);
-//                    product_recyclerview.setNestedScrollingEnabled(false);
-//                    product_recyclerview.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
-//                    product_recyclerview.setAdapter(new Recent_Products_Adapter(product_ids, product_names, product_descs, product_imgs, product_prices, product_brands, product_sps, product_dps, HomeActivity.this));
-                } catch (Exception e) {
+
+                }
+
+                @Override
+                public void onFailure(Call<List<ProductResponse>> call, Throwable t) {
+                    call.cancel();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                    builder.setTitle("Received Message");
                     builder.setCancelable(true);
                     builder.setTitle("No Internet Connection");
-//                    builder.setMessage(s);
                     builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -623,188 +451,89 @@ public class HomeActivity extends AppCompatActivity
                     });
                     builder.show();
                 }
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
+            });
 
         }
-        BestDeals products = new BestDeals();
-        products.execute();
+        catch (Exception ex){
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("Received Message");
+            builder.setCancelable(true);
+            builder.setTitle("No Internet Connection");
+            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-//
-//        class RecentProducts extends AsyncTask<String, Void, String> {
-//
-//            @Override
-//            protected String doInBackground(String... params) {
-//                String productUrl = getResources().getString(R.string.base_url) + "getRecentProducts/";
-//
-//                try {
-//                    URL url = new URL(productUrl);
-//
-//                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                    httpURLConnection.setRequestMethod("POST");
-//                    httpURLConnection.setDoInput(true);
-//                    httpURLConnection.setDoOutput(true);
-//
-//                    InputStream inputStream = httpURLConnection.getInputStream();
-//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//                    String result = "", line = "";
-//                    while ((line = bufferedReader.readLine()) != null) {
-//                        result += line;
-//                    }
-//                    return result;
-//                } catch (Exception e) {
-//                    return e.toString();
-//                }
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String s) {
-//                super.onPostExecute(s);
-//                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-//                builder.setTitle("Received Message");
-//
-//                try {
-//
-//                    JSONArray productArray = new JSONArray(s);
-//
-//                    String[] product_ids = new String[productArray.length()];
-//                    String[] product_names = new String[productArray.length()];
-//                    String[] product_descs = new String[productArray.length()];
-//                    String[] product_imgs = new String[productArray.length()];
-//                    String[] product_prices = new String[productArray.length()];
-//                    String[] product_brands = new String[productArray.length()];
-//                    String[] product_sps = new String[productArray.length()];
-//                    String[] product_dps = new String[productArray.length()];
-//
-//
-//                    JSONObject json_data = new JSONObject();
-//                    for (int i = 0; i < productArray.length(); i++) {
-//                        json_data = productArray.getJSONObject(i);
-//                        product_ids[i] = json_data.getString("id");
-//                        product_names[i] = json_data.getString("name");
-//                        product_descs[i] = json_data.getString("description");
-//                        product_imgs[i] = json_data.getString("image");
-//                        product_prices[i] = json_data.getString("mrp") + " /-";
-//                        product_brands[i] = json_data.getString("brand");
-//                        product_sps[i] = "\u20B9" + json_data.getString("selling_price") + " /-";
-//                        double p_mrp = Double.parseDouble(json_data.getString("mrp"));
-//                        double p_sp = Double.parseDouble(json_data.getString("selling_price"));
-//                        double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
-//                        int p_dp_i = (int) p_dp;
-//                        product_dps[i] = String.valueOf(p_dp_i);
-//
-//
-//                    }
-//                    RecyclerView product_recyclerview = findViewById(R.id.recyclerview_recent_products);
-//                    product_recyclerview.setNestedScrollingEnabled(false);
-//                    product_recyclerview.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
-//                    product_recyclerview.setAdapter(new Recent_Products_Adapter(product_ids, product_names, product_descs, product_imgs, product_prices, product_brands, product_sps, product_dps, HomeActivity.this));
-//                } catch (JSONException e) {
-//                    builder.setCancelable(true);
-//                    builder.setTitle("No Internet Connection");
-//                    builder.setMessage(s);
-//                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                        }
-//                    });
-//                    builder.show();
-//                }
-//
-//            }
-//
-//            @Override
-//            protected void onPreExecute() {
-//                super.onPreExecute();
-//            }
-//
-//
-//        }
-//        RecentProducts recentProducts = new RecentProducts();
-//        recentProducts.execute();
-
-    }
-
-    class LoadGridImages extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+                }
+            });
+            builder.show();
         }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-//                Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
-            try {
-                JSONArray jArray = new JSONArray(s);
-                JSONObject json_data = new JSONObject();
-                GridItem item;
 
-                for (int i = 0; i < jArray.length(); i++) {
+        //GetRecentProducts
+        try {
+            apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<List<ProductResponse>> promotionCall = apiInterface.GetRecentProducts();
+            promotionCall.enqueue(new Callback<List<ProductResponse>>() {
+                @Override
+                public void onResponse(Call<List<ProductResponse>> call, Response<List<ProductResponse>> response) {
+                    if (!response.isSuccessful())
+                        return;
+                    Log.d("TAG", response.code() + "");
+                    List<ProductResponse> RecentProductsList = response.body();
+                    GridItem item;
+                    for(int i = 0; i < RecentProductsList.size(); i++){
+                        String title = "Nothing";
 
-                    json_data = jArray.getJSONObject(i);
-                    String title = "Nothing";
-                    if (json_data.getString("name").length() > 20) {
-                        title = json_data.getString("name").substring(0, 19);
-                    } else {
-                        title = json_data.getString("name");
+                        if (RecentProductsList.get(i).getName().length() > 20) {
+                            title = RecentProductsList.get(i).getName().substring(0, 19);
+                        } else {
+                            title = RecentProductsList.get(i).getName();
+                        }
+                        item = new GridItem();
+                        item.setTitle(title);
+
+                        item.setImage(RecentProductsList.get(i).getImageURL());
+                        bsp_id_list.add(String.valueOf(RecentProductsList.get(i).getId()));
+                        mGridData.add(item);
                     }
-                    item = new GridItem();
-                    item.setTitle(title);
-
-                    item.setImage(getResources().getString(R.string.img_base_url) + "product_images/" + json_data.getString("image"));
-                    bsp_id_list.add(json_data.getString("id"));
-                    mGridData.add(item);
+                    mGridAdapter.setGridData(mGridData);
+                    mProgressBar.setVisibility(View.GONE);
                 }
 
-                mGridAdapter.setGridData(mGridData);
-                mProgressBar.setVisibility(View.GONE);
+                @Override
+                public void onFailure(Call<List<ProductResponse>> call, Throwable t) {
+                    call.cancel();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                    builder.setTitle("Received Message");
+                    builder.setCancelable(true);
+                    builder.setTitle("No Internet Connection");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-            } catch (Exception e) {
-                Toast.makeText(HomeActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
-            }
-//                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.show();
+                }
+            });
+
         }
+        catch (Exception ex){
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("Received Message");
+            builder.setCancelable(true);
+            builder.setTitle("No Internet Connection");
+            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-        //in this method we are fetching the json string
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                String urls = getResources().getString(R.string.base_url).concat("getRecentProducts");
-                URL url = new URL(urls);
-
-                //Opening the URL using HttpURLConnection
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-                //StringBuilder object to read the string from the service
-                StringBuilder sb = new StringBuilder();
-
-                //We will use a buffered reader to read the string from service
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-                //A simple string to read values from each line
-                String json;
-
-                //reading until we don't find null
-                while ((json = bufferedReader.readLine()) != null) {
-
-                    //appending it to string builder
-                    sb.append(json + "\n");
                 }
-
-                //finally returning the read string
-                return sb.toString().trim();
-            } catch (Exception e) {
-                return null;
-            }
+            });
+            builder.show();
         }
     }
+
+
 
     @Override
     protected void onPostResume() {

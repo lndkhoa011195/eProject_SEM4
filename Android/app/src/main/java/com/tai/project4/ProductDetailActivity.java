@@ -9,13 +9,21 @@ import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.squareup.picasso.Picasso;
+import com.tai.project4.interfaces.APIClient;
+import com.tai.project4.interfaces.APIInterface;
+import com.tai.project4.models.CategoryResult;
+import com.tai.project4.models.ProductResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +34,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -37,6 +52,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     ScrollView view;
     private ProgressBar mProgressBar;
     AddToCart addToCart;
+
+    APIInterface apiInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,89 +172,160 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        ProductDetail productDetail = new ProductDetail();
-        productDetail.execute();
+//        ProductDetail productDetail = new ProductDetail();
+//        productDetail.execute();
 
-    }
+        //GetProductDetails
+        try {
+            apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<ProductResponse> productDetailsCall = apiInterface.GetProduct(Integer.parseInt(p_id));
 
-    class ProductDetail extends AsyncTask<String, Void, String> {
+            productDetailsCall.enqueue(new Callback<ProductResponse>() {
+                @Override
+                public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                    if (!response.isSuccessful())
+                        return;
+                    Log.d("TAG", response.code() + "");
+                    ProductResponse productDetails = response.body();
+                    tvProductName.setText(productDetails.getName());
+                    tvProductDesc.setText(productDetails.getDescription());
+                    tvMRP.setText(String.valueOf(productDetails.getOriginalPrice()));
+                    tvPrice.setText(String.valueOf(productDetails.getSellingPrice()));
+                    product_id.setText(String.valueOf(productDetails.getId()));
+                    tvQty.setText("1");
+                    Picasso.with(ProductDetailActivity.this).load(productDetails.getImageURL()).placeholder(R.drawable.watermark_icon).into(ivProductImage);
 
-        @Override
-        protected String doInBackground(String... params) {
-            String productUrl = getResources().getString(R.string.base_url) + "getProductDetail/" + p_id;
+                    double p_mrp = productDetails.getOriginalPrice();
+                    double p_sp = productDetails.getSellingPrice();
+                    double p_dp = (p_mrp - p_sp);
+                    double p_dp_p = p_dp / (p_mrp / 100);
 
-            try {
-                URL url = new URL(productUrl);
+                    int p_dp_i = (int) p_dp;
+                    int p_dp_p_i = (int) p_dp_p;
 
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setDoOutput(true);
+                    tvSaved.setText(String.valueOf(p_dp_i));
+                    tvSavedPer.setText("(" + p_dp_p_i + "%)");
+                    mProgressBar.setVisibility(View.GONE);
+                    view.setVisibility(View.VISIBLE);
 
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-                String result = "", line = "";
-                while ((line = bufferedReader.readLine()) != null) {
-                    result += line;
                 }
-                return result;
-            } catch (Exception e) {
-                return e.toString();
-            }
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+                @Override
+                public void onFailure(Call<ProductResponse> call, Throwable t) {
+                    call.cancel();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
+                    builder.setTitle("Received Message");
+                    builder.setCancelable(true);
+                    builder.setTitle("No Internet Connection");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.show();
+                }
+            });
+        }
+        catch (Exception ex){
             AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
             builder.setTitle("Received Message");
+            builder.setCancelable(true);
+            builder.setTitle("No Internet Connection");
+            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-            try {
-
-                JSONArray productDetailsArray = new JSONArray(s);
-                JSONObject json_data = new JSONObject();
-                json_data = productDetailsArray.getJSONObject(0);
-
-                tvProductName.setText(json_data.getString("name"));
-                tvProductDesc.setText(json_data.getString("description"));
-                tvMRP.setText("\u20B9 " + json_data.getString("mrp"));
-                tvPrice.setText("\u20B9 " + json_data.getString("selling_price"));
-                product_id.setText(json_data.getString("id"));
-                tvQty.setText("1");
-                Picasso.with(ProductDetailActivity.this).load(getResources().getString(R.string.img_base_url) + "product_images/" + json_data.getString("image")).placeholder(R.drawable.watermark_icon).into(ivProductImage);
-
-                double p_mrp = Double.parseDouble(json_data.getString("mrp"));
-                double p_sp = Double.parseDouble(json_data.getString("selling_price"));
-                double p_dp = (p_mrp - p_sp);
-                double p_dp_p = p_dp / (p_mrp / 100);
-
-                int p_dp_i = (int) p_dp;
-                int p_dp_p_i = (int) p_dp_p;
-
-                tvSaved.setText("\u20B9" + p_dp_i);
-                tvSavedPer.setText("(" + p_dp_p_i + "%)");
-                mProgressBar.setVisibility(View.GONE);
-                view.setVisibility(View.VISIBLE);
-
-            } catch (JSONException e) {
-                builder.setCancelable(true);
-                builder.setTitle("No Internet Connection");
-                builder.setMessage("Please Connect to internet");
-                builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                builder.show();
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+                }
+            });
+            builder.show();
         }
 
     }
+
+
+
+
+
+
+//    class ProductDetail extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            String productUrl = getResources().getString(R.string.base_url) + "getProductDetail/" + p_id;
+//
+//            try {
+//                URL url = new URL(productUrl);
+//
+//                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+//                httpURLConnection.setRequestMethod("POST");
+//                httpURLConnection.setDoInput(true);
+//                httpURLConnection.setDoOutput(true);
+//
+//                InputStream inputStream = httpURLConnection.getInputStream();
+//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//                String result = "", line = "";
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    result += line;
+//                }
+//                return result;
+//            } catch (Exception e) {
+//                return e.toString();
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
+//            builder.setTitle("Received Message");
+//
+//            try {
+//
+//                JSONArray productDetailsArray = new JSONArray(s);
+//                JSONObject json_data = new JSONObject();
+//                json_data = productDetailsArray.getJSONObject(0);
+//
+//                tvProductName.setText(json_data.getString("name"));
+//                tvProductDesc.setText(json_data.getString("description"));
+//                tvMRP.setText("\u20B9 " + json_data.getString("mrp"));
+//                tvPrice.setText("\u20B9 " + json_data.getString("selling_price"));
+//                product_id.setText(json_data.getString("id"));
+//                tvQty.setText("1");
+//                Picasso.with(ProductDetailActivity.this).load(getResources().getString(R.string.img_base_url) + "product_images/" + json_data.getString("image")).placeholder(R.drawable.watermark_icon).into(ivProductImage);
+//
+//                double p_mrp = Double.parseDouble(json_data.getString("mrp"));
+//                double p_sp = Double.parseDouble(json_data.getString("selling_price"));
+//                double p_dp = (p_mrp - p_sp);
+//                double p_dp_p = p_dp / (p_mrp / 100);
+//
+//                int p_dp_i = (int) p_dp;
+//                int p_dp_p_i = (int) p_dp_p;
+//
+//                tvSaved.setText("\u20B9" + p_dp_i);
+//                tvSavedPer.setText("(" + p_dp_p_i + "%)");
+//                mProgressBar.setVisibility(View.GONE);
+//                view.setVisibility(View.VISIBLE);
+//
+//            } catch (JSONException e) {
+//                builder.setCancelable(true);
+//                builder.setTitle("No Internet Connection");
+//                builder.setMessage("Please Connect to internet");
+//                builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                    }
+//                });
+//                builder.show();
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//    }
 
 }
