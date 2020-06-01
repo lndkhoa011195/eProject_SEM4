@@ -12,8 +12,12 @@ namespace eProject.DataAccess.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
+        public string Address { get; set; }
+        [JsonIgnore]
         public DateTime ModifiedDate { get; set; }
+        [JsonIgnore]
         public int LoginAttemptCount { get; set; }
+        [JsonIgnore]
         public bool IsActive { get; set; }  
         [JsonIgnore]
         public ICollection<Order> Orders { get; set; }

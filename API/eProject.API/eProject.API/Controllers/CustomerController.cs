@@ -43,7 +43,7 @@ namespace eProject.API.Controllers
                 //Tài khoản còn active hay không
                 if (cus.IsActive == false)
                 {
-                    return JsonConvert.SerializeObject(response);
+                    return JsonConvert.SerializeObject(new Customer());
                 }
                 else if (cus.Password == loginRequest.Password) //Kiểm tra xem password có đúng hay không
                 {
@@ -51,11 +51,11 @@ namespace eProject.API.Controllers
                     _context.Customers.Update(cus);
                     _context.SaveChanges();
 
-                    response.Id = cus.Id;
-                    response.Name = cus.Name;
-                    response.Email = cus.Email;
-                    response.Phone = cus.Phone;
-                    return JsonConvert.SerializeObject(response);
+                    //response.Id = cus.Id;
+                    //response.Name = cus.Name;
+                    //response.Email = cus.Email;
+                    //response.Phone = cus.Phone;
+                    return JsonConvert.SerializeObject(cus);
                 }
                 else //Password không đúng
                 {
@@ -73,12 +73,12 @@ namespace eProject.API.Controllers
                         _context.Customers.Update(cus);
                         _context.SaveChanges();
                     }
-                    return JsonConvert.SerializeObject(response);
+                    return JsonConvert.SerializeObject(new Customer());
                 }
             }
             else
             {
-                return JsonConvert.SerializeObject(response);
+                return JsonConvert.SerializeObject(new Customer());
             }
         }
 
@@ -111,6 +111,7 @@ namespace eProject.API.Controllers
                 Email = signUpRequest.Email,
                 Phone = signUpRequest.Phone,
                 Password = signUpRequest.Password,
+                Address = signUpRequest.Address,
                 LoginAttemptCount = 0,
                 ModifiedDate = DateTime.Now,
                 IsActive = true
@@ -120,13 +121,15 @@ namespace eProject.API.Controllers
 
             cus = _context.Customers.FirstOrDefault(x => x.Email == signUpRequest.Email && x.Phone == signUpRequest.Phone);
 
-            LoginResponse response = new LoginResponse();
+            SignUpRequest response = new SignUpRequest();
             if (cus != null)
             {
                 response.Id = cus.Id;
                 response.Name = cus.Name;
                 response.Email = cus.Email;
                 response.Phone = cus.Phone;
+                response.Password = cus.Password;
+                response.Address = cus.Address;
                 return new RequestResult
                 {
                     ErrorCode = ErrorCode.Success,
