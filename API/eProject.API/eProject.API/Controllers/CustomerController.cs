@@ -33,15 +33,48 @@ namespace eProject.API.Controllers
         [HttpPost("Authenticate")]
         public async Task<string> Authenticate(LoginRequest loginRequest)
         {
-            var cus = _context.Customers.FirstOrDefault(x => x.Email == loginRequest.Email && x.Password == loginRequest.Password);
+            //Tìm kiếm xem email có tồn tại hay không
+            var cus = _context.Customers.FirstOrDefault(x => x.Email == loginRequest.Email);
             LoginResponse response = new LoginResponse();
+
+            //Email có tồn tại
             if (cus != null)
             {
-                response.Id = cus.Id;
-                response.Name = cus.Name;
-                response.Email = cus.Email;
-                response.Phone = cus.Phone;
-                return JsonConvert.SerializeObject(response);
+                //Tài khoản còn active hay không
+                if (cus.IsActive == false)
+                {
+                    return JsonConvert.SerializeObject(response);
+                }
+                else if (cus.Password == loginRequest.Password) //Kiểm tra xem password có đúng hay không
+                {
+                    cus.LoginAttemptCount = 0;
+                    _context.Customers.Update(cus);
+                    _context.SaveChanges();
+
+                    response.Id = cus.Id;
+                    response.Name = cus.Name;
+                    response.Email = cus.Email;
+                    response.Phone = cus.Phone;
+                    return JsonConvert.SerializeObject(response);
+                }
+                else //Password không đúng
+                {
+                    //Nếu đã đăng nhập sai mật khẩu 3 lần, khoá tài khoản
+                    if (cus.LoginAttemptCount == 3)
+                    {
+                        cus.LoginAttemptCount = 0;
+                        cus.IsActive = false;
+                        _context.Customers.Update(cus);
+                        _context.SaveChanges();
+                    }
+                    else //Đăng nhập sai < 3 lần, cộng LoginAttemptCount
+                    {
+                        cus.LoginAttemptCount++;
+                        _context.Customers.Update(cus);
+                        _context.SaveChanges();
+                    }
+                    return JsonConvert.SerializeObject(response);
+                }
             }
             else
             {
@@ -332,6 +365,134 @@ namespace eProject.API.Controllers
                 return countCart;
             }
             return countCart;
+        }
+
+        /// <summary>
+        /// Tạo Order mới và thêm thông tin vào OrderDetail
+        /// </summary>
+        /// <param name="checkOutRequest"></param>
+        /// <returns></returns>
+        [HttpPost("CheckOut")]
+        public async Task<RequestResult> CheckOut(CheckOutRequest checkOutRequest)
+        {
+            try
+            {
+                //Kiểm tra CustomerId có tồn tại hay không
+                var customer = _context.Customers.Find(checkOutRequest.CustomerId);
+                //Có tồn tại
+                if (customer != null)
+                {
+                    //Kiểm tra tất cả sản phẩm trong cart có ProductId hợp lệ hay không
+                    bool check = true;
+                    foreach (var item in checkOutRequest.CartProducts)
+                    {
+                        var product = _context.Products.Find(item.ProductId);
+                        if (product == null)
+                        {
+                            check = false;
+                            break;
+                        }
+                    }
+                    if (check)
+                    {
+                        //Tạo order mới
+                        DateTime date = DateTime.Now;
+                        string newOrderCode = date.ToString("yyyyMMddHHmmssfff") + "_" + checkOutRequest.CustomerId.ToString();
+                        Order newOrder = new Order
+                        {
+                            Id = 0,
+                            OrderCode = newOrderCode,
+                            CustomerId = checkOutRequest.CustomerId,
+                            ShippingAddress = checkOutRequest.ShippingAddress,
+                            OrderDate = date,
+                            Note = checkOutRequest.Note,
+                            Status = 1
+                        };
+                        _context.Orders.Add(newOrder);
+                        _context.SaveChanges();
+                        var order = _context.Orders.SingleOrDefault(x => x.CustomerId == checkOutRequest.CustomerId && x.OrderCode == newOrderCode);
+                        if (order != null)
+                        {
+                            var products = _context.Products.ToList();
+                            var manufacturers = _context.Manufacturers.ToList();
+                            var units = _context.Units.ToList();
+
+                            var list = from product in products
+                                       join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                                       join unit in units on product.UnitId equals unit.Id
+                                       where product.IsActive == true
+                                       select new ProductResponse
+                                       {
+                                           Id = product.Id,
+                                           Name = product.Name,
+                                           OriginalPrice = product.OriginalPrice,
+                                           SellingPrice = product.SellingPrice,
+                                           Description = product.Description,
+                                           MadeIn = product.MadeIn,
+                                           ManufacturerName = manufacturer.Name,
+                                           ImageURL = product.ImageURL,
+                                           UnitName = unit.Name
+                                       };
+
+                            foreach (var item in checkOutRequest.CartProducts)
+                            {
+                                var temp = list.FirstOrDefault(x => x.Id == item.ProductId);
+                                OrderDetail orderDetail = new OrderDetail 
+                                { 
+                                    Id = 0,
+                                    OrderId = order.Id,
+                                    ProductId = temp.Id,
+                                    ProductName = temp.Name,
+                                    OriginalPrice = temp.OriginalPrice,
+                                    SellingPrice = temp.SellingPrice,
+                                    Description = temp.Description,
+                                    UnitName = temp.UnitName,
+                                    ManufacturerName = temp.ManufacturerName,
+                                    MadeIn = temp.MadeIn,
+                                    ImageURL = temp.ImageURL,
+                                    Quantity = item.Quantity
+                                };
+                                _context.OrderDetails.Add(orderDetail);
+                                _context.SaveChanges();
+                            }
+                            return new RequestResult
+                            {
+                                ErrorCode = ErrorCode.Success,
+                                Content = "Success"
+                            };
+                        }
+                        else
+                        {
+                            return new RequestResult
+                            {
+                                ErrorCode = ErrorCode.Failed,
+                                Content = "Failed"
+                            };
+                        }
+                    }
+                    else
+                    {
+                        return new RequestResult
+                        {
+                            ErrorCode = ErrorCode.Failed,
+                            Content = "Failed"
+                        };
+                    }
+                }
+            }
+            catch
+            {
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Failed"
+                };
+            }
+            return new RequestResult
+            {
+                ErrorCode = ErrorCode.Failed,
+                Content = "Failed"
+            };
         }
     }
 }

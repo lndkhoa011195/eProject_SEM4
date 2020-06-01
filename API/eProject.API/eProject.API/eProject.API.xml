@@ -58,6 +58,13 @@
             <param name="_customerId"></param>
             <returns></returns>
         </member>
+        <member name="M:eProject.API.Controllers.CustomerController.CheckOut(eProject.DataAccess.Models.Request.CheckOutRequest)">
+            <summary>
+            Tạo Order mới và thêm thông tin vào OrderDetail
+            </summary>
+            <param name="checkOutRequest"></param>
+            <returns></returns>
+        </member>
         <member name="M:eProject.API.Controllers.ProductController.GetProducts">
             <summary>
             Lấy danh sách tất cả product
@@ -81,6 +88,12 @@
         <member name="M:eProject.API.Controllers.ProductController.GetRecentProducts">
             <summary>
             Lấy 12 sản phẩm được thêm vào gần nhất
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.ProductController.GetBestDealProducts">
+            <summary>
+            Lấy danh sách sản phẩm giảm giá nhiều nhất
             </summary>
             <returns></returns>
         </member>

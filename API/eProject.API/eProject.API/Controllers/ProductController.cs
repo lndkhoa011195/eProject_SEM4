@@ -152,7 +152,7 @@ namespace eProject.API.Controllers
         [HttpGet("GetRecentProducts")]
         public async Task<string> GetRecentProducts()
         {
-            var products = await _context.Products.ToListAsync();
+            var products =  _context.Products.ToListAsync().Result.Take(12);
             var manufacturers = await _context.Manufacturers.ToListAsync();
             var units = await _context.Units.ToListAsync();
 
@@ -173,7 +173,38 @@ namespace eProject.API.Controllers
                            ImageURL = product.ImageURL,
                            UnitName = unit.Name
                        };
-            return JsonConvert.SerializeObject(list.Take(12));
+            return JsonConvert.SerializeObject(list);
+        }
+
+        /// <summary>
+        /// Lấy danh sách sản phẩm giảm giá nhiều nhất
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetBestDealProducts")]
+        public async Task<string> GetBestDealProducts()
+        {
+            var products = await _context.Products.ToListAsync();
+            var manufacturers = await _context.Manufacturers.ToListAsync();
+            var units = await _context.Units.ToListAsync();
+
+            var list = from product in products
+                       join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                       join unit in units on product.UnitId equals unit.Id
+                       where product.IsActive == true
+                       orderby (product.OriginalPrice - product.SellingPrice) descending
+                       select new ProductResponse
+                       {
+                           Id = product.Id,
+                           Name = product.Name,
+                           OriginalPrice = product.OriginalPrice,
+                           SellingPrice = product.SellingPrice,
+                           Description = product.Description,
+                           MadeIn = product.MadeIn,
+                           ManufacturerName = manufacturer.Name,
+                           ImageURL = product.ImageURL,
+                           UnitName = unit.Name
+                       };
+            return JsonConvert.SerializeObject(list.Take(9));
         }
 
         /// <summary>
@@ -188,4 +219,6 @@ namespace eProject.API.Controllers
             return JsonConvert.SerializeObject(promo);
         }
     }
+
+    
 }
