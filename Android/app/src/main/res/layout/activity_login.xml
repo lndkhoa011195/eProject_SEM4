@@ -60,7 +60,7 @@
                 android:layout_marginEnd="40dp">
 
                 <EditText
-                    android:id="@+id/loginid"
+                    android:id="@+id/loginEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_email_black"
@@ -94,16 +94,6 @@
                     android:textColor="@color/blue_grey" />
             </com.google.android.material.textfield.TextInputLayout>
 
-<!--            <Button-->
-<!--                android:id="@+id/login"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="end"-->
-<!--                android:layout_margin="25sp"-->
-<!--                android:background="@drawable/btn_background"-->
-<!--                android:text="Sign In"-->
-<!--                android:textColor="@color/color_black_light"-->
-<!--                android:textStyle="bold" />-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -149,6 +139,17 @@
         app:layout_constraintHorizontal_bias="0.32"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <TextView
+        android:id="@+id/responseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forget" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"

@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
 
+    @SerializedName("Id")
+    public String Id;
     @SerializedName("Email")
     public String email;
     @SerializedName("Password")
