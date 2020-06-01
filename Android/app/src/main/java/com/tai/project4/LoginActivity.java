@@ -41,10 +41,10 @@ import retrofit2.http.Body;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String PREFS = "PREFS";
-    EditText etLogin_id, etPassword;
+    EditText etLogin_email, etPassword;
     Button btnLogin, btnSkip;
     //String login_id, password;
-    TextView signup, forget;
+    TextView signup, forget, responeText;
     SharedPreferences sp;
     SharedPreferences.Editor edit;
 
@@ -58,20 +58,22 @@ public class LoginActivity extends AppCompatActivity {
         sp = getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE);
         edit = sp.edit();
         signup = findViewById(R.id.signup);
-        etLogin_id = findViewById(R.id.loginid);
+        etLogin_email = findViewById(R.id.loginEmail);
         etPassword = findViewById(R.id.password);
         btnLogin = findViewById(R.id.login);
         btnSkip = findViewById(R.id.skip_login);
         forget = findViewById(R.id.forget);
+        responeText = findViewById(R.id.responseText);
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String txtEmail = etLogin_id.getText().toString();
+                final String txtEmail = etLogin_email.getText().toString();
                 final String txtPass = etPassword.getText().toString();
                 if (txtEmail.isEmpty() || txtPass.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Đm nhập cho đủ vào", Toast.LENGTH_SHORT).show();
+                    responeText.setText("Cút");
+                    //Toast.makeText(LoginActivity.this, "Đm nhập cho đủ vào", Toast.LENGTH_SHORT).show();
                 }
                 Call<Account> call3 = apiInterface.Login(new Account(){{ email = txtEmail; password = txtPass;}});
                 call3.enqueue(new Callback<Account>() {
@@ -86,6 +88,14 @@ public class LoginActivity extends AppCompatActivity {
                             if (txtEmail.equalsIgnoreCase(Data.userProfile.email)) {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("Account", Account);
+//                                edit.putString("loginid", json_data.getString("email"));
+//                                edit.putString("name", json_data.getString("name"));
+//                                edit.putString("mobile", json_data.getString("mobile"));
+//                                edit.putString("city", json_data.getString("city"));
+//                                edit.putString("locality", json_data.getString("locality"));
+//                                edit.putString("address", json_data.getString("address"));
+//                                edit.putString("c_dt", json_data.getString("c_dt"));
+//                                edit.apply();
                                 Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                                 i.putExtras(bundle);
                                 startActivity(i);

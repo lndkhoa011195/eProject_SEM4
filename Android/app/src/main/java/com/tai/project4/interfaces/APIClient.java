@@ -20,7 +20,11 @@ public class APIClient {
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
             retrofit = new Retrofit.Builder()
+<<<<<<< HEAD
                     .baseUrl("http://172.16.100.140:5544")
+=======
+                    .baseUrl("http://192.168.0.9:5656/")
+>>>>>>> bb004a77c10f255a1bb3cf5ca469cee53c646c6e
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(client)
                     .build();
