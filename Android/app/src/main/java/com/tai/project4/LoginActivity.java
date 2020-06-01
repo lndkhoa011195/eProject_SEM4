@@ -18,6 +18,7 @@ import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.model.Account;
 import com.tai.project4.model.Data;
+import com.tai.project4.model.Login;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -71,54 +72,52 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String txtEmail = etLogin_email.getText().toString();
                 final String txtPass = etPassword.getText().toString();
-                if (txtEmail.isEmpty() || txtPass.isEmpty()){
+                if (txtEmail.isEmpty() || txtPass.isEmpty()) {
                     responeText.setText("Cút");
                     //Toast.makeText(LoginActivity.this, "Đm nhập cho đủ vào", Toast.LENGTH_SHORT).show();
-                }
-                Call<Account> call3 = apiInterface.Login(new Account(){{ email = txtEmail; password = txtPass;}});
-                call3.enqueue(new Callback<Account>() {
-                    @Override
-                    public void onResponse(Call<Account> call, Response<Account> response) {
-                        try {
-                            if (!response.isSuccessful())
-                                return;
-                            Log.d("TAG", response.code() + "");
-                            Account Account = response.body();
-                            Data.userProfile = Account;
-                            if (txtEmail.equalsIgnoreCase(Data.userProfile.email)) {
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("Account", Account);
-//                                edit.putString("loginid", json_data.getString("email"));
-//                                edit.putString("name", json_data.getString("name"));
-//                                edit.putString("mobile", json_data.getString("mobile"));
-//                                edit.putString("city", json_data.getString("city"));
-//                                edit.putString("locality", json_data.getString("locality"));
-//                                edit.putString("address", json_data.getString("address"));
-//                                edit.putString("c_dt", json_data.getString("c_dt"));
-//                                edit.apply();
-                                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                                i.putExtras(bundle);
-                                startActivity(i);
-                                finish();
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Login Invalid", Toast.LENGTH_SHORT).show();
-                                //edtPhone.setText("");
-                                etPassword.setText("");
+                } 
+                else {
+                    Login login = new Login(txtEmail, txtPass);
+                    Call<Account> call3 = apiInterface.Login(login);
+                    call3.enqueue(new Callback<Account>() {
+                        @Override
+                        public void onResponse(Call<Account> call, Response<Account> response) {
+                            try {
+                                if (!response.isSuccessful())
+                                    return;
+                                Log.d("TAG", response.code() + "");
+                                Account Account = response.body();
+                                Data.userProfile = Account;
+                                if (txtEmail.equalsIgnoreCase(Data.userProfile.Email)) {
+                                    edit.putString("Id", String.valueOf(Account.getId()));
+                                    edit.putString("Name", Account.getName());
+                                    edit.putString("Phone", Account.getPhone());
+                                    edit.apply();
+                                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+//                                i.putExtras(bundle);
+                                    startActivity(i);
+                                    finish();
+                                } else {
+                                    //Toast.makeText(LoginActivity.this, "Login Invalid", Toast.LENGTH_SHORT).show();
+                                    responeText.setText("Login Invalid");
+                                    etPassword.setText("");
+                                }
+                            } catch (Exception e) {
+                                //Toast.makeText(LoginActivity.this, "Login Invalid", Toast.LENGTH_SHORT).show();
+                                //responeText.setText("Login Invalid");
+                                //etPassword.setText("");
                             }
-                        } catch (Exception e) {
-                            Toast.makeText(LoginActivity.this, "Login Invalid", Toast.LENGTH_SHORT).show();
-                            //edtPhone.setText("");
-                            etPassword.setText("");
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Account> call, Throwable t) {
-                        call.cancel();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Account> call, Throwable t) {
+                            call.cancel();
+                        }
+                    });
+                }
             }
         });
+
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

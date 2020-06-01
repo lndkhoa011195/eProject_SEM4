@@ -3,6 +3,7 @@ package com.tai.project4.interfaces;
 
 
 import com.tai.project4.model.Account;
+import com.tai.project4.model.Login;
 import com.tai.project4.models.CategoryResult;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
@@ -20,7 +21,7 @@ import retrofit2.http.Query;
 public interface APIInterface {
 
     @POST("/api/Customer/Authenticate")
-    Call<Account> Login(@Body Account account);
+    Call<Account> Login(@Body Login account);
 
     @GET("/api/Product/GetProductsByName")
     Call<List<ProductResponse>> GetProductsByName(@Query("name") String name);

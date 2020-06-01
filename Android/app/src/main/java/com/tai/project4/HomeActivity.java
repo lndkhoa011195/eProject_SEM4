@@ -110,11 +110,11 @@ public class HomeActivity extends AppCompatActivity
 
         handleIntent(getIntent());
         final IProfile profile;
-        if (sp.getString("loginid", null) == null) {
+        if (sp.getString("Id", null) == null) {
             profile = new ProfileDrawerItem().withName("RKS").withEmail("profile@rks.com").withIcon(R.drawable.icon).withTag("RKS");
 
         } else {
-            profile = new ProfileDrawerItem().withName(sp.getString("name", null)).withEmail(sp.getString("mobile", null)).withIcon(R.drawable.icon).withTag("CUSTOMER");
+            profile = new ProfileDrawerItem().withName(sp.getString("Name", null)).withEmail(sp.getString("Phone", null)).withIcon(R.drawable.icon).withTag("CUSTOMER");
 
         }
 
@@ -186,7 +186,7 @@ public class HomeActivity extends AppCompatActivity
                                 cart_count = 0;
                                 invalidateOptionsMenu();
                                 editor.clear().apply();
-                                Intent i = new Intent(HomeActivity.this, StartActivity.class);
+                                Intent i = new Intent(HomeActivity.this, LoginActivity.class);
                                 startActivity(i);
                                 finish();
 
@@ -209,7 +209,7 @@ public class HomeActivity extends AppCompatActivity
 //                .withShowDrawerUntilDraggedOpened(true)
                 .build();
 
-        if (sp.getString("loginid", null) != null) {
+        if (sp.getString("Id", null) != null) {
             PrimaryDrawerItem order_history = new PrimaryDrawerItem().withName("Order History").withIcon(R.drawable.ic_history_black).withTag("ORDER_HISTORY");
             PrimaryDrawerItem my_cart = new PrimaryDrawerItem().withName("My Cart").withIcon(R.drawable.ic_shopping_cart_black).withTag("MY_CART");
             result.addItem(order_history);
