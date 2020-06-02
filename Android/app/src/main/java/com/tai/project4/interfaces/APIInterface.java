@@ -23,6 +23,9 @@ public interface APIInterface {
     @POST("/api/Customer/Authenticate")
     Call<Account> Login(@Body Login account);
 
+    @POST("/api/Customer/SignUp")
+    Call<Account> SignUp(@Body Account account);
+
     @GET("/api/Product/GetProductsByName")
     Call<List<ProductResponse>> GetProductsByName(@Query("name") String name);
 

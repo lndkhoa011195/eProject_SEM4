@@ -26,7 +26,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -103,55 +102,54 @@
                     android:singleLine="true"
                     android:textColor="@color/blue_grey" />
 
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginBottom="5dp"-->
+<!--                    android:background="@drawable/box"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:paddingEnd="10dp"-->
+<!--                    android:paddingStart="10dp"-->
+<!--                    android:paddingTop="9dp">-->
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/box"
-                    android:paddingBottom="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingTop="9dp">
+<!--                    <ImageView-->
+<!--                        android:id="@+id/i1"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/ic_location_city_black" />-->
 
-                    <ImageView
-                        android:id="@+id/i1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_location_city_black" />
-
-                    <Spinner
-                        android:id="@+id/city"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_toEndOf="@id/i1"
-                        android:background="#00000000" />
-                </RelativeLayout>
+<!--                    <Spinner-->
+<!--                        android:id="@+id/city"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_toEndOf="@id/i1"-->
+<!--                        android:background="#00000000" />-->
+<!--                </RelativeLayout>-->
 
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/box"
-                    android:paddingBottom="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingTop="9dp">
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginBottom="5dp"-->
+<!--                    android:background="@drawable/box"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:paddingEnd="10dp"-->
+<!--                    android:paddingStart="10dp"-->
+<!--                    android:paddingTop="9dp">-->
 
-                    <ImageView
-                        android:id="@+id/i2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_bookmark_black" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/i2"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/ic_bookmark_black" />-->
 
-                    <Spinner
-                        android:id="@+id/locality"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_toEndOf="@+id/i2"
-                        android:background="#00000000" />
-                </RelativeLayout>
+<!--                    <Spinner-->
+<!--                        android:id="@+id/locality"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_toEndOf="@+id/i2"-->
+<!--                        android:background="#00000000" />-->
+<!--                </RelativeLayout>-->
 
                 <EditText
                     android:id="@+id/address"
@@ -209,7 +207,6 @@
                     android:singleLine="true"
                     android:textColor="@color/blue_grey" />
 
-
                 <Button
                     android:id="@+id/register"
                     android:layout_width="wrap_content"
@@ -238,7 +235,6 @@
             android:gravity="bottom|center"
             android:orientation="horizontal"
             android:paddingBottom="4sp">
-
 
             <TextView
                 android:layout_width="wrap_content"

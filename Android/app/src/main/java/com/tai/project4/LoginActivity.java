@@ -96,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                                     edit.putString("Address", Account.getAddress());
                                     edit.apply();
                                     Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-//                                i.putExtras(bundle);
                                     startActivity(i);
                                     finish();
                                 } else {
