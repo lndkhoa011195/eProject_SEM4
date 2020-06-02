@@ -146,6 +146,123 @@ namespace eProject.API.Controllers
             }
         }
 
+        [HttpPost("SignUp2")]
+        public async Task<SignUpRequest> SignUp2(SignUpRequest signUpRequest)
+        {
+            var cus = _context.Customers.FirstOrDefault(x => x.Email == signUpRequest.Email);
+            if (cus != null)
+                return new SignUpRequest();
+            cus = _context.Customers.FirstOrDefault(x => x.Phone == signUpRequest.Phone);
+            if (cus != null)
+                return new SignUpRequest();
+            Customer customer = new Customer()
+            {
+                Id = 0,
+                Name = signUpRequest.Name,
+                Email = signUpRequest.Email,
+                Phone = signUpRequest.Phone,
+                Password = signUpRequest.Password,
+                Address = signUpRequest.Address,
+                LoginAttemptCount = 0,
+                ModifiedDate = DateTime.Now,
+                IsActive = true
+            };
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+
+            cus = _context.Customers.FirstOrDefault(x => x.Email == signUpRequest.Email && x.Phone == signUpRequest.Phone);
+
+            SignUpRequest response = new SignUpRequest();
+            if (cus != null)
+            {
+                response.Id = cus.Id;
+                response.Name = cus.Name;
+                response.Email = cus.Email;
+                response.Phone = cus.Phone;
+                response.Password = cus.Password;
+                response.Address = cus.Address;
+                return response;
+            }
+            else
+            {
+                return new SignUpRequest();
+            }
+        }
+
+        /// <summary>
+        /// Cập nhật lại thông tin người dùng
+        /// </summary>
+        /// <param name="updateRequest"></param>
+        /// <returns></returns>
+        [HttpPost("UpdateInfomation")]
+        public async Task<RequestResult> UpdateInfomation(SignUpRequest updateRequest)
+        {
+            //Tìm kiếm xem Customer có tồn tại hay không
+            var customer = _context.Customers.Find(updateRequest.Id);
+            if (customer != null) //Có tồn tại
+            {
+                if(customer.IsActive) //Tài khoản không bị khoá
+                {
+                    //kiểm tra xem Email mới có bị trùng với một tài khoản khác hay không
+                    var checkMail = _context.Customers.SingleOrDefault(x => x.Email == updateRequest.Email && x.Id != updateRequest.Id);
+                    if(checkMail != null) //Email đã tồn tại
+                    {
+                        return new RequestResult
+                        {
+                            ErrorCode = ErrorCode.Failed,
+                            Content = "Email is registed by other customer."
+                        };
+                    }
+                    else
+                    {
+                        //kiểm tra xem Phone mới có bị trùng với một tài khoản khác hay không
+                        var checkPhone = _context.Customers.SingleOrDefault(x => x.Phone == updateRequest.Phone && x.Id != updateRequest.Id);
+                        if (checkPhone != null) //Phone đã tồn tại
+                        {
+                            return new RequestResult
+                            {
+                                ErrorCode = ErrorCode.Failed,
+                                Content = "Phone is registed by other customer."
+                            };
+                        }
+                        else //Email và Phone mới không trùng
+                        {
+                            customer.Name = updateRequest.Name;
+                            customer.Email = updateRequest.Email;
+                            customer.Phone = updateRequest.Phone;
+                            customer.Password = updateRequest.Password;
+                            customer.Address = updateRequest.Address;
+                            customer.ModifiedDate = DateTime.Now;
+                            _context.Customers.Update(customer);
+                            _context.SaveChanges();
+
+                            return new RequestResult
+                            {
+                                ErrorCode = ErrorCode.Success,
+                                Content = JsonConvert.SerializeObject(customer)
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    return new RequestResult
+                    {
+                        ErrorCode = ErrorCode.Failed,
+                        Content = "Account is deactivated."
+                    };
+                }
+            }
+            else
+            {
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Invalid information."
+                };
+            }
+        }
+
         /// <summary>
         /// Lấy danh sách sản phẩm trong giỏ hàng theo CustomerId
         /// </summary>

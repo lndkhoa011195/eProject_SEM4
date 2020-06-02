@@ -109,6 +109,45 @@ namespace eProject.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Lấy danh sách sản phẩm dựa vào SubCategoryId
+        /// </summary>
+        /// <param name="SubCategoryId"></param>
+        /// <returns></returns>
+        [HttpGet("GetProductsBySubCategory")]
+        public async Task<string> GetProductsBySubCategory(int SubCategoryId)
+        {
+            var products = await _context.Products.ToListAsync();
+            var manufacturers = await _context.Manufacturers.ToListAsync();
+            var units = await _context.Units.ToListAsync();
+
+            if (SubCategoryId > 0)
+            {
+                var list = from product in products
+                           join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                           join unit in units on product.UnitId equals unit.Id
+                           where product.IsActive == true
+                           where product.SubCategoryId == SubCategoryId
+                           select new ProductResponse
+                           {
+                               Id = product.Id,
+                               Name = product.Name,
+                               OriginalPrice = product.OriginalPrice,
+                               SellingPrice = product.SellingPrice,
+                               Description = product.Description,
+                               MadeIn = product.MadeIn,
+                               ManufacturerName = manufacturer.Name,
+                               ImageURL = product.ImageURL,
+                               UnitName = unit.Name
+                           };
+                return JsonConvert.SerializeObject(list);
+            }
+            else
+            {
+                return JsonConvert.SerializeObject(new List<ProductResponse>());
+            }
+        }
+
 
         /// <summary>
         /// Lấy thông tin của product dựa vào id

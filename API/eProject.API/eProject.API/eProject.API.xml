@@ -30,6 +30,13 @@
             <param name="signUpRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:eProject.API.Controllers.CustomerController.UpdateInfomation(eProject.DataAccess.Models.Request.SignUpRequest)">
+            <summary>
+            Cập nhật lại thông tin người dùng
+            </summary>
+            <param name="updateRequest"></param>
+            <returns></returns>
+        </member>
         <member name="M:eProject.API.Controllers.CustomerController.GetProductsInCart(System.Int32)">
             <summary>
             Lấy danh sách sản phẩm trong giỏ hàng theo CustomerId
@@ -76,6 +83,13 @@
             Lấy danh sách sản phẩm có tên chứa chuỗi name tìm kiếm
             </summary>
             <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.ProductController.GetProductsBySubCategory(System.Int32)">
+            <summary>
+            Lấy danh sách sản phẩm dựa vào SubCategoryId
+            </summary>
+            <param name="SubCategoryId"></param>
             <returns></returns>
         </member>
         <member name="M:eProject.API.Controllers.ProductController.GetProduct(System.Int32)">

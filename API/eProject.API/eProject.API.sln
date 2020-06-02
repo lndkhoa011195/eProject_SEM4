@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eProject.API", "eProject.API\eProject.API.csproj", "{71368399-79F4-4DEE-AFC6-FD0A4AD6BD50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eProject.DataAccess", "eProject.DataAccess\eProject.DataAccess.csproj", "{5E5243BD-4965-4802-A560-615191C94ACD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eProject.DataAccess", "eProject.DataAccess\eProject.DataAccess.csproj", "{5E5243BD-4965-4802-A560-615191C94ACD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eProject.Infastructure", "eProject.Infastructure\eProject.Infastructure.csproj", "{93D4C7F4-DD22-4706-A246-76C3FECE3D2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5E5243BD-4965-4802-A560-615191C94ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E5243BD-4965-4802-A560-615191C94ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E5243BD-4965-4802-A560-615191C94ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93D4C7F4-DD22-4706-A246-76C3FECE3D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93D4C7F4-DD22-4706-A246-76C3FECE3D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93D4C7F4-DD22-4706-A246-76C3FECE3D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93D4C7F4-DD22-4706-A246-76C3FECE3D2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
