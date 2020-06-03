@@ -68,23 +68,7 @@ namespace eProject.API.Controllers
             
             if (string.IsNullOrEmpty(name))
             {
-                  var list = from product in products
-                           join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
-                           join unit in units on product.UnitId equals unit.Id
-                           where product.IsActive == 1
-                           select new ProductResponse
-                           {
-                               Id = product.Id,
-                               Name = product.Name,
-                               OriginalPrice = product.OriginalPrice,
-                               SellingPrice = product.SellingPrice,
-                               Description = product.Description,
-                               MadeIn = product.MadeIn,
-                               ManufacturerName = manufacturer.Name,
-                               ImageURL = product.ImageURL,
-                               UnitName = unit.Name
-                           };
-                return JsonConvert.SerializeObject(list);
+                return "Fail";
             }
             else
             {

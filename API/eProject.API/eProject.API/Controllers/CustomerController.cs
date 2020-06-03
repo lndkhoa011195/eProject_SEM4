@@ -9,6 +9,7 @@ using eProject.DataAccess.Models.Request;
 using eProject.DataAccess.Models.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace eProject.API.Controllers
@@ -160,7 +161,7 @@ namespace eProject.API.Controllers
             {
                 if (customer.IsActive == 1) //Tài khoản không bị khoá
                 {
-                    if(customer.Password.Equals(request.OldPassword)) //OldPassword trùng password cũ
+                    if (customer.Password.Equals(request.OldPassword)) //OldPassword trùng password cũ
                     {
                         customer.Password = request.NewPassword;
                         _context.Update(customer);
@@ -515,101 +516,98 @@ namespace eProject.API.Controllers
                 //Có tồn tại
                 if (customer != null)
                 {
-                    //Kiểm tra tất cả sản phẩm trong cart có ProductId hợp lệ hay không
-                    bool check = true;
-                    foreach (var item in checkOutRequest.CartProducts)
+                    //Tìm CartID dựa vào CustomerId
+                    var cart = _context.Carts.SingleOrDefault(x => x.CustomerId == checkOutRequest.CustomerId);
+                    if (cart != null)
                     {
-                        var product = _context.Products.Find(item.ProductId);
-                        if (product == null)
+                        //Tìm danh sách sản phẩm hiện có trong cart
+                        var cartDetails = _context.CartDetails.Where(x => x.CartId == cart.Id).ToList();
+                        if (cartDetails.Count() > 0) //trong cart có hàng
                         {
-                            check = false;
-                            break;
-                        }
-                    }
-                    if (check)
-                    {
-                        //Tạo order mới
-                        DateTime date = DateTime.Now;
-                        string newOrderCode = date.ToString("yyyyMMddHHmmssfff") + "_" + checkOutRequest.CustomerId.ToString();
-                        Order newOrder = new Order
-                        {
-                            Id = 0,
-                            OrderCode = newOrderCode,
-                            CustomerId = checkOutRequest.CustomerId,
-                            ShippingAddress = checkOutRequest.ShippingAddress,
-                            OrderDate = date,
-                            Note = checkOutRequest.Note,
-                            Status = 1
-                        };
-                        _context.Orders.Add(newOrder);
-                        _context.SaveChanges();
-                        var order = _context.Orders.SingleOrDefault(x => x.CustomerId == checkOutRequest.CustomerId && x.OrderCode == newOrderCode);
-                        if (order != null)
-                        {
-                            var products = _context.Products.ToList();
-                            var manufacturers = _context.Manufacturers.ToList();
-                            var units = _context.Units.ToList();
-
-                            var list = from product in products
-                                       join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
-                                       join unit in units on product.UnitId equals unit.Id
-                                       where product.IsActive == 1
-                                       select new ProductResponse
-                                       {
-                                           Id = product.Id,
-                                           Name = product.Name,
-                                           OriginalPrice = product.OriginalPrice,
-                                           SellingPrice = product.SellingPrice,
-                                           Description = product.Description,
-                                           MadeIn = product.MadeIn,
-                                           ManufacturerName = manufacturer.Name,
-                                           ImageURL = product.ImageURL,
-                                           UnitName = unit.Name
-                                       };
-
-                            foreach (var item in checkOutRequest.CartProducts)
+                            //Tạo order mới
+                            DateTime date = DateTime.Now;
+                            string newOrderCode = date.ToString("yyyyMMddHHmmssfff") + "_" + checkOutRequest.CustomerId.ToString();
+                            Order newOrder = new Order
                             {
-                                var temp = list.FirstOrDefault(x => x.Id == item.ProductId);
-                                OrderDetail orderDetail = new OrderDetail
-                                {
-                                    Id = 0,
-                                    OrderId = order.Id,
-                                    ProductId = temp.Id,
-                                    ProductName = temp.Name,
-                                    OriginalPrice = temp.OriginalPrice,
-                                    SellingPrice = temp.SellingPrice,
-                                    Description = temp.Description,
-                                    UnitName = temp.UnitName,
-                                    ManufacturerName = temp.ManufacturerName,
-                                    MadeIn = temp.MadeIn,
-                                    ImageURL = temp.ImageURL,
-                                    Quantity = item.Quantity
-                                };
-                                _context.OrderDetails.Add(orderDetail);
-                                _context.SaveChanges();
-                            }
-                            return new RequestResult
-                            {
-                                ErrorCode = ErrorCode.Success,
-                                Content = "Success"
+                                Id = 0,
+                                OrderCode = newOrderCode,
+                                CustomerId = customer.Id,
+                                OrderDate = date,
+                                Status = 1
                             };
+                            _context.Orders.Add(newOrder);
+                            _context.SaveChanges();
+                            var order = _context.Orders.SingleOrDefault(x => x.CustomerId == checkOutRequest.CustomerId && x.OrderCode == newOrderCode);
+                            if (order != null)
+                            {
+                                var products = _context.Products.ToList();
+                                var manufacturers = _context.Manufacturers.ToList();
+                                var units = _context.Units.ToList();
+
+                                var list = from product in products
+                                           join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                                           join unit in units on product.UnitId equals unit.Id
+                                           where product.IsActive == 1
+                                           select new ProductResponse
+                                           {
+                                               Id = product.Id,
+                                               Name = product.Name,
+                                               OriginalPrice = product.OriginalPrice,
+                                               SellingPrice = product.SellingPrice,
+                                               Description = product.Description,
+                                               MadeIn = product.MadeIn,
+                                               ManufacturerName = manufacturer.Name,
+                                               ImageURL = product.ImageURL,
+                                               UnitName = unit.Name
+                                           };
+
+                                foreach (var item in cartDetails)
+                                {
+                                    var temp = list.FirstOrDefault(x => x.Id == item.ProductId);
+                                    OrderDetail orderDetail = new OrderDetail
+                                    {
+                                        Id = 0,
+                                        OrderId = order.Id,
+                                        ProductId = temp.Id,
+                                        ProductName = temp.Name,
+                                        OriginalPrice = temp.OriginalPrice,
+                                        SellingPrice = temp.SellingPrice,
+                                        Description = temp.Description,
+                                        UnitName = temp.UnitName,
+                                        ManufacturerName = temp.ManufacturerName,
+                                        MadeIn = temp.MadeIn,
+                                        ImageURL = temp.ImageURL,
+                                        Quantity = item.Quantity
+                                    };
+                                    _context.OrderDetails.Add(orderDetail);
+                                    _context.CartDetails.Remove(item);
+                                    _context.SaveChanges();
+                                }
+
+
+                                return new RequestResult
+                                {
+                                    ErrorCode = ErrorCode.Success,
+                                    Content = "Success"
+                                };
+                            }
+                            else
+                            {
+                                return new RequestResult
+                                {
+                                    ErrorCode = ErrorCode.Failed,
+                                    Content = "Can not create order."
+                                };
+                            }
                         }
                         else
                         {
                             return new RequestResult
                             {
                                 ErrorCode = ErrorCode.Failed,
-                                Content = "Failed"
+                                Content = "Can not find cart details."
                             };
                         }
-                    }
-                    else
-                    {
-                        return new RequestResult
-                        {
-                            ErrorCode = ErrorCode.Failed,
-                            Content = "Failed"
-                        };
                     }
                 }
             }
@@ -626,6 +624,268 @@ namespace eProject.API.Controllers
                 ErrorCode = ErrorCode.Failed,
                 Content = "Failed"
             };
+        }
+
+
+        /// <summary>
+        /// Tạo Order mới và thêm thông tin vào OrderDetail
+        /// </summary>
+        /// <param name="checkOutRequest"></param>
+        /// <returns></returns>
+        [HttpPost("CheckOutTest")]
+        public async Task<RequestResult> CheckOutTest(int CustomerId)
+        {
+            try
+            {
+                //Kiểm tra CustomerId có tồn tại hay không
+                var customer = _context.Customers.Find(CustomerId);
+                //Có tồn tại
+                if (customer != null)
+                {
+                    //Tìm CartID dựa vào CustomerId
+                    var cart = _context.Carts.SingleOrDefault(x => x.CustomerId == CustomerId);
+                    if (cart != null)
+                    {
+                        //Tìm danh sách sản phẩm hiện có trong cart
+                        var cartDetails = _context.CartDetails.Where(x => x.CartId == cart.Id).ToList();
+                        if (cartDetails.Count() > 0) //trong cart có hàng
+                        {
+                            //Tạo order mới
+                            DateTime date = DateTime.Now;
+                            string newOrderCode = date.ToString("yyyyMMddHHmmssfff") + "_" + CustomerId.ToString();
+                            Order newOrder = new Order
+                            {
+                                Id = 0,
+                                OrderCode = newOrderCode,
+                                CustomerId = customer.Id,
+                                OrderDate = date,
+                                Status = 1
+                            };
+                            _context.Orders.Add(newOrder);
+                            _context.SaveChanges();
+                            var order = _context.Orders.SingleOrDefault(x => x.CustomerId == CustomerId && x.OrderCode == newOrderCode);
+                            if (order != null)
+                            {
+                                var products = _context.Products.ToList();
+                                var manufacturers = _context.Manufacturers.ToList();
+                                var units = _context.Units.ToList();
+
+                                var list = from product in products
+                                           join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
+                                           join unit in units on product.UnitId equals unit.Id
+                                           where product.IsActive == 1
+                                           select new ProductResponse
+                                           {
+                                               Id = product.Id,
+                                               Name = product.Name,
+                                               OriginalPrice = product.OriginalPrice,
+                                               SellingPrice = product.SellingPrice,
+                                               Description = product.Description,
+                                               MadeIn = product.MadeIn,
+                                               ManufacturerName = manufacturer.Name,
+                                               ImageURL = product.ImageURL,
+                                               UnitName = unit.Name
+                                           };
+
+                                foreach (var item in cartDetails)
+                                {
+                                    var temp = list.FirstOrDefault(x => x.Id == item.ProductId);
+                                    OrderDetail orderDetail = new OrderDetail
+                                    {
+                                        Id = 0,
+                                        OrderId = order.Id,
+                                        ProductId = temp.Id,
+                                        ProductName = temp.Name,
+                                        OriginalPrice = temp.OriginalPrice,
+                                        SellingPrice = temp.SellingPrice,
+                                        Description = temp.Description,
+                                        UnitName = temp.UnitName,
+                                        ManufacturerName = temp.ManufacturerName,
+                                        MadeIn = temp.MadeIn,
+                                        ImageURL = temp.ImageURL,
+                                        Quantity = item.Quantity
+                                    };
+                                    _context.OrderDetails.Add(orderDetail);
+                                    _context.CartDetails.Remove(item);
+                                    _context.SaveChanges();
+                                }
+
+
+                                return new RequestResult
+                                {
+                                    ErrorCode = ErrorCode.Success,
+                                    Content = "Success"
+                                };
+                            }
+                            else
+                            {
+                                return new RequestResult
+                                {
+                                    ErrorCode = ErrorCode.Failed,
+                                    Content = "Can not create order."
+                                };
+                            }
+                        }
+                        else
+                        {
+                            return new RequestResult
+                            {
+                                ErrorCode = ErrorCode.Failed,
+                                Content = "Can not find cart details."
+                            };
+                        }
+                    }
+                    else
+                    {
+                        return new RequestResult
+                        {
+                            ErrorCode = ErrorCode.Failed,
+                            Content = "Can not find cart."
+                        };
+                    }
+                }
+                else
+                {
+                    return new RequestResult
+                    {
+                        ErrorCode = ErrorCode.Failed,
+                        Content = "Customer is not existed."
+                    };
+                }
+            }
+            catch
+            {
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Failed"
+                };
+            }
+        }
+
+        /// <summary>
+        /// Lấy danh sách order dựa vào CustomerId
+        /// </summary>
+        /// <param name="OrderCode"></param>
+        /// <returns></returns>
+        [HttpPost("GetOrders")]
+        public async Task<RequestResult> GetOrders(int CustomerId)
+        {
+            try
+            {
+                List<OrderResponse> orderResponses = new List<OrderResponse>();
+                //Kiểm tra CustomerId có tồn tại hay không
+                var customer = _context.Customers.Find(CustomerId);
+                //Có tồn tại
+                if (customer != null)
+                {
+                    //lấy danh sách order
+                    var orders = _context.Orders.Where(x => x.CustomerId == customer.Id).ToList();
+                    foreach (var order in orders)
+                    {
+                        double sellingSum = 0;
+                        double originalSum = 0;
+                        int count = 0;
+                        var orderDetails = _context.OrderDetails.Where(x => x.OrderId == order.Id).ToList();
+                        foreach (var detail in orderDetails)
+                        {
+                            sellingSum += detail.SellingPrice;
+                            originalSum += detail.OriginalPrice;
+                            count++;
+                        }
+                        OrderResponse orderResponse = new OrderResponse()
+                        {
+                            Id = order.Id,
+                            OrderCode = order.OrderCode,
+                            OrderDate = order.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"),
+                            Status = order.Status,
+                            OriginalSum = originalSum,
+                            SellingSum = sellingSum,
+                            ProductCount = count
+                        };
+                        orderResponses.Add(orderResponse);
+                    }
+                    var temp = orderResponses.OrderByDescending(x => x.OrderCode);
+                    return new RequestResult
+                    {
+                        ErrorCode = ErrorCode.Success,
+                        Content = JsonConvert.SerializeObject(temp)
+                    };
+                }
+                else
+                {
+                    return new RequestResult
+                    {
+                        ErrorCode = ErrorCode.Failed,
+                        Content = "Customer is not existed."
+                    };
+                }
+            }
+            catch
+            {
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Failed"
+                };
+            }
+        }
+
+        /// <summary>
+        /// Lấy details dựa vào OrderCode
+        /// </summary>
+        /// <param name="OrderCode"></param>
+        /// <returns></returns>
+        [HttpPost("GetOrderDetails")]
+        public async Task<RequestResult> GetOrderDetails(string OrderCode)
+        {
+            try
+            {
+                //Tìm kiếm orderId dựa vào OrderCode
+                var order = _context.Orders.SingleOrDefault(x => x.OrderCode == OrderCode);
+                if (order != null)
+                {
+                    //Lấy danh sách order details
+                    //var details = _context.OrderDetails.Where(x => x.OrderId == order.Id);
+                    var details = _context.OrderDetails.ToList();
+                    var list = from detail in details
+                               where detail.OrderId == order.Id
+                               select new CartResponse
+                               {
+                                   Id = detail.ProductId,
+                                   Name = detail.ProductName,
+                                   OriginalPrice = detail.OriginalPrice,
+                                   SellingPrice = detail.SellingPrice,
+                                   Description = detail.Description,
+                                   MadeIn = detail.MadeIn,
+                                   ManufacturerName = detail.ManufacturerName,
+                                   ImageURL = detail.ImageURL,
+                                   UnitName = detail.UnitName,
+                                   Quantity = detail.Quantity
+                               };
+                    return new RequestResult
+                    {
+                        ErrorCode = ErrorCode.Success,
+                        Content = JsonConvert.SerializeObject(list)
+                    };
+                }
+                else
+                {
+                    return new RequestResult
+                    {
+                        ErrorCode = ErrorCode.Failed,
+                        Content = "Can not find order Id"
+                    };
+                }
+            }
+            catch
+            {
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Failed"
+                };
+            }
         }
     }
 }

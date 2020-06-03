@@ -79,6 +79,20 @@
             <param name="checkOutRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:eProject.API.Controllers.CustomerController.CheckOutTest(System.Int32)">
+            <summary>
+            Tạo Order mới và thêm thông tin vào OrderDetail
+            </summary>
+            <param name="checkOutRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eProject.API.Controllers.CustomerController.GetOrders(System.Int32)">
+            <summary>
+            Lấy danh sách order dựa vào CustomerId
+            </summary>
+            <param name="OrderCode"></param>
+            <returns></returns>
+        </member>
         <member name="M:eProject.API.Controllers.ProductController.GetProducts">
             <summary>
             Lấy danh sách tất cả product
