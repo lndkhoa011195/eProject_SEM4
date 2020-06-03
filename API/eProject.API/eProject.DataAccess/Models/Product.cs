@@ -20,7 +20,7 @@ namespace eProject.DataAccess.Models
 
         [JsonIgnore]
         public DateTime ModifiedDate { get; set; }
-        public bool IsActive { get; set; }
+        public int IsActive { get; set; }
 
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }

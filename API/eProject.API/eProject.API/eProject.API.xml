@@ -30,6 +30,13 @@
             <param name="signUpRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:eProject.API.Controllers.CustomerController.ChangePassword(eProject.DataAccess.Models.Request.ChangePassRequest)">
+            <summary>
+            Đổi password
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:eProject.API.Controllers.CustomerController.UpdateInfomation(eProject.DataAccess.Models.Request.SignUpRequest)">
             <summary>
             Cập nhật lại thông tin người dùng

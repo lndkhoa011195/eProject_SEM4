@@ -37,7 +37,7 @@ namespace eProject.API.Controllers
             var list = from product in products
                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                        join unit in units on product.UnitId equals unit.Id
-                       where product.IsActive == true
+                       where product.IsActive == 1
                        select new ProductResponse
                        {
                            Id = product.Id,
@@ -71,7 +71,7 @@ namespace eProject.API.Controllers
                   var list = from product in products
                            join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                            join unit in units on product.UnitId equals unit.Id
-                           where product.IsActive == true
+                           where product.IsActive == 1
                            select new ProductResponse
                            {
                                Id = product.Id,
@@ -91,7 +91,7 @@ namespace eProject.API.Controllers
                 var list = from product in products
                            join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                            join unit in units on product.UnitId equals unit.Id
-                           where product.IsActive == true
+                           where product.IsActive == 1
                            where product.Name.ToLower().Contains(name.ToLower())
                            select new ProductResponse
                            {
@@ -126,7 +126,7 @@ namespace eProject.API.Controllers
                 var list = from product in products
                            join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                            join unit in units on product.UnitId equals unit.Id
-                           where product.IsActive == true
+                           where product.IsActive == 1
                            where product.SubCategoryId == SubCategoryId
                            select new ProductResponse
                            {
@@ -164,7 +164,7 @@ namespace eProject.API.Controllers
             var list = from product in products
                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                        join unit in units on product.UnitId equals unit.Id
-                       where product.IsActive == true
+                       where product.IsActive == 1
                        select new ProductResponse
                        {
                            Id = product.Id,
@@ -198,7 +198,7 @@ namespace eProject.API.Controllers
             var list = from product in products
                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                        join unit in units on product.UnitId equals unit.Id
-                       where product.IsActive == true
+                       where product.IsActive == 1
                        orderby product.Id descending
                        select new ProductResponse
                        {
@@ -229,7 +229,7 @@ namespace eProject.API.Controllers
             var list = from product in products
                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                        join unit in units on product.UnitId equals unit.Id
-                       where product.IsActive == true
+                       where product.IsActive == 1
                        orderby (product.OriginalPrice - product.SellingPrice) descending
                        select new ProductResponse
                        {

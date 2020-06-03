@@ -18,7 +18,7 @@ namespace eProject.DataAccess.Models
         [JsonIgnore]
         public int LoginAttemptCount { get; set; }
         [JsonIgnore]
-        public bool IsActive { get; set; }  
+        public int IsActive { get; set; }  
         [JsonIgnore]
         public ICollection<Order> Orders { get; set; }
         [JsonIgnore]

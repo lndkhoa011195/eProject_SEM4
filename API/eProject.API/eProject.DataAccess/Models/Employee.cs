@@ -12,7 +12,7 @@ namespace eProject.DataAccess.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public int Status { get; set; }
+        public int IsActive { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
 }

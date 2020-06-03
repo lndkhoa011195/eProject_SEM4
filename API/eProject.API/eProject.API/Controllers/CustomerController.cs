@@ -41,7 +41,7 @@ namespace eProject.API.Controllers
             if (cus != null)
             {
                 //Tài khoản còn active hay không
-                if (cus.IsActive == false)
+                if (cus.IsActive == 0)
                 {
                     return JsonConvert.SerializeObject(new Customer());
                 }
@@ -63,7 +63,7 @@ namespace eProject.API.Controllers
                     if (cus.LoginAttemptCount == 3)
                     {
                         cus.LoginAttemptCount = 0;
-                        cus.IsActive = false;
+                        cus.IsActive = 0;
                         _context.Customers.Update(cus);
                         _context.SaveChanges();
                     }
@@ -114,7 +114,7 @@ namespace eProject.API.Controllers
                 Address = signUpRequest.Address,
                 LoginAttemptCount = 0,
                 ModifiedDate = DateTime.Now,
-                IsActive = true
+                IsActive = 1
             };
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
@@ -146,48 +146,61 @@ namespace eProject.API.Controllers
             }
         }
 
-        [HttpPost("SignUp2")]
-        public async Task<SignUpRequest> SignUp2(SignUpRequest signUpRequest)
+
+        /// <summary>
+        /// Đổi password
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("ChangePassword")]
+        public async Task<RequestResult> ChangePassword(ChangePassRequest request)
         {
-            var cus = _context.Customers.FirstOrDefault(x => x.Email == signUpRequest.Email);
-            if (cus != null)
-                return new SignUpRequest();
-            cus = _context.Customers.FirstOrDefault(x => x.Phone == signUpRequest.Phone);
-            if (cus != null)
-                return new SignUpRequest();
-            Customer customer = new Customer()
+            var customer = _context.Customers.Find(request.CustomerId);
+            if (customer != null) //Có tồn tại
             {
-                Id = 0,
-                Name = signUpRequest.Name,
-                Email = signUpRequest.Email,
-                Phone = signUpRequest.Phone,
-                Password = signUpRequest.Password,
-                Address = signUpRequest.Address,
-                LoginAttemptCount = 0,
-                ModifiedDate = DateTime.Now,
-                IsActive = true
-            };
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
-
-            cus = _context.Customers.FirstOrDefault(x => x.Email == signUpRequest.Email && x.Phone == signUpRequest.Phone);
-
-            SignUpRequest response = new SignUpRequest();
-            if (cus != null)
-            {
-                response.Id = cus.Id;
-                response.Name = cus.Name;
-                response.Email = cus.Email;
-                response.Phone = cus.Phone;
-                response.Password = cus.Password;
-                response.Address = cus.Address;
-                return response;
+                if (customer.IsActive == 1) //Tài khoản không bị khoá
+                {
+                    if(customer.Password.Equals(request.OldPassword)) //OldPassword trùng password cũ
+                    {
+                        customer.Password = request.NewPassword;
+                        _context.Update(customer);
+                        _context.SaveChanges();
+                        customer = _context.Customers.Find(request.CustomerId);
+                        return new RequestResult
+                        {
+                            ErrorCode = ErrorCode.Failed,
+                            Content = JsonConvert.SerializeObject(customer)
+                        };
+                    }
+                    else
+                    {
+                        return new RequestResult
+                        {
+                            ErrorCode = ErrorCode.Failed,
+                            Content = "Old password is not correct."
+                        };
+                    }
+                }
+                else
+                {
+                    return new RequestResult
+                    {
+                        ErrorCode = ErrorCode.Failed,
+                        Content = "Account is deactivated."
+                    };
+                }
             }
             else
             {
-                return new SignUpRequest();
+                return new RequestResult
+                {
+                    ErrorCode = ErrorCode.Failed,
+                    Content = "Invalid information."
+                };
             }
         }
+
+
 
         /// <summary>
         /// Cập nhật lại thông tin người dùng
@@ -201,11 +214,11 @@ namespace eProject.API.Controllers
             var customer = _context.Customers.Find(updateRequest.Id);
             if (customer != null) //Có tồn tại
             {
-                if(customer.IsActive) //Tài khoản không bị khoá
+                if (customer.IsActive == 1) //Tài khoản không bị khoá
                 {
                     //kiểm tra xem Email mới có bị trùng với một tài khoản khác hay không
                     var checkMail = _context.Customers.SingleOrDefault(x => x.Email == updateRequest.Email && x.Id != updateRequest.Id);
-                    if(checkMail != null) //Email đã tồn tại
+                    if (checkMail != null) //Email đã tồn tại
                     {
                         return new RequestResult
                         {
@@ -230,7 +243,7 @@ namespace eProject.API.Controllers
                             customer.Name = updateRequest.Name;
                             customer.Email = updateRequest.Email;
                             customer.Phone = updateRequest.Phone;
-                            customer.Password = updateRequest.Password;
+                            //customer.Password = updateRequest.Password;
                             customer.Address = updateRequest.Address;
                             customer.ModifiedDate = DateTime.Now;
                             _context.Customers.Update(customer);
@@ -273,7 +286,6 @@ namespace eProject.API.Controllers
         {
             try
             {
-
                 //Tìm kiếm xem CustomerId và ProductId có tồn tại hay không
                 var customer = _context.Customers.Find(_customerId);
                 if (customer != null)
@@ -292,7 +304,8 @@ namespace eProject.API.Controllers
                                    join product in products on cartDetail.ProductId equals product.Id
                                    join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                                    join unit in units on product.UnitId equals unit.Id
-                                   where product.IsActive == true
+                                   where product.IsActive == 1
+                                   where cart.Id == cartD.Id
                                    select new CartResponse
                                    {
                                        Id = product.Id,
@@ -359,7 +372,7 @@ namespace eProject.API.Controllers
                     //Lấy lại thông tin cart
                     cart = _context.Carts.FirstOrDefault(x => x.CustomerId == addToCartRequest.CustomerId);
                     //Kiểm tra xem product này đã có tồn tại trong cart hay chưa?
-                    var productInCart = _context.CartDetails.FirstOrDefault(x => x.ProductId == addToCartRequest.ProductId);
+                    var productInCart = _context.CartDetails.FirstOrDefault(x => x.ProductId == addToCartRequest.ProductId && x.CartId == cart.Id);
                     //Chưa tồn tại => thêm mới vào CartDetails
                     if (productInCart == null)
                     {
@@ -540,7 +553,7 @@ namespace eProject.API.Controllers
                             var list = from product in products
                                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                                        join unit in units on product.UnitId equals unit.Id
-                                       where product.IsActive == true
+                                       where product.IsActive == 1
                                        select new ProductResponse
                                        {
                                            Id = product.Id,
@@ -557,8 +570,8 @@ namespace eProject.API.Controllers
                             foreach (var item in checkOutRequest.CartProducts)
                             {
                                 var temp = list.FirstOrDefault(x => x.Id == item.ProductId);
-                                OrderDetail orderDetail = new OrderDetail 
-                                { 
+                                OrderDetail orderDetail = new OrderDetail
+                                {
                                     Id = 0,
                                     OrderId = order.Id,
                                     ProductId = temp.Id,
