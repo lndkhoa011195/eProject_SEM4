@@ -30,6 +30,7 @@ public interface APIInterface {
     @POST("/api/Customer/Authenticate")
     Call<Account> Login(@Body Login account);
 
+<<<<<<< HEAD
     @POST("/api/Customer/AddToCart")
     Call<String> AddToCart(@Body CartRequest cartRequest);
 
@@ -44,6 +45,11 @@ public interface APIInterface {
 
 
     //Product
+=======
+    @POST("/api/Customer/SignUp")
+    Call<Account> SignUp(@Body Account account);
+
+>>>>>>> c6e28244564c84a8711ea20d633eea456b195fa6
     @GET("/api/Product/GetProductsByName")
     Call<List<ProductResponse>> GetProductsByName(@Query("name") String name);
 
