@@ -48,6 +48,7 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.tai.project4.adapter.ProductAdapter;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
+import com.tai.project4.models.CartRequest;
 import com.tai.project4.models.CategoryResult;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
@@ -67,6 +68,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -97,6 +99,7 @@ public class HomeActivity extends AppCompatActivity
     private Drawer result = null;
     private AccountHeader headerResult = null;
     APIInterface apiInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +113,7 @@ public class HomeActivity extends AppCompatActivity
 
         handleIntent(getIntent());
         final IProfile profile;
-        if (sp.getString("Id", null) == null) {
+        if (sp.getString("loginid", null) == null) {
             profile = new ProfileDrawerItem().withName("RKS").withEmail("profile@rks.com").withIcon(R.drawable.icon).withTag("RKS");
 
         } else {
@@ -209,7 +212,7 @@ public class HomeActivity extends AppCompatActivity
 //                .withShowDrawerUntilDraggedOpened(true)
                 .build();
 
-        if (sp.getString("Id", null) != null) {
+        if (sp.getString("loginid", null) != null) {
             PrimaryDrawerItem order_history = new PrimaryDrawerItem().withName("Order History").withIcon(R.drawable.ic_history_black).withTag("ORDER_HISTORY");
             PrimaryDrawerItem my_cart = new PrimaryDrawerItem().withName("My Cart").withIcon(R.drawable.ic_shopping_cart_black).withTag("MY_CART");
             result.addItem(order_history);
@@ -234,7 +237,7 @@ public class HomeActivity extends AppCompatActivity
                 public void onResponse(Call<List<CategoryResult>> call, Response<List<CategoryResult>> response) {
                     if (!response.isSuccessful())
                         return;
-                    Log.d("TAG", response.code() + "");
+                    //Log.d("TAG", response.code() + "");
                     List<CategoryResult> categoryResultList = response.body();
                     List<String> categories = new ArrayList<>();
                     for (CategoryResult cate : categoryResultList) {
@@ -243,8 +246,10 @@ public class HomeActivity extends AppCompatActivity
 
                     List<String> categoryListNoDup = new ArrayList<>(
                             new HashSet<>(categories));
+                    //Order by ascending
+                    Collections.sort(categoryListNoDup);
 
-                    for (String cate : categoryListNoDup){
+                    for (String cate : categoryListNoDup) {
                         ExpandableDrawerItem item = new ExpandableDrawerItem().withName(cate).withIcon(R.drawable.ic_filter_list_black).withIdentifier(0).withSelectable(false).withTag("CATEGORIES");
                         for (CategoryResult subcate : categoryResultList) {
                             if (subcate.getCategoryName().equals(cate)) {
@@ -272,8 +277,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
 
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             builder.setTitle("Received Message");
             builder.setCancelable(true);
@@ -300,10 +304,10 @@ public class HomeActivity extends AppCompatActivity
                 public void onResponse(Call<List<Promotion>> call, Response<List<Promotion>> response) {
                     if (!response.isSuccessful())
                         return;
-                    Log.d("TAG", response.code() + "");
+                    //Log.d("TAG", response.code() + "");
                     List<Promotion> PromotionList = response.body();
 
-                    for (int i = 0; i< PromotionList.size(); i++){
+                    for (int i = 0; i < PromotionList.size(); i++) {
                         url_maps.put("", PromotionList.get(i).getImageURL());
                         sliderShow = findViewById(R.id.slider);
 
@@ -317,7 +321,7 @@ public class HomeActivity extends AppCompatActivity
 
                             defaultSliderView.bundle(new Bundle());
                             defaultSliderView.getBundle()
-                                    .putString("extra",String.valueOf(PromotionList.get(i).getProductId()));
+                                    .putString("extra", String.valueOf(PromotionList.get(i).getProductId()));
 
 
                             sliderShow.addSlider(defaultSliderView);
@@ -346,8 +350,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
 
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             builder.setTitle("Received Message");
             builder.setCancelable(true);
@@ -422,7 +425,7 @@ public class HomeActivity extends AppCompatActivity
                 public void onResponse(Call<List<ProductResponse>> call, Response<List<ProductResponse>> response) {
                     if (!response.isSuccessful())
                         return;
-                    Log.d("TAG", response.code() + "");
+                    //Log.d("TAG", response.code() + "");
                     List<ProductResponse> BestSellingProductsList = response.body();
 
                     l2.setVisibility(View.VISIBLE);
@@ -453,8 +456,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
 
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             builder.setTitle("Received Message");
             builder.setCancelable(true);
@@ -478,10 +480,10 @@ public class HomeActivity extends AppCompatActivity
                 public void onResponse(Call<List<ProductResponse>> call, Response<List<ProductResponse>> response) {
                     if (!response.isSuccessful())
                         return;
-                    Log.d("TAG", response.code() + "");
+                    //Log.d("TAG", response.code() + "");
                     List<ProductResponse> RecentProductsList = response.body();
                     GridItem item;
-                    for(int i = 0; i < RecentProductsList.size(); i++){
+                    for (int i = 0; i < RecentProductsList.size(); i++) {
                         String title = "Nothing";
 
                         if (RecentProductsList.get(i).getName().length() > 20) {
@@ -517,8 +519,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
 
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             builder.setTitle("Received Message");
             builder.setCancelable(true);
@@ -532,7 +533,6 @@ public class HomeActivity extends AppCompatActivity
             builder.show();
         }
     }
-
 
 
     @Override
@@ -566,53 +566,73 @@ public class HomeActivity extends AppCompatActivity
         menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this, cart_count, R.drawable.ic_shopping_cart_white));
 
         if (sp.getString("loginid", null) != null) {
-            class GetCartItemCount extends AsyncTask<String, Void, String> {
-
+            apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<String> cartCountCall = apiInterface.GetCartCount(Integer.parseInt(sp.getString("loginid", null)));
+            cartCountCall.enqueue(new Callback<String>() {
                 @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                }
-
-                @Override
-                protected void onPostExecute(String s) {
-                    super.onPostExecute(s);
-                    cart_count = Integer.parseInt(s);
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (!response.isSuccessful())
+                        return;
+                    String result = response.body();
+                    cart_count = Integer.parseInt(result);
                     menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this, cart_count, R.drawable.ic_shopping_cart_white));
+
                 }
 
                 @Override
-                protected String doInBackground(String... params) {
-
-                    String urls = getResources().getString(R.string.base_url).concat("getItemCount/");
-                    try {
-                        URL url = new URL(urls);
-                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                        httpURLConnection.setRequestMethod("POST");
-                        httpURLConnection.setDoInput(true);
-                        httpURLConnection.setDoOutput(true);
-                        OutputStream outputStream = httpURLConnection.getOutputStream();
-                        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                        String post_Data = URLEncoder.encode("login_id", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8");
-
-                        bufferedWriter.write(post_Data);
-                        bufferedWriter.flush();
-                        bufferedWriter.close();
-                        outputStream.close();
-                        InputStream inputStream = httpURLConnection.getInputStream();
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-                        String result = "", line = "";
-                        while ((line = bufferedReader.readLine()) != null) {
-                            result += line;
-                        }
-                        return result;
-                    } catch (Exception e) {
-                        return e.toString();
-                    }
+                public void onFailure(Call<String> call, Throwable t) {
+                    call.cancel();
                 }
-            }
-            //creating asynctask object and executing it
-            GetCartItemCount catItemObj = new GetCartItemCount();
-            catItemObj.execute(sp.getString("loginid", null));
+            });
+
+
+//            class GetCartItemCount extends AsyncTask<String, Void, String> {
+//
+//                @Override
+//                protected void onPreExecute() {
+//                    super.onPreExecute();
+//                }
+//
+//                @Override
+//                protected void onPostExecute(String s) {
+//                    super.onPostExecute(s);
+//                    cart_count = Integer.parseInt(s);
+//                    menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this, cart_count, R.drawable.ic_shopping_cart_white));
+//                }
+//
+//                @Override
+//                protected String doInBackground(String... params) {
+//
+//                    String urls = getResources().getString(R.string.base_url).concat("getItemCount/");
+//                    try {
+//                        URL url = new URL(urls);
+//                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+//                        httpURLConnection.setRequestMethod("POST");
+//                        httpURLConnection.setDoInput(true);
+//                        httpURLConnection.setDoOutput(true);
+//                        OutputStream outputStream = httpURLConnection.getOutputStream();
+//                        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+//                        String post_Data = URLEncoder.encode("login_id", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8");
+//
+//                        bufferedWriter.write(post_Data);
+//                        bufferedWriter.flush();
+//                        bufferedWriter.close();
+//                        outputStream.close();
+//                        InputStream inputStream = httpURLConnection.getInputStream();
+//                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//                        String result = "", line = "";
+//                        while ((line = bufferedReader.readLine()) != null) {
+//                            result += line;
+//                        }
+//                        return result;
+//                    } catch (Exception e) {
+//                        return e.toString();
+//                    }
+//                }
+//            }
+//            //creating asynctask object and executing it
+//            GetCartItemCount catItemObj = new GetCartItemCount();
+//            catItemObj.execute(sp.getString("loginid", null));
         }
 
         SearchManager searchManager =

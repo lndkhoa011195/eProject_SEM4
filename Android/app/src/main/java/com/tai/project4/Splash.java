@@ -2,18 +2,22 @@ package com.tai.project4;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
+
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Splash extends FragmentActivity {
-
+    public static final String PREFS = "PREFS";
+    SharedPreferences sp;
     private Animation animation;
     private ImageView logo;
     private TextView appTitle;
@@ -27,6 +31,7 @@ public class Splash extends FragmentActivity {
         logo = findViewById(R.id.logo);
         appTitle = findViewById(R.id.grocery);
         appSlogan = findViewById(R.id.slogan);
+        sp = getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE);
 
         if (ConnectivityReceiver.isConnected()) {
 
@@ -96,9 +101,16 @@ public class Splash extends FragmentActivity {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationEnd(Animation arg0) {
+                Intent intent;
+                if (sp.getString("loginid", null) != null) {
+                    intent = new Intent(getApplicationContext(),
+                            HomeActivity.class);
+                }
+                else {
+                    intent = new Intent(getApplicationContext(),
+                            LoginActivity.class);
+                }
 
-                Intent intent = new Intent(getApplicationContext(),
-                        LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
