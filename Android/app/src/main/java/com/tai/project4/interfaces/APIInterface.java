@@ -1,7 +1,6 @@
 package com.tai.project4.interfaces;
 
 
-
 import com.tai.project4.model.Account;
 import com.tai.project4.model.Login;
 import com.tai.project4.models.CartRequest;
@@ -9,6 +8,7 @@ import com.tai.project4.models.CartResult;
 import com.tai.project4.models.CategoryResult;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
+import com.tai.project4.models.RequestResult;
 
 import java.util.List;
 
@@ -30,8 +30,11 @@ public interface APIInterface {
     @POST("/api/Customer/Authenticate")
     Call<Account> Login(@Body Login account);
 
+    //    @POST("/api/Customer/SignUp")
+//    Call<Account> SignUp(@Body Account account);
+
     @POST("/api/Customer/SignUp")
-    Call<Account> SignUp(@Body Account account);
+    Call<RequestResult> SignUp(@Body Account account);
 
     @POST("/api/Customer/AddToCart")
     Call<String> AddToCart(@Body CartRequest cartRequest);
@@ -64,11 +67,5 @@ public interface APIInterface {
 
     @GET("/api/Product/GetProductsBySubCategory")
     Call<List<ProductResponse>> GetProductsBySubCategory(@Query("SubCategoryId") Integer SubCategoryId);
-
-
-
-
-
-
 
 }
