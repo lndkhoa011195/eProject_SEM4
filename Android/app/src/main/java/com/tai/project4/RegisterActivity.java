@@ -1,49 +1,19 @@
 package com.tai.project4;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
-
-import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.telephony.SmsManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.model.Account;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,12 +23,8 @@ public class RegisterActivity extends AppCompatActivity {
     String Name, Email, Phone, Address, Password, cpassword;
     EditText etName, etMobile, etEmail, etAddress, etPassword, etcPassword;
     Button register;
-
     APIInterface apiInterface;
-
     TextView loginnext;
-
-    //int otp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if ((!Name.equals("")) && (!Email.equals("")) && (!Phone.equals("")) && (!Address.equals("")) && (!Password.equals("")) && (!cpassword.equals(""))) {
                     Account account = new Account(0, Name, Email, Phone, Password, Address);
-                    if(!Password.equals(cpassword))
+                    if(!cpassword.equals(Password))
                     {
                         Toast.makeText(getApplicationContext(), "Password and confirm password not matches.", Toast.LENGTH_LONG).show();
                         return;
@@ -116,9 +82,12 @@ public class RegisterActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Register successful. Please go back to login.", Toast.LENGTH_LONG).show();
-//                                Gson gson = new Gson();
-//                                String temp = result.getContent();
-//                                Account user = gson.fromJson(result.getContent(), Account.class);
+                                    etName.setText("");
+                                    etEmail.setText("");
+                                    etMobile.setText("");
+                                    etAddress.setText("");
+                                    etPassword.setText("");
+                                    etcPassword.setText("");
                                 }
                             }
 
