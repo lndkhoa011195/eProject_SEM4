@@ -30,9 +30,6 @@ public interface APIInterface {
     @POST("/api/Customer/Authenticate")
     Call<Account> Login(@Body Login account);
 
-    //    @POST("/api/Customer/SignUp")
-//    Call<Account> SignUp(@Body Account account);
-
     @POST("/api/Customer/SignUp")
     Call<RequestResult> SignUp(@Body Account account);
 
@@ -48,6 +45,14 @@ public interface APIInterface {
     @POST("/api/Customer/GetProductsInCart")
     Call<List<CartResult>> GetProductsInCart(@Query("_customerId") Integer _customerId);
 
+    @POST("/api/Customer/CheckOutTest")
+    Call<RequestResult> CheckOutTest(@Query("CustomerId") Integer CustomerId);
+
+    @POST("/api/Customer/GetOrders")
+    Call<RequestResult> GetOrders(@Query("CustomerId") Integer CustomerId);
+
+    @POST("/api/Customer/GetOrderDetails")
+    Call<RequestResult> GetOrderDetails(@Query("OrderCode") String OrderCode);
 
     //Product
     @GET("/api/Product/GetProductsByName")
