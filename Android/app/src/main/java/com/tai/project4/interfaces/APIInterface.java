@@ -2,6 +2,7 @@ package com.tai.project4.interfaces;
 
 
 import com.tai.project4.model.Account;
+import com.tai.project4.model.ChangePass;
 import com.tai.project4.model.Login;
 import com.tai.project4.models.CartRequest;
 import com.tai.project4.models.CartResult;
@@ -14,10 +15,8 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIInterface {
@@ -32,6 +31,9 @@ public interface APIInterface {
 
     @POST("/api/Customer/SignUp")
     Call<RequestResult> SignUp(@Body Account account);
+
+    @POST("/api/Customer/ChangePassword")
+    Call<RequestResult> ChangePassword(@Body ChangePass changePass);
 
     @POST("/api/Customer/AddToCart")
     Call<String> AddToCart(@Body CartRequest cartRequest);

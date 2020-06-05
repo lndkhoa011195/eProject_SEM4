@@ -1,0 +1,40 @@
+package com.tai.project4.model;
+
+public class ChangePass {
+    Integer customerId;
+    String oldPassword;
+    String newPassword;
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public ChangePass(Integer customerId, String oldPassword, String newPassword) {
+        this.customerId = customerId;
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+    }
+
+    public ChangePass() {
+    }
+}
