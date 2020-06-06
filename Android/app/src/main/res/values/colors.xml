@@ -104,5 +104,6 @@
     <color name="black">#000000</color><!-- light blue 800 -->
     <color name="colorButton">#0277bd</color>
     <color name="material">#DA4453</color>
+    <color name="colorBackgound">#1DB954</color>
 
 </resources>

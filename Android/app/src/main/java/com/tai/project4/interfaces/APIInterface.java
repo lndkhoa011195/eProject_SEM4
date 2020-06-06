@@ -35,6 +35,9 @@ public interface APIInterface {
     @POST("/api/Customer/ChangePassword")
     Call<RequestResult> ChangePassword(@Body ChangePass changePass);
 
+    @POST("/api/Customer/UpdateInfomation")
+    Call<RequestResult> UpdateInfo(@Body Account account);
+
     @POST("/api/Customer/AddToCart")
     Call<String> AddToCart(@Body CartRequest cartRequest);
 
