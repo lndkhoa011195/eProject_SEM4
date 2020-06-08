@@ -18,7 +18,7 @@ namespace eProject.DataAccess.EF
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<Orders> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
@@ -33,7 +33,7 @@ namespace eProject.DataAccess.EF
             modelBuilder.Entity<Customer>().ToTable("Customer");
             modelBuilder.Entity<Employee>().ToTable("Employee");
             modelBuilder.Entity<Manufacturer>().ToTable("Manufacturer");
-            modelBuilder.Entity<Order>().ToTable("Order");
+            modelBuilder.Entity<Orders>().ToTable("Orders");
             modelBuilder.Entity<OrderDetail>().ToTable("OrderDetail");
             modelBuilder.Entity<Product>().ToTable("Product");
             modelBuilder.Entity<SubCategory>().ToTable("SubCategory");

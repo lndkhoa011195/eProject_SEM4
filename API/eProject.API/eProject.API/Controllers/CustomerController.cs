@@ -527,11 +527,15 @@ namespace eProject.API.Controllers
                             //Tạo order mới
                             DateTime date = DateTime.Now;
                             string newOrderCode = date.ToString("yyyyMMddHHmmssfff") + "_" + checkOutRequest.CustomerId.ToString();
-                            Order newOrder = new Order
+                            Orders newOrder = new Orders
                             {
                                 Id = 0,
                                 OrderCode = newOrderCode,
                                 CustomerId = customer.Id,
+                                ShipName = checkOutRequest.Name,
+                                ShipPhone = checkOutRequest.Phone,
+                                ShipAddress = checkOutRequest.ShippingAddress,
+                                ShipNote = checkOutRequest.Note,
                                 OrderDate = date,
                                 Status = 1
                             };
@@ -653,11 +657,15 @@ namespace eProject.API.Controllers
                             //Tạo order mới
                             DateTime date = DateTime.Now;
                             string newOrderCode = date.ToString("yyyyMMddHHmmssfff") + "_" + CustomerId.ToString();
-                            Order newOrder = new Order
+                            Orders newOrder = new Orders
                             {
                                 Id = 0,
                                 OrderCode = newOrderCode,
                                 CustomerId = customer.Id,
+                                ShipName = customer.Name,
+                                ShipPhone = customer.Phone,
+                                ShipAddress = customer.Address,
+                                ShipNote = "",
                                 OrderDate = date,
                                 Status = 1
                             };

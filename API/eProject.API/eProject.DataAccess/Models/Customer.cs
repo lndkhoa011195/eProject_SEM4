@@ -20,7 +20,7 @@ namespace eProject.DataAccess.Models
         [JsonIgnore]
         public int IsActive { get; set; }  
         [JsonIgnore]
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Orders> Orders { get; set; }
         [JsonIgnore]
         public ICollection<Cart> Carts { get; set; }
     }

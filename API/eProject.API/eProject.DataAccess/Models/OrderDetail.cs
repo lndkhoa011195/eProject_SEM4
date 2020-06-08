@@ -12,7 +12,7 @@ namespace eProject.DataAccess.Models
         public int Id { get; set; }
 
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public Orders Order { get; set; }
         public int OrderId { get; set; }
 
         [ForeignKey("ProductId")]
