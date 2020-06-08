@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 public class MainFragment extends Fragment {
 
-    TextView tvName, tvEmail, tvAddress;
+    TextView tvName, tvEmail,tvPhone , tvAddress;
     Button btnChangePSW, btnChangeDetails;
     Context context;
     public static final String PREFS = "PREFS";
@@ -35,6 +35,7 @@ public class MainFragment extends Fragment {
         ImageView back = view.findViewById(R.id.back);
         tvName = view.findViewById(R.id.tvName);
         tvEmail = view.findViewById(R.id.tvEmail);
+        tvPhone = view.findViewById(R.id.tvPhone);
         tvAddress = view.findViewById(R.id.tvAddress);
         btnChangePSW = view.findViewById(R.id.btnChangePSW);
         btnChangeDetails = view.findViewById(R.id.btnChangeDetails);
@@ -74,6 +75,7 @@ public class MainFragment extends Fragment {
 
         if (sp.getString("loginid", null) != null) {
             tvName.setText(sp.getString("Name", "Name"));
+            tvPhone.setText((sp.getString("Phone", "Phone")));
             tvEmail.setText(sp.getString("Email", "Email"));
             tvAddress.setText(sp.getString("Address", "Address"));
         }

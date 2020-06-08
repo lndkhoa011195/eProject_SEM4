@@ -25,7 +25,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="68dp"
             android:fontFamily="sans-serif"
-            android:text="Nearest Kirana Store"
+            android:text="HKTT Store"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
@@ -38,26 +38,26 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="profile@grocery.com"
+            android:text="profile@gmai.com"
             android:textSize="14sp" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/tvMob"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@id/tvEmail"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_marginBottom="4dp"-->
-<!--            android:fontFamily="sans-serif-light"-->
-<!--            android:text="9090909090"-->
-<!--            android:textSize="16sp" />-->
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvEmail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="sans-serif-light"
+            android:text="9090909090"
+            android:textSize="16sp" />
 
         <TextView
 
             android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvEmail"
+            android:layout_below="@id/tvPhone"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif-light"

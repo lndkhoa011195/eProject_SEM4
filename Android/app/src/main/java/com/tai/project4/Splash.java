@@ -21,7 +21,6 @@ public class Splash extends FragmentActivity {
     private Animation animation;
     private ImageView logo;
     private TextView appTitle;
-    private TextView appSlogan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,6 @@ public class Splash extends FragmentActivity {
 
         logo = findViewById(R.id.logo);
         appTitle = findViewById(R.id.grocery);
-        appSlogan = findViewById(R.id.slogan);
         sp = getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE);
 
         if (ConnectivityReceiver.isConnected()) {
@@ -80,9 +78,6 @@ public class Splash extends FragmentActivity {
         animation = AnimationUtils.loadAnimation(this,
                 R.anim.app_name_animation);
         appTitle.startAnimation(animation);
-
-        animation = AnimationUtils.loadAnimation(this, R.anim.pro_animation);
-        appSlogan.startAnimation(animation);
     }
 
     private void endSplash() {
@@ -93,10 +88,6 @@ public class Splash extends FragmentActivity {
         animation = AnimationUtils.loadAnimation(this,
                 R.anim.app_name_animation_back);
         appTitle.startAnimation(animation);
-
-        animation = AnimationUtils.loadAnimation(this,
-                R.anim.pro_animation_back);
-        appSlogan.startAnimation(animation);
 
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
