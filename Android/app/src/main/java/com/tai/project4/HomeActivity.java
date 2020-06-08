@@ -129,7 +129,7 @@ public class HomeActivity extends AppCompatActivity
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
-                .withHeaderBackground(R.drawable.profile_bg)
+                .withHeaderBackground(R.color.colorBackgound)
                 .addProfiles(
                         profile,
                         //don't ask but google uses 14dp for the add account icon in gmail but 20dp for the normal icons (like manage account)
@@ -224,9 +224,8 @@ public class HomeActivity extends AppCompatActivity
         }
 
         result.addItem(new DividerDrawerItem());
-        result.addItem(new SecondaryDrawerItem().withName("Shop By Category").withTag("CATEGORY_LABEL").withSelectable(false).withSetSelected(false).withTextColor(getResources().getColor(R.color.material)));
+        result.addItem(new SecondaryDrawerItem().withName("Shop By Category").withTag("CATEGORY_LABEL").withSelectable(false).withSetSelected(false).withTextColor(getResources().getColor(R.color.colorBackgound)));
         result.addItem(new DividerDrawerItem());
-
 
         //SetCategoryAndSubCategory
         try {
@@ -290,7 +289,6 @@ public class HomeActivity extends AppCompatActivity
             });
             builder.show();
         }
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);

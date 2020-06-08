@@ -8,7 +8,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mytoolbar"
         android:layout_width="match_parent"
-        android:background="@drawable/toolbar"
+        android:background="@color/colorBackgound"
         app:theme="@style/ToolBarStyle"
         android:layout_height="?attr/actionBarSize"
         app:popupTheme="@style/MyTheme.PopupOverlay">
