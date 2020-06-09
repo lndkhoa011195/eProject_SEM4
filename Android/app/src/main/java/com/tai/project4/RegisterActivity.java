@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     return;
                                 Log.d("TAG", response.code() + "");
                                 RequestResult result = response.body();
-                                if (result.getErrorCode() == StatusCode.FAILED) {
+                                if (result.getStatusCode() == StatusCode.FAILED) {
                                     Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Register successful. Please go back to login.", Toast.LENGTH_LONG).show();

@@ -70,7 +70,7 @@ public class ChangeClientDetail extends AppCompatActivity{
                             return;
                         Log.d("TAG", response.code() + "");
                         RequestResult result = response.body();
-                        if (result.getErrorCode() == StatusCode.FAILED) {
+                        if (result.getStatusCode() == StatusCode.FAILED) {
                             Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(getApplicationContext(), "Register successful.", Toast.LENGTH_LONG).show();

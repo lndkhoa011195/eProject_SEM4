@@ -89,7 +89,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                 RequestResult result = response.body();
-                if (result.getErrorCode() == StatusCode.FAILED) {
+                if (result.getStatusCode() == StatusCode.FAILED) {
                     Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                 } else {
                     Gson gson = new Gson();

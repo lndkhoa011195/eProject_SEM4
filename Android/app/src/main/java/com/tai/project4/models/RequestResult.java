@@ -1,15 +1,15 @@
 package com.tai.project4.models;
 
 public class RequestResult {
-    private int errorCode;
+    private int statusCode;
     private String content;
 
-    public int getErrorCode() {
-        return errorCode;
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getContent() {
@@ -20,8 +20,8 @@ public class RequestResult {
         this.content = content;
     }
 
-    public RequestResult(int errorCode, String content) {
-        this.errorCode = errorCode;
+    public RequestResult(int statusCode, String content) {
+        this.statusCode = statusCode;
         this.content = content;
     }
 }

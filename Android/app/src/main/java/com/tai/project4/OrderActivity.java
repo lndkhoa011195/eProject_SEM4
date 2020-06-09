@@ -75,7 +75,7 @@ public class OrderActivity extends AppCompatActivity {
                 if (!response.isSuccessful())
                     return;
                 RequestResult result = response.body();
-                if (result.getErrorCode() == StatusCode.FAILED) {
+                if (result.getStatusCode() == StatusCode.FAILED) {
                     Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                 } else {
                     Gson gson = new Gson();
