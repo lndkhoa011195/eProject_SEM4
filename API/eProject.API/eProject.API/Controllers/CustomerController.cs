@@ -95,14 +95,14 @@ namespace eProject.API.Controllers
             if (cus != null)
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Email is existed."
                 };
             cus = _context.Customers.FirstOrDefault(x => x.Phone == signUpRequest.Phone);
             if (cus != null)
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Phone is existed."
                 };
             Customer customer = new Customer()
@@ -133,7 +133,7 @@ namespace eProject.API.Controllers
                 response.Address = cus.Address;
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Success,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Success,
                     Content = JsonConvert.SerializeObject(response)
                 };
             }
@@ -141,7 +141,7 @@ namespace eProject.API.Controllers
             {
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Invalid information."
                 };
             }
@@ -169,7 +169,7 @@ namespace eProject.API.Controllers
                         customer = _context.Customers.Find(request.CustomerId);
                         return new RequestResult
                         {
-                            ErrorCode = ErrorCode.Failed,
+                            StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                             Content = JsonConvert.SerializeObject(customer)
                         };
                     }
@@ -177,7 +177,7 @@ namespace eProject.API.Controllers
                     {
                         return new RequestResult
                         {
-                            ErrorCode = ErrorCode.Failed,
+                            StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                             Content = "Old password is not correct."
                         };
                     }
@@ -186,7 +186,7 @@ namespace eProject.API.Controllers
                 {
                     return new RequestResult
                     {
-                        ErrorCode = ErrorCode.Failed,
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                         Content = "Account is deactivated."
                     };
                 }
@@ -195,7 +195,7 @@ namespace eProject.API.Controllers
             {
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Invalid information."
                 };
             }
@@ -223,7 +223,7 @@ namespace eProject.API.Controllers
                     {
                         return new RequestResult
                         {
-                            ErrorCode = ErrorCode.Failed,
+                            StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                             Content = "Email is registed by other customer."
                         };
                     }
@@ -235,7 +235,7 @@ namespace eProject.API.Controllers
                         {
                             return new RequestResult
                             {
-                                ErrorCode = ErrorCode.Failed,
+                                StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                                 Content = "Phone is registed by other customer."
                             };
                         }
@@ -252,7 +252,7 @@ namespace eProject.API.Controllers
 
                             return new RequestResult
                             {
-                                ErrorCode = ErrorCode.Success,
+                                StatusCode = DataAccess.Models.Enum.StatusCode.Success,
                                 Content = JsonConvert.SerializeObject(customer)
                             };
                         }
@@ -262,7 +262,7 @@ namespace eProject.API.Controllers
                 {
                     return new RequestResult
                     {
-                        ErrorCode = ErrorCode.Failed,
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                         Content = "Account is deactivated."
                     };
                 }
@@ -271,7 +271,7 @@ namespace eProject.API.Controllers
             {
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Invalid information."
                 };
             }
@@ -591,7 +591,7 @@ namespace eProject.API.Controllers
 
                                 return new RequestResult
                                 {
-                                    ErrorCode = ErrorCode.Success,
+                                    StatusCode = DataAccess.Models.Enum.StatusCode.Success,
                                     Content = "Success"
                                 };
                             }
@@ -599,7 +599,7 @@ namespace eProject.API.Controllers
                             {
                                 return new RequestResult
                                 {
-                                    ErrorCode = ErrorCode.Failed,
+                                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                                     Content = "Can not create order."
                                 };
                             }
@@ -608,7 +608,7 @@ namespace eProject.API.Controllers
                         {
                             return new RequestResult
                             {
-                                ErrorCode = ErrorCode.Failed,
+                                StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                                 Content = "Can not find cart details."
                             };
                         }
@@ -619,13 +619,13 @@ namespace eProject.API.Controllers
             {
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Failed"
                 };
             }
             return new RequestResult
             {
-                ErrorCode = ErrorCode.Failed,
+                StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                 Content = "Failed"
             };
         }
@@ -721,7 +721,7 @@ namespace eProject.API.Controllers
 
                                 return new RequestResult
                                 {
-                                    ErrorCode = ErrorCode.Success,
+                                    StatusCode = DataAccess.Models.Enum.StatusCode.Success,
                                     Content = "Success"
                                 };
                             }
@@ -729,7 +729,7 @@ namespace eProject.API.Controllers
                             {
                                 return new RequestResult
                                 {
-                                    ErrorCode = ErrorCode.Failed,
+                                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                                     Content = "Can not create order."
                                 };
                             }
@@ -738,7 +738,7 @@ namespace eProject.API.Controllers
                         {
                             return new RequestResult
                             {
-                                ErrorCode = ErrorCode.Failed,
+                                StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                                 Content = "Can not find cart details."
                             };
                         }
@@ -747,7 +747,7 @@ namespace eProject.API.Controllers
                     {
                         return new RequestResult
                         {
-                            ErrorCode = ErrorCode.Failed,
+                            StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                             Content = "Can not find cart."
                         };
                     }
@@ -756,7 +756,7 @@ namespace eProject.API.Controllers
                 {
                     return new RequestResult
                     {
-                        ErrorCode = ErrorCode.Failed,
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                         Content = "Customer is not existed."
                     };
                 }
@@ -765,7 +765,7 @@ namespace eProject.API.Controllers
             {
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Failed"
                 };
             }
@@ -797,8 +797,8 @@ namespace eProject.API.Controllers
                         var orderDetails = _context.OrderDetails.Where(x => x.OrderId == order.Id).ToList();
                         foreach (var detail in orderDetails)
                         {
-                            sellingSum += detail.SellingPrice;
-                            originalSum += detail.OriginalPrice;
+                            sellingSum += detail.SellingPrice * detail.Quantity;
+                            originalSum += detail.OriginalPrice * detail.Quantity;
                             count++;
                         }
                         OrderResponse orderResponse = new OrderResponse()
@@ -816,7 +816,7 @@ namespace eProject.API.Controllers
                     var temp = orderResponses.OrderByDescending(x => x.OrderCode);
                     return new RequestResult
                     {
-                        ErrorCode = ErrorCode.Success,
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Success,
                         Content = JsonConvert.SerializeObject(temp)
                     };
                 }
@@ -824,7 +824,7 @@ namespace eProject.API.Controllers
                 {
                     return new RequestResult
                     {
-                        ErrorCode = ErrorCode.Failed,
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                         Content = "Customer is not existed."
                     };
                 }
@@ -833,7 +833,7 @@ namespace eProject.API.Controllers
             {
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Failed"
                 };
             }
@@ -873,7 +873,7 @@ namespace eProject.API.Controllers
                                };
                     return new RequestResult
                     {
-                        ErrorCode = ErrorCode.Success,
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Success,
                         Content = JsonConvert.SerializeObject(list)
                     };
                 }
@@ -881,7 +881,7 @@ namespace eProject.API.Controllers
                 {
                     return new RequestResult
                     {
-                        ErrorCode = ErrorCode.Failed,
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                         Content = "Can not find order Id"
                     };
                 }
@@ -890,7 +890,7 @@ namespace eProject.API.Controllers
             {
                 return new RequestResult
                 {
-                    ErrorCode = ErrorCode.Failed,
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
                     Content = "Failed"
                 };
             }

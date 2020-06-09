@@ -41,7 +41,7 @@ namespace eProject.API.Controllers
             .ToArray();
             return new RequestResult
             {
-                ErrorCode = ErrorCode.Success,
+                StatusCode = DataAccess.Models.Enum.StatusCode.Success,
                 Content = JsonConvert.SerializeObject(list)
             };
         }
