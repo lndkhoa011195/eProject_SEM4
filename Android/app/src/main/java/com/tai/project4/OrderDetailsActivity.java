@@ -106,8 +106,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                             savings = savings + ((p_mrp - p_sp) * p_qty);
                             payable_amt = payable_amt + (p_sp * p_qty);
                         }
-                        tvSavings.setText("\u20B9" + Double.toString(savings));
-                        tvPayableAmt.setText("\u20B9" + Double.toString(payable_amt));
+                        tvSavings.setText( Double.toString(savings));
+                        tvPayableAmt.setText(Double.toString(payable_amt));
 
                         l1.setVisibility(View.VISIBLE);
                         l2.setVisibility(View.VISIBLE);

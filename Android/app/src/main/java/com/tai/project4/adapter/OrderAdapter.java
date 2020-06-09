@@ -42,8 +42,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CustomerView
     @Override
     public void onBindViewHolder(OrderAdapter.CustomerViewHolder holder, int position) {
         String order_id = String.valueOf(list.get(position).getOrderCode());
-        String order_saving = String.valueOf(list.get(position).getSellingSum());
-        String order_payableamt = String.valueOf(list.get(position).getOriginalSum());
+        String order_saving = String.valueOf(list.get(position).getOriginalSum()-list.get(position).getSellingSum());
+        String order_payableamt = String.valueOf(list.get(position).getSellingSum());
         String order_statu = "";
         switch (list.get(position).getStatus()){
             case 1:
@@ -59,8 +59,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CustomerView
         String order_dt = list.get(position).getOrderDate();
 
         holder.tvOrderId.setText(order_id);
-        holder.tvOrderSaving.setText("\u20B9"+order_saving);
-        holder.tvOrderPayableAmt.setText("\u20B9"+order_payableamt);
+        holder.tvOrderSaving.setText(order_saving);
+        holder.tvOrderPayableAmt.setText(order_payableamt);
         holder.tvOrderStatus.setText(order_statu);
         holder.tvOrderDate.setText(order_dt);
         holder.tvOrderTime.setText(order_dt.substring(11));

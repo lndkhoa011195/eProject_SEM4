@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:layout_marginTop="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="5dp"
     android:id="@+id/order_history_cart"
+    android:outlineSpotShadowColor="@color/black"
     app:cardElevation="5dp"
     android:elevation="5dp">
 
@@ -51,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="OrderId"
+            android:text="OrderCode"
             android:textColor="#8795bb"
             app:layout_constraintBottom_toTopOf="@+id/statustText"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="TextView"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/blue_grey"
             app:layout_constraintBaseline_toBaselineOf="@+id/totalSavingsText"
             app:layout_constraintStart_toEndOf="@+id/totalSavingsText" />
 

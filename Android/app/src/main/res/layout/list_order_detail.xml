@@ -152,7 +152,8 @@
                 android:singleLine="true"
                 android:text="  Rs 25"
                 android:textColor="#757575"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:layout_marginLeft="10dp"/>
 
             <TextView
                 android:id="@+id/selling_price"

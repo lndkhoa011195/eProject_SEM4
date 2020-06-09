@@ -6,9 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     android:orientation="vertical"
-
     tools:context="com.tai.project4.OrderActivity">
-
     <include layout="@layout/toolbar" />
 
     <ProgressBar
@@ -19,7 +17,8 @@
         android:layout_marginTop="35dp"
         android:visibility="gone" />
 
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recyclerview_order_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
