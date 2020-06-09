@@ -114,28 +114,20 @@ public class HomeActivity extends AppCompatActivity
         handleIntent(getIntent());
         final IProfile profile;
         if (sp.getString("loginid", null) == null) {
-            profile = new ProfileDrawerItem().withName("RKS").withEmail("profile@rks.com").withIcon(R.drawable.icon).withTag("RKS");
+            profile = new ProfileDrawerItem().withName("Guest").withEmail("guest@hktt.com").withIcon(R.drawable.account).withTag("Guest");
 
         } else {
-            profile = new ProfileDrawerItem().withName(sp.getString("Name", null)).withEmail(sp.getString("Phone", null)).withIcon(R.drawable.icon).withTag("CUSTOMER");
-
+            profile = new ProfileDrawerItem().withName(sp.getString("Name", null)).withEmail(sp.getString("Email", null)).withIcon(R.drawable.account).withTag("CUSTOMER");
         }
 
-//        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(0).withName("Adarsh");
 
         final Intent i = new Intent(this, ProfileActivity.class);
-        final Intent r = new Intent(this, RegisterActivity.class);
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
                 .withHeaderBackground(R.color.colorBackgound)
-                .addProfiles(
-                        profile,
-                        //don't ask but google uses 14dp for the add account icon in gmail but 20dp for the normal icons (like manage account)
-                        new ProfileSettingDrawerItem().withName("Register Now").withDescription("Add new RKS Account").withTag("REGISTER")
-
-                )
+                .addProfiles(profile)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
 
 
@@ -146,11 +138,7 @@ public class HomeActivity extends AppCompatActivity
                         if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getTag().equals("CUSTOMER")) {
 //                            headerResult.removeProfile(profile);
                             startActivity(i);
-                        } else if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getTag().equals("REGISTER")) {
-                            startActivity(r);
-
                         }
-                        //false if you have not consumed the event and it should close the drawer
                         return false;
                     }
                 })
