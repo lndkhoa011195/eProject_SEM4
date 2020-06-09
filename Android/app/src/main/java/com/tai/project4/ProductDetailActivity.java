@@ -45,7 +45,7 @@ import retrofit2.Response;
 public class ProductDetailActivity extends AppCompatActivity {
 
     public static final String PREFS = "PREFS";
-    TextView tvProductName, tvProductDesc, tvMRP, tvPrice, tvSaved, tvSavedPer, tvQty, addtocart, product_id, buy_now;
+    TextView tvProductName, tvProductDesc, tvMRP, tvPrice, tvSaved, tvSavedPer, tvQty, addtocart, product_id, buy_now, tvDesc, tvBrand, tvUnittype;
     ImageView ivProductImage, add, remove;
     String p_id;
     SharedPreferences sp;
@@ -71,12 +71,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         product_id = findViewById(R.id.product_id);
 
         tvProductName = findViewById(R.id.product_name);
-        tvProductDesc = findViewById(R.id.product_desc);
+        //tvProductDesc = findViewById(R.id.product_desc);
         tvMRP = findViewById(R.id.mrp);
         tvPrice = findViewById(R.id.price);
         tvSaved = findViewById(R.id.saved);
         tvSavedPer = findViewById(R.id.saved_per);
         tvQty = findViewById(R.id.product_qty);
+        tvDesc = findViewById(R.id.description);
+        tvBrand = findViewById(R.id.brand);
+        tvUnittype = findViewById(R.id.unit);
         ivProductImage = findViewById(R.id.product_img);
         add = findViewById(R.id.add);
         remove = findViewById(R.id.remove);
@@ -188,7 +191,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Log.d("TAG", response.code() + "");
                     ProductResponse productDetails = response.body();
                     tvProductName.setText(productDetails.getName());
-                    tvProductDesc.setText(productDetails.getDescription());
+                    tvDesc.setText(productDetails.getDescription());
+                    tvBrand.setText(productDetails.getManufacturerName());
+                    tvUnittype.setText(productDetails.getUnitName());
                     tvMRP.setText(String.valueOf(productDetails.getOriginalPrice()));
                     tvPrice.setText(String.valueOf(productDetails.getSellingPrice()));
                     product_id.setText(String.valueOf(productDetails.getId()));

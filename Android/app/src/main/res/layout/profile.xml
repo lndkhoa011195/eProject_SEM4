@@ -62,7 +62,7 @@
             android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif-light"
             android:lines="3"
-            android:text="GoGrocery Store,  Bilaspur, Chhattisgarh"
+            android:text="HKTT Store,  District, HCM ctiy"
             android:textAlignment="center"
             android:textSize="16sp" />
 

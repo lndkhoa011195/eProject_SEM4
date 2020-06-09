@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <LinearLayout
 
                 android:id="@+id/name"
@@ -45,15 +44,15 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/product_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:singleLine="false"
-                    android:text="Product Description Here"
-                    android:textColor="@color/blue_grey"
-                    android:textSize="13sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/product_desc"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="2dp"-->
+<!--                    android:singleLine="false"-->
+<!--                    android:text="Product Description Here"-->
+<!--                    android:textColor="@color/blue_grey"-->
+<!--                    android:textSize="13sp" />-->
 
             </LinearLayout>
 
@@ -96,7 +95,85 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:text="M.R.P: "
+                        android:text="Description: "
+                        android:textColor="@color/blue_grey"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rs 290 /-"
+                        android:textColor="@color/blue_grey"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="Brand: "
+                        android:textColor="@color/blue_grey"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/brand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rs 290 /-"
+                        android:textColor="@color/blue_grey"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="Unit Type: "
+                        android:textColor="@color/blue_grey"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Rs 290 /-"
+                        android:textColor="@color/blue_grey"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="OriginalPrice: "
                         android:textColor="@color/blue_grey"
                         android:textSize="13sp" />
 
@@ -122,7 +199,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:text="Price: "
+                        android:text="SellingPrice: "
                         android:textColor="@color/blue_grey"
                         android:textSize="16sp" />
 
@@ -238,9 +315,6 @@
 
             </LinearLayout>
 
-            <!--******add to cart******-->
-
-
             <LinearLayout
                 android:id="@+id/save"
                 android:layout_width="match_parent"
@@ -276,7 +350,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/box51"
+                    android:background="@drawable/box511"
                     android:elevation="3dp"
                     android:gravity="center"
                     android:paddingBottom="12dp"
@@ -286,9 +360,7 @@
                     android:text="ADD TO CART"
                     android:textColor="@color/white" />
 
-
             </LinearLayout>
-
 
         </RelativeLayout>
     </ScrollView>
@@ -300,6 +372,5 @@
         android:layout_gravity="center"
         android:layout_marginTop="220dp"
         android:visibility="gone" />
-
 
 </RelativeLayout>
