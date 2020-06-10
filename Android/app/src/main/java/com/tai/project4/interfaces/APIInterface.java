@@ -7,6 +7,7 @@ import com.tai.project4.model.Login;
 import com.tai.project4.models.CartRequest;
 import com.tai.project4.models.CartResult;
 import com.tai.project4.models.CategoryResult;
+import com.tai.project4.models.CheckOutRequest;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
 import com.tai.project4.models.RequestResult;
@@ -50,8 +51,8 @@ public interface APIInterface {
     @POST("/api/Customer/GetProductsInCart")
     Call<List<CartResult>> GetProductsInCart(@Query("_customerId") Integer _customerId);
 
-    @POST("/api/Customer/CheckOutTest")
-    Call<RequestResult> CheckOutTest(@Query("CustomerId") Integer CustomerId);
+    @POST("/api/Customer/CheckOut")
+    Call<RequestResult> CheckOut(@Body CheckOutRequest checkOutRequest);
 
     @POST("/api/Customer/GetOrders")
     Call<RequestResult> GetOrders(@Query("CustomerId") Integer CustomerId);

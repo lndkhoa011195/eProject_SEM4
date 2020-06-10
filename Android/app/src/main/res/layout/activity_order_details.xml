@@ -49,6 +49,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="fill_parent"
                 android:layout_height="60dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:layout_gravity="bottom"
                 android:background="@drawable/box6"
                 android:baselineAligned="false"
@@ -95,8 +97,6 @@
                     android:textStyle="bold"
                     app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
                     app:layout_constraintStart_toEndOf="@+id/textView5" />
-
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

@@ -17,6 +17,8 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
+
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -42,11 +44,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".RegisterActivity" />
-        <activity
-            android:name=".LoginActivity">
-        </activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity"></activity>
         <activity
             android:name=".HomeActivity"
             android:launchMode="singleTop"
@@ -59,10 +58,8 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity
-            android:name=".StartActivity" />
-        <activity
-            android:name=".ProductDetailActivity" />
+        <activity android:name=".StartActivity" />
+        <activity android:name=".ProductDetailActivity" />
         <activity
             android:name=".MyCart"
             android:parentActivityName=".HomeActivity">
@@ -77,16 +74,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tai.project4.HomeActivity" />
         </activity>
-        <activity android:name=".OrderDetailsActivity"
+        <activity
+            android:name=".OrderDetailsActivity"
             android:parentActivityName=".OrderActivity">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tai.project4.OrderActivity" />
-
         </activity>
-        <activity
-            android:name=".ProfileActivity" />
+        <activity android:name=".ProfileActivity" />
         <activity
             android:name=".Category_wise_products"
             android:parentActivityName=".HomeActivity">
@@ -101,16 +96,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tai.project4.HomeActivity" />
         </activity>
+        <activity android:name=".ChangePassword" />
+        <activity android:name=".ChangeClientDetail" />
+        <activity android:name=".ValidateOTP" />
+        <activity android:name=".ForgetActivity" />
+        <activity android:name=".OtpForgetActivity" />
         <activity
-            android:name=".ChangePassword" />
-        <activity
-            android:name=".ChangeClientDetail" />
-        <activity
-            android:name=".ValidateOTP" />
-        <activity
-            android:name=".ForgetActivity" />
-        <activity
-            android:name=".OtpForgetActivity" />
+            android:name=".CheckOutActivity"
+            android:parentActivityName=".MyCart">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tai.project4.MyCart" />
+        </activity>
     </application>
 
 </manifest>

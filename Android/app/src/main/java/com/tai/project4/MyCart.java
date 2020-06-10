@@ -109,8 +109,8 @@ public class MyCart extends AppCompatActivity {
                         savings = savings + ((p_mrp - p_sp) * p_qty);
                         payable_amt = payable_amt + (p_sp * p_qty);
                     }
-                    tvSavings.setText( Double.toString(savings));
-                    tvPayableAmt.setText( Double.toString(payable_amt));
+                    tvSavings.setText(Double.toString(savings));
+                    tvPayableAmt.setText(Double.toString(payable_amt));
 
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
@@ -137,106 +137,9 @@ public class MyCart extends AppCompatActivity {
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sp = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-                String login_id = sp.getString("loginid", null);
-                apiInterface = APIClient.getClient().create(APIInterface.class);
-                Call<RequestResult> resultCall = apiInterface.CheckOutTest(Integer.parseInt(login_id));
-                resultCall.enqueue(new Callback<RequestResult>() {
-                    @Override
-                    public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-                        if (!response.isSuccessful())
-                            return;
-                        RequestResult result = response.body();
-                        if (result.getStatusCode() == StatusCode.FAILED) {
-                            Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
-                        } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MyCart.this);
-                            builder.setTitle("Successful")
-                                    .setMessage("Order Placed Successfully")
-                                    .setIcon(R.drawable.ic_check_black)
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                                            Intent ii = new Intent(MyCart.this, HomeActivity.class);
-                                            startActivity(ii);
-                                            finish();
-                                        }
-                                    });
-                            builder.show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<RequestResult> call, Throwable t) {
-                        call.cancel();
-                    }
-                });
-
-
-//                class PlaceOrder extends AsyncTask<String, Void, String> {
-//
-//                    @Override
-//                    protected String doInBackground(String... params) {
-//                        String cartProductsURL = getResources().getString(R.string.base_url) + "placeOrder/";
-//
-//                        try {
-//                            URL url = new URL(cartProductsURL);
-//                            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                            httpURLConnection.setRequestMethod("POST");
-//                            httpURLConnection.setDoInput(true);
-//                            httpURLConnection.setDoOutput(true);
-//                            OutputStream outputStream = httpURLConnection.getOutputStream();
-//                            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-//                            String post_Data = URLEncoder.encode("login_id", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
-//                                    URLEncoder.encode("savings", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8") + "&" +
-//                                    URLEncoder.encode("payableamt", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8");
-//
-//                            bufferedWriter.write(post_Data);
-//                            bufferedWriter.flush();
-//                            bufferedWriter.close();
-//                            outputStream.close();
-//                            InputStream inputStream = httpURLConnection.getInputStream();
-//                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//                            String result = "", line = "";
-//                            while ((line = bufferedReader.readLine()) != null) {
-//                                result += line;
-//                            }
-//                            return result;
-//                        } catch (Exception e) {
-//                            return e.toString();
-//                        }
-//                    }
-//
-//                    @Override
-//                    protected void onPostExecute(String s) {
-//                        super.onPostExecute(s);
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(MyCart.this);
-//                        builder.setTitle("Successful")
-//                                .setMessage("Order Placed Successfully")
-//                                .setIcon(R.drawable.ic_check_black)
-//                                .setCancelable(false)
-//                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                                        Intent ii = new Intent(MyCart.this, OrderActivity.class);
-//                                        startActivity(ii);
-//                                        finish();
-//                                    }
-//                                });
-//                        builder.show();
-//                    }
-//
-//                    @Override
-//                    protected void onPreExecute() {
-//                        super.onPreExecute();
-//                    }
-//
-//                }
-//                PlaceOrder placeOrderOBJ = new PlaceOrder();
-//                placeOrderOBJ.execute(sp.getString("loginid", null), tvSavings.getText().toString(), tvPayableAmt.getText().toString());
+                Intent checkOutIntent = new Intent(MyCart.this, CheckOutActivity.class);
+                startActivity(checkOutIntent);
             }
         });
     }
