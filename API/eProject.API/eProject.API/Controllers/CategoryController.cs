@@ -50,6 +50,7 @@ namespace eProject.API.Controllers
             var list = from subCategory in subCategories
                        join category in categories
                        on subCategory.CategoryId equals category.Id
+                       orderby subCategory.Name ascending
                        select new CategoryAndSubCategoryResponse { SubCategoryID = subCategory.Id, SubCategoryName = subCategory.Name, CategoryName = category.Name };
             return JsonConvert.SerializeObject(list);
         }
