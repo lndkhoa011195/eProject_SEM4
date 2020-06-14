@@ -16,6 +16,7 @@ import com.tai.project4.Item_Order_Detail;
 import com.tai.project4.Product;
 import com.tai.project4.R;
 import com.tai.project4.models.CartResult;
+import com.tai.project4.util.NumberManager;
 
 import java.util.List;
 
@@ -45,11 +46,11 @@ public class OrderDetailAdapter  extends RecyclerView.Adapter<OrderDetailAdapter
         String name = list.get(position).getName();
         String desc = list.get(position).getDescription();
         String img = list.get(position).getImageURL();
-        String price = String.valueOf(list.get(position).getOriginalPrice());
-        String selling_price = String.valueOf(list.get(position).getSellingPrice());
+        int originalPrice = (int)list.get(position).getOriginalPrice();
+        int sellingPrice = (int)list.get(position).getSellingPrice();
         String brand = list.get(position).getManufacturerName();
-        double p_mrp = Double.parseDouble(price);
-        double p_sp = Double.parseDouble(selling_price);
+        double p_mrp = list.get(position).getOriginalPrice();
+        double p_sp = list.get(position).getSellingPrice();
         double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
         int p_dp_i = (int) p_dp;
         String discount = String.valueOf(p_dp_i);
@@ -58,8 +59,8 @@ public class OrderDetailAdapter  extends RecyclerView.Adapter<OrderDetailAdapter
         holder.pro_id.setText(id);
         holder.pro_name.setText(name);
         holder.pro_desc.setText(desc);
-        holder.pro_price.setText(price);
-        holder.pro_sp.setText(selling_price);
+        holder.pro_price.setText(NumberManager.getInstance().format(originalPrice) + "đ");
+        holder.pro_sp.setText(NumberManager.getInstance().format(sellingPrice) + "đ");
         holder.pro_brand.setText(brand);
         holder.pro_discount.setText(discount + " %   OFF");
         holder.pro_qty.setText(qty);
@@ -67,7 +68,7 @@ public class OrderDetailAdapter  extends RecyclerView.Adapter<OrderDetailAdapter
         if (Integer.parseInt(discount) <= 0) {
             holder.pro_discount.setVisibility(View.GONE);
         }
-        if(selling_price.trim().equals(price.trim())){
+        if(originalPrice == sellingPrice){
             holder.pro_price.setVisibility(View.GONE);
         }
 
@@ -118,9 +119,8 @@ public class OrderDetailAdapter  extends RecyclerView.Adapter<OrderDetailAdapter
             pro_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Product detail = new Product();
-//                    detail.startProductDetailActivity(pro_id.getText().toString(), context);
-
+                    Product detail = new Product();
+                    detail.startProductDetailActivity(pro_id.getText().toString(), context);
                 }
             });
         }

@@ -1,5 +1,6 @@
 package com.tai.project4.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +23,8 @@ import com.tai.project4.LoginActivity;
 import com.tai.project4.Product;
 import com.tai.project4.R;
 import com.tai.project4.models.ProductResponse;
+import com.tai.project4.util.LoadingDialog;
+import com.tai.project4.util.NumberManager;
 
 import java.util.List;
 
@@ -29,10 +32,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
     public static final String PREFS = "PREFS";
     Context context;
     SharedPreferences sp;
+    Activity activity;
 
     private List<ProductResponse> list;
 
-    public ProductAdapter(List<ProductResponse> _list, Context _context) {
+    public ProductAdapter(Activity activity, List<ProductResponse> _list, Context _context) {
+        this.activity  = activity;
         this.list = _list;
         this.context = _context;
     }
@@ -52,11 +57,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
         String name = list.get(position).getName();
         String desc = list.get(position).getDescription();
         String img = list.get(position).getImageURL();
-        String price = String.valueOf(list.get(position).getOriginalPrice());
-        String selling_price = String.valueOf(list.get(position).getSellingPrice());
+        int originalPrice = (int)list.get(position).getOriginalPrice();
+        int sellingPrice = (int)list.get(position).getSellingPrice();
         String brand = list.get(position).getManufacturerName();
-        double p_mrp = Double.parseDouble(price);
-        double p_sp = Double.parseDouble(selling_price);
+        double p_mrp = list.get(position).getOriginalPrice();
+        double p_sp = list.get(position).getSellingPrice();
         double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
         int p_dp_i = (int) p_dp;
         String discount = String.valueOf(p_dp_i);
@@ -64,15 +69,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
         holder.pro_id.setText(id);
         holder.pro_name.setText(name);
         holder.pro_desc.setText(desc);
-        holder.pro_price.setText(price);
-        holder.pro_sp.setText(selling_price);
+        holder.pro_price.setText(NumberManager.getInstance().format(originalPrice) + "đ");
+        holder.pro_sp.setText(NumberManager.getInstance().format(sellingPrice) + "đ");
         holder.pro_brand.setText(brand);
         holder.pro_discount.setText(discount + " %   OFF");
 
         if (Integer.parseInt(discount) <= 0) {
             holder.pro_discount.setVisibility(View.GONE);
         }
-        if (selling_price.trim().equals(price.trim())) {
+        if (originalPrice == sellingPrice) {
             holder.pro_price.setVisibility(View.GONE);
         }
 
@@ -116,6 +121,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
 
             sp = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
 
+
+
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -135,14 +142,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
                 public void onClick(View view) {
                     Product detail = new Product();
                     detail.startProductDetailActivity(pro_id.getText().toString(), context);
-
                 }
             });
             pro_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (sp.getString("loginid", null) != null) {
-                        AddToCart addToCart = new AddToCart(context);
+                        AddToCart addToCart = new AddToCart(activity, context);
                         addToCart.addToCart(pro_id.getText().toString(), "1");
                         ((AddorRemoveCallbacks) context).onAddProduct();
                     } else {

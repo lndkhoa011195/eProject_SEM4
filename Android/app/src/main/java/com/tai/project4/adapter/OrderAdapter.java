@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tai.project4.OrderDetailsActivity;
 import com.tai.project4.R;
 import com.tai.project4.models.OrderResult;
+import com.tai.project4.util.NumberManager;
 
 import java.util.List;
 
@@ -41,33 +42,33 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CustomerView
 
     @Override
     public void onBindViewHolder(OrderAdapter.CustomerViewHolder holder, int position) {
-        String order_id = String.valueOf(list.get(position).getOrderCode());
-        String order_saving = String.valueOf(list.get(position).getOriginalSum()-list.get(position).getSellingSum());
-        String order_payableamt = String.valueOf(list.get(position).getSellingSum());
-        String order_statu = "";
+        String orderCode = String.valueOf(list.get(position).getOrderCode());
+        int TotalSaving = (int)(list.get(position).getOriginalSum()-list.get(position).getSellingSum());
+        int TotalPaid = (int)(list.get(position).getSellingSum());
+        String OrderStatus = "";
         switch (list.get(position).getStatus()){
             case 1:
-                order_statu = "NEW";
+                OrderStatus = "NEW";
                 break;
             case 2:
-                order_statu = "PROCESSING";
+                OrderStatus = "PROCESSING";
                 break;
             case 3:
-                order_statu = "DONE";
+                OrderStatus = "DONE";
                 break;
         }
         String order_dt = list.get(position).getOrderDate();
 
-        holder.tvOrderId.setText(order_id);
-        holder.tvOrderSaving.setText(order_saving);
-        holder.tvOrderPayableAmt.setText(order_payableamt);
-        holder.tvOrderStatus.setText(order_statu);
+        holder.tvOrderId.setText(orderCode);
+        holder.tvOrderSaving.setText(NumberManager.getInstance().format(TotalSaving) + "đ");
+        holder.tvOrderPayableAmt.setText(NumberManager.getInstance().format(TotalPaid) + "đ");
+        holder.tvOrderStatus.setText(OrderStatus);
         holder.tvOrderDate.setText(order_dt);
         holder.tvOrderTime.setText(order_dt.substring(11));
 
-        if(order_statu.trim().equals("NEW")){
+        if(OrderStatus.trim().equals("NEW")){
             holder.tvOrderStatus.setTextColor(context.getResources().getColor(R.color.holo_green_light));
-        }else if(order_statu.trim().equals("PROCESSING")){
+        }else if(OrderStatus.trim().equals("PROCESSING")){
             holder.tvOrderStatus.setTextColor(context.getResources().getColor(R.color.orange));
         }
     }

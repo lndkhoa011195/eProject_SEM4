@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +25,8 @@ import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CategoryResult;
 import com.tai.project4.models.ProductResponse;
+import com.tai.project4.util.LoadingDialog;
+import com.tai.project4.util.NumberManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +64,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         view = findViewById(R.id.product_page);
         mProgressBar = findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
-        addToCart=new AddToCart(ProductDetailActivity.this);
+        addToCart=new AddToCart(ProductDetailActivity.this, ProductDetailActivity.this);
         Bundle extras = getIntent().getExtras();
         p_id = extras.getString("p_id");
 
@@ -122,9 +125,16 @@ public class ProductDetailActivity extends AppCompatActivity {
                 String loginid = sp.getString("loginid", null);
                 if (loginid != null) {
                     addToCart.addToCart(product_id.getText().toString(),tvQty.getText().toString());
-                    Intent intent = new Intent(getApplicationContext(), MyCart.class);
-                    startActivity(intent);
-                    finish();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(getApplicationContext(), MyCart.class);
+                            finish();
+                            startActivity(intent);
+                        }
+                    }, 500);
+
                 } else {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
@@ -194,8 +204,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                     tvDesc.setText(productDetails.getDescription());
                     tvBrand.setText(productDetails.getManufacturerName());
                     tvUnittype.setText(productDetails.getUnitName());
-                    tvMRP.setText(String.valueOf(productDetails.getOriginalPrice()));
-                    tvPrice.setText(String.valueOf(productDetails.getSellingPrice()));
+                    tvMRP.setText(NumberManager.getInstance().format(productDetails.getOriginalPrice()) + "đ");
+                    tvPrice.setText(NumberManager.getInstance().format(productDetails.getSellingPrice()) + "đ");
                     product_id.setText(String.valueOf(productDetails.getId()));
                     tvQty.setText("1");
                     Picasso.with(ProductDetailActivity.this).load(productDetails.getImageURL()).placeholder(R.drawable.watermark_icon).into(ivProductImage);
@@ -208,7 +218,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     int p_dp_i = (int) p_dp;
                     int p_dp_p_i = (int) p_dp_p;
 
-                    tvSaved.setText(String.valueOf(p_dp_i));
+                    tvSaved.setText(NumberManager.getInstance().format(p_dp_i) + "đ");
                     tvSavedPer.setText("(" + p_dp_p_i + "%)");
                     mProgressBar.setVisibility(View.GONE);
                     view.setVisibility(View.VISIBLE);
@@ -247,90 +257,5 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
     }
-
-
-
-
-
-
-//    class ProductDetail extends AsyncTask<String, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            String productUrl = getResources().getString(R.string.base_url) + "getProductDetail/" + p_id;
-//
-//            try {
-//                URL url = new URL(productUrl);
-//
-//                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                httpURLConnection.setRequestMethod("POST");
-//                httpURLConnection.setDoInput(true);
-//                httpURLConnection.setDoOutput(true);
-//
-//                InputStream inputStream = httpURLConnection.getInputStream();
-//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//                String result = "", line = "";
-//                while ((line = bufferedReader.readLine()) != null) {
-//                    result += line;
-//                }
-//                return result;
-//            } catch (Exception e) {
-//                return e.toString();
-//            }
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//            AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
-//            builder.setTitle("Received Message");
-//
-//            try {
-//
-//                JSONArray productDetailsArray = new JSONArray(s);
-//                JSONObject json_data = new JSONObject();
-//                json_data = productDetailsArray.getJSONObject(0);
-//
-//                tvProductName.setText(json_data.getString("name"));
-//                tvProductDesc.setText(json_data.getString("description"));
-//                tvMRP.setText("\u20B9 " + json_data.getString("mrp"));
-//                tvPrice.setText("\u20B9 " + json_data.getString("selling_price"));
-//                product_id.setText(json_data.getString("id"));
-//                tvQty.setText("1");
-//                Picasso.with(ProductDetailActivity.this).load(getResources().getString(R.string.img_base_url) + "product_images/" + json_data.getString("image")).placeholder(R.drawable.watermark_icon).into(ivProductImage);
-//
-//                double p_mrp = Double.parseDouble(json_data.getString("mrp"));
-//                double p_sp = Double.parseDouble(json_data.getString("selling_price"));
-//                double p_dp = (p_mrp - p_sp);
-//                double p_dp_p = p_dp / (p_mrp / 100);
-//
-//                int p_dp_i = (int) p_dp;
-//                int p_dp_p_i = (int) p_dp_p;
-//
-//                tvSaved.setText("\u20B9" + p_dp_i);
-//                tvSavedPer.setText("(" + p_dp_p_i + "%)");
-//                mProgressBar.setVisibility(View.GONE);
-//                view.setVisibility(View.VISIBLE);
-//
-//            } catch (JSONException e) {
-//                builder.setCancelable(true);
-//                builder.setTitle("No Internet Connection");
-//                builder.setMessage("Please Connect to internet");
-//                builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                });
-//                builder.show();
-//            }
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//    }
 
 }

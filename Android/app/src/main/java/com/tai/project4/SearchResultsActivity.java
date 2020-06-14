@@ -95,7 +95,7 @@ public class SearchResultsActivity extends AppCompatActivity implements AddorRem
                             RecyclerView product_recyclerview = findViewById(R.id.recyclerview_products);
                             product_recyclerview.setNestedScrollingEnabled(false);
                             product_recyclerview.setLayoutManager(new LinearLayoutManager(SearchResultsActivity.this));
-                            product_recyclerview.setAdapter(new ProductAdapter(responseList, SearchResultsActivity.this));
+                            product_recyclerview.setAdapter(new ProductAdapter(SearchResultsActivity.this, responseList, SearchResultsActivity.this));
                         }
                     } catch (Exception ex) {
 

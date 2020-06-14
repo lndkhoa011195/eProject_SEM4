@@ -99,7 +99,7 @@ public class Category_wise_products extends AppCompatActivity implements AddorRe
                     RecyclerView product_recyclerview = findViewById(R.id.recyclerview_products);
                     product_recyclerview.setNestedScrollingEnabled(false);
                     product_recyclerview.setLayoutManager(new LinearLayoutManager(Category_wise_products.this));
-                    product_recyclerview.setAdapter(new ProductAdapter(resultList, Category_wise_products.this));
+                    product_recyclerview.setAdapter(new ProductAdapter(Category_wise_products.this,resultList, Category_wise_products.this));
                 }
             }
 

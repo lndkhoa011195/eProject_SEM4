@@ -44,15 +44,7 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/product_desc"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="2dp"-->
-<!--                    android:singleLine="false"-->
-<!--                    android:text="Product Description Here"-->
-<!--                    android:textColor="@color/blue_grey"-->
-<!--                    android:textSize="13sp" />-->
+
 
             </LinearLayout>
 
@@ -104,8 +96,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Rs 290 /-"
+                        android:gravity="start"
+                        android:layout_marginEnd="10dp"
                         android:textColor="@color/blue_grey"
                         android:textSize="13sp" />
 
@@ -131,7 +123,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Rs 290 /-"
                         android:textColor="@color/blue_grey"
                         android:textSize="13sp" />
 
@@ -157,7 +148,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Rs 290 /-"
                         android:textColor="@color/blue_grey"
                         android:textSize="13sp" />
 
@@ -183,7 +173,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Rs 290 /-"
                         android:textColor="@color/blue_grey"
                         android:textSize="13sp" />
 
@@ -201,7 +190,7 @@
                         android:layout_gravity="start"
                         android:text="SellingPrice: "
                         android:textColor="@color/blue_grey"
-                        android:textSize="16sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/price"
@@ -209,9 +198,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Rs 250 /-"
                         android:textColor="@color/red"
-                        android:textSize="16sp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -227,7 +215,7 @@
                         android:layout_gravity="start"
                         android:text="You Save: "
                         android:textColor="@color/blue_grey"
-                        android:textSize="18sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/saved"
@@ -235,9 +223,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Rs 50"
                         android:textColor="@color/red"
-                        android:textSize="20sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/saved_per"
@@ -246,9 +233,9 @@
                         android:layout_marginLeft="6dp"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="(8%)"
+                        android:text="(0%)"
                         android:textColor="@color/red"
-                        android:textSize="20sp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 

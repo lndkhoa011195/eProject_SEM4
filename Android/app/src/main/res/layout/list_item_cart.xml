@@ -16,7 +16,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4">
+            android:layout_weight="3">
 
             <ImageView
                 android:id="@+id/product_img"
@@ -54,12 +54,12 @@
                 android:id="@+id/product_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="marquee"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:focusable="false"
                 android:freezesText="true"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
-                android:singleLine="true"
                 android:text="Product Name"
                 android:textColor="@android:color/background_dark"
                 android:textSize="15sp" />
@@ -158,7 +158,8 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="  Rs 25"
+                android:text="1.000đ"
+                android:layout_marginStart="10dp"
                 android:textColor="#757575"
                 android:textSize="13sp" />
 
@@ -175,7 +176,7 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="Rs 20"
+                android:text="1.000đ"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp"
                 android:textStyle="bold" />
