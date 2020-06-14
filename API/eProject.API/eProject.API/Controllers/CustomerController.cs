@@ -632,146 +632,6 @@ namespace eProject.API.Controllers
 
 
         /// <summary>
-        /// Tạo Order mới và thêm thông tin vào OrderDetail
-        /// </summary>
-        /// <param name="checkOutRequest"></param>
-        /// <returns></returns>
-        [HttpPost("CheckOutTest")]
-        public async Task<RequestResult> CheckOutTest(int CustomerId)
-        {
-            try
-            {
-                //Kiểm tra CustomerId có tồn tại hay không
-                var customer = _context.Customers.Find(CustomerId);
-                //Có tồn tại
-                if (customer != null)
-                {
-                    //Tìm CartID dựa vào CustomerId
-                    var cart = _context.Carts.SingleOrDefault(x => x.CustomerId == CustomerId);
-                    if (cart != null)
-                    {
-                        //Tìm danh sách sản phẩm hiện có trong cart
-                        var cartDetails = _context.CartDetails.Where(x => x.CartId == cart.Id).ToList();
-                        if (cartDetails.Count() > 0) //trong cart có hàng
-                        {
-                            //Tạo order mới
-                            DateTime date = DateTime.Now;
-                            string newOrderCode = date.ToString("yyyyMMddHHmmssfff") + "_" + CustomerId.ToString();
-                            Orders newOrder = new Orders
-                            {
-                                Id = 0,
-                                OrderCode = newOrderCode,
-                                CustomerId = customer.Id,
-                                ShipName = customer.Name,
-                                ShipPhone = customer.Phone,
-                                ShipAddress = customer.Address,
-                                ShipNote = "",
-                                OrderDate = date,
-                                Status = 1
-                            };
-                            _context.Orders.Add(newOrder);
-                            _context.SaveChanges();
-                            var order = _context.Orders.SingleOrDefault(x => x.CustomerId == CustomerId && x.OrderCode == newOrderCode);
-                            if (order != null)
-                            {
-                                var products = _context.Products.ToList();
-                                var manufacturers = _context.Manufacturers.ToList();
-                                var units = _context.Units.ToList();
-
-                                var list = from product in products
-                                           join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
-                                           join unit in units on product.UnitId equals unit.Id
-                                           where product.IsActive == 1
-                                           select new ProductResponse
-                                           {
-                                               Id = product.Id,
-                                               Name = product.Name,
-                                               OriginalPrice = product.OriginalPrice,
-                                               SellingPrice = product.SellingPrice,
-                                               Description = product.Description,
-                                               MadeIn = product.MadeIn,
-                                               ManufacturerName = manufacturer.Name,
-                                               ImageURL = product.ImageURL,
-                                               UnitName = unit.Name
-                                           };
-
-                                foreach (var item in cartDetails)
-                                {
-                                    var temp = list.FirstOrDefault(x => x.Id == item.ProductId);
-                                    OrderDetail orderDetail = new OrderDetail
-                                    {
-                                        Id = 0,
-                                        OrderId = order.Id,
-                                        ProductId = temp.Id,
-                                        ProductName = temp.Name,
-                                        OriginalPrice = temp.OriginalPrice,
-                                        SellingPrice = temp.SellingPrice,
-                                        Description = temp.Description,
-                                        UnitName = temp.UnitName,
-                                        ManufacturerName = temp.ManufacturerName,
-                                        MadeIn = temp.MadeIn,
-                                        ImageURL = temp.ImageURL,
-                                        Quantity = item.Quantity
-                                    };
-                                    _context.OrderDetails.Add(orderDetail);
-                                    _context.CartDetails.Remove(item);
-                                    _context.SaveChanges();
-                                }
-
-
-                                return new RequestResult
-                                {
-                                    StatusCode = DataAccess.Models.Enum.StatusCode.Success,
-                                    Content = "Success"
-                                };
-                            }
-                            else
-                            {
-                                return new RequestResult
-                                {
-                                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
-                                    Content = "Can not create order."
-                                };
-                            }
-                        }
-                        else
-                        {
-                            return new RequestResult
-                            {
-                                StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
-                                Content = "Can not find cart details."
-                            };
-                        }
-                    }
-                    else
-                    {
-                        return new RequestResult
-                        {
-                            StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
-                            Content = "Can not find cart."
-                        };
-                    }
-                }
-                else
-                {
-                    return new RequestResult
-                    {
-                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
-                        Content = "Customer is not existed."
-                    };
-                }
-            }
-            catch
-            {
-                return new RequestResult
-                {
-                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
-                    Content = "Failed"
-                };
-            }
-        }
-
-        /// <summary>
         /// Lấy danh sách order dựa vào CustomerId
         /// </summary>
         /// <param name="OrderCode"></param>
@@ -895,5 +755,68 @@ namespace eProject.API.Controllers
                 };
             }
         }
+
+
+        [HttpPost("GetOrderDetailsTest")]
+        public async Task<RequestResult> GetOrderDetailsTest(string OrderCode)
+        {
+            try
+            {
+                //Tìm kiếm orderId dựa vào OrderCode
+                var order = _context.Orders.SingleOrDefault(x => x.OrderCode == OrderCode);
+                if (order != null)
+                {
+                    //Lấy danh sách order details
+                    //var details = _context.OrderDetails.Where(x => x.OrderId == order.Id);
+                    var details = _context.OrderDetails.ToList();
+                    var list = from detail in details
+                               where detail.OrderId == order.Id
+                               select new CartResponse
+                               {
+                                   Id = detail.ProductId,
+                                   Name = detail.ProductName,
+                                   OriginalPrice = detail.OriginalPrice,
+                                   SellingPrice = detail.SellingPrice,
+                                   Description = detail.Description,
+                                   MadeIn = detail.MadeIn,
+                                   ManufacturerName = detail.ManufacturerName,
+                                   ImageURL = detail.ImageURL,
+                                   UnitName = detail.UnitName,
+                                   Quantity = detail.Quantity
+                               };
+                    OrderDetailResponse orderDetail = new OrderDetailResponse();
+                    orderDetail.ShipName = order.ShipName;
+                    orderDetail.ShipPhone = order.ShipPhone;
+                    orderDetail.ShipAddress = order.ShipAddress;
+                    orderDetail.ShipNote = order.ShipNote;
+                    orderDetail.Details = new List<CartResponse>(list);
+                    return new RequestResult
+                    {
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Success,
+                        Content = JsonConvert.SerializeObject(orderDetail)
+                    };
+                }
+                else
+                {
+                    return new RequestResult
+                    {
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
+                        Content = "Can not find order Id"
+                    };
+                }
+            }
+            catch
+            {
+                return new RequestResult
+                {
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
+                    Content = "Failed"
+                };
+            }
+        }
+
+
+
+
     }
 }

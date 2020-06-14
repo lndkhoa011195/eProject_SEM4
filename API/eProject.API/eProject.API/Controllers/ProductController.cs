@@ -175,7 +175,7 @@ namespace eProject.API.Controllers
         [HttpGet("GetRecentProducts")]
         public async Task<string> GetRecentProducts()
         {
-            var products =  _context.Products.ToListAsync().Result.Take(9);
+            var products =  _context.Products.ToListAsync().Result;
             var manufacturers = await _context.Manufacturers.ToListAsync();
             var units = await _context.Units.ToListAsync();
 
@@ -196,7 +196,7 @@ namespace eProject.API.Controllers
                            ImageURL = product.ImageURL,
                            UnitName = unit.Name
                        };
-            return JsonConvert.SerializeObject(list);
+            return JsonConvert.SerializeObject(list.Take(9));
         }
 
         /// <summary>
