@@ -87,11 +87,7 @@
     <color name="holo_blue_bright">#ff00ddff</color>
     <!-- A really bright Holo shade of gray -->
     <color name="holo_gray_bright">#33CCCCCC</color>
-<<<<<<< HEAD
-    <color name="primary">#0b7542</color>
-=======
     <color name="primary">#0F9D58</color>
->>>>>>> fd8653c32ebba1ec038b50797fd411d554c648d8
     <color name="primary_dark">#0b7542</color>
     <color name="ripple">#F06292</color>
     <color name="accent">#E91E63</color>

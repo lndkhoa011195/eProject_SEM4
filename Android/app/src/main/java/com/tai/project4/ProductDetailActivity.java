@@ -262,8 +262,4 @@ public class ProductDetailActivity extends AppCompatActivity {
             builder.show();
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> fd8653c32ebba1ec038b50797fd411d554c648d8
 }
