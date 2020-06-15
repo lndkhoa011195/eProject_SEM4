@@ -17,15 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <RelativeLayout
 
                 android:id="@+id/name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:orientation="vertical"
+                android:layout_height="?actionBarSize"
+                android:background="@color/colorBackgound"
+                android:orientation="horizontal"
                 android:padding="16dp">
-
 
                 <TextView
                     android:id="@id/product_id"
@@ -34,27 +33,26 @@
                     android:singleLine="false"
                     android:visibility="gone" />
 
+                <ImageButton
+                    android:id="@+id/backdetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_arrow_back_black"
+                    android:clickable="true"
+                    android:focusable="true" />
+
                 <TextView
                     android:id="@id/product_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
                     android:text="@string/app_name"
-                    android:textColor="@color/blue_grey"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/product_desc"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="2dp"-->
-<!--                    android:singleLine="false"-->
-<!--                    android:text="Product Description Here"-->
-<!--                    android:textColor="@color/blue_grey"-->
-<!--                    android:textSize="13sp" />-->
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <FrameLayout
                 android:id="@+id/productimage"
@@ -64,16 +62,13 @@
                 android:elevation="4dp"
                 android:visibility="visible">
 
-
                 <ImageView
                     android:id="@+id/product_img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/watermark_icon" />
 
-
             </FrameLayout>
-
 
             <LinearLayout
                 android:id="@+id/rating"
@@ -252,9 +247,7 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/size"
@@ -263,7 +256,6 @@
                 android:layout_below="@+id/rating"
                 android:background="#fff"
                 android:orientation="horizontal">
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -312,7 +304,6 @@
                         android:src="@drawable/ic_minus_black" />
                 </LinearLayout>
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -323,7 +314,7 @@
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
-                <TextView
+                <Button
                     android:id="@+id/buynow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -341,7 +332,7 @@
                     android:text="BUY NOW"
                     android:textColor="@color/white" />
 
-                <TextView
+                <Button
                     android:id="@+id/addtocart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -120,7 +120,6 @@ public class HomeActivity extends AppCompatActivity
             profile = new ProfileDrawerItem().withName(sp.getString("Name", null)).withEmail(sp.getString("Email", null)).withIcon(R.drawable.account).withTag("CUSTOMER");
         }
 
-
         final Intent i = new Intent(this, ProfileActivity.class);
 
         headerResult = new AccountHeaderBuilder()
@@ -304,19 +303,15 @@ public class HomeActivity extends AppCompatActivity
                                     .image(url_maps.get(name))
                                     .setOnSliderClickListener(HomeActivity.this);
 
-
                             defaultSliderView.bundle(new Bundle());
                             defaultSliderView.getBundle()
                                     .putString("extra", String.valueOf(PromotionList.get(i).getProductId()));
-
 
                             sliderShow.addSlider(defaultSliderView);
                         }
                         sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                         sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
                     }
-
-
                 }
 
                 @Override
@@ -350,12 +345,9 @@ public class HomeActivity extends AppCompatActivity
             builder.show();
         }
 
-
-
         /*  Grid View Best Selling Product  */
 
         mGridView = findViewById(R.id.gridView);
-
         mProgressBar = findViewById(R.id.progressBar);
 
         //Initialize with empty data
@@ -369,36 +361,11 @@ public class HomeActivity extends AppCompatActivity
 
                 Product detail = new Product();
                 detail.startProductDetailActivity(bsp_id_list.get(position), HomeActivity.this);
-//                Toast.makeText(HomeActivity.this, bsp_id_list.get(position), Toast.LENGTH_SHORT).show();
-//        Get item at position
-//                GridItem item = (GridItem) parent.getItemAtPosition(position);
-//
-//                Intent intent = new Intent(GridViewActivity.this, DetailsActivity.class);
-//                ImageView imageView = (ImageView) v.findViewById(R.id.grid_item_image);
-//
-//                // Interesting data to pass across are the thumbnail size/location, the
-//                // resourceId of the source bitmap, the picture description, and the
-//                // orientation (to avoid returning back to an obsolete configuration if
-//                // the device rotates again in the meantime)
-//
-//                int[] screenLocation = new int[2];
-//                imageView.getLocationOnScreen(screenLocation);
-//
-//                //Pass the image title and url to DetailsActivity
-//                intent.putExtra("left", screenLocation[0]).
-//                        putExtra("top", screenLocation[1]).
-//                        putExtra("width", imageView.getWidth()).
-//                        putExtra("height", imageView.getHeight()).
-//                        putExtra("title", item.getTitle()).
-//                        putExtra("image", item.getImage());
-//
-//                //Start details activity
-////                startActivity(intent);
+                finish();
             }
         });
 
         //Start download
-
 
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -421,7 +388,6 @@ public class HomeActivity extends AppCompatActivity
                     product_recyclerview.setNestedScrollingEnabled(false);
                     product_recyclerview.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
                     product_recyclerview.setAdapter(new ProductAdapter(BestSellingProductsList, HomeActivity.this));
-
 
                 }
 
@@ -455,7 +421,6 @@ public class HomeActivity extends AppCompatActivity
             });
             builder.show();
         }
-
 
         //GetRecentProducts
         try {
@@ -520,7 +485,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -570,55 +534,6 @@ public class HomeActivity extends AppCompatActivity
                     call.cancel();
                 }
             });
-
-
-//            class GetCartItemCount extends AsyncTask<String, Void, String> {
-//
-//                @Override
-//                protected void onPreExecute() {
-//                    super.onPreExecute();
-//                }
-//
-//                @Override
-//                protected void onPostExecute(String s) {
-//                    super.onPostExecute(s);
-//                    cart_count = Integer.parseInt(s);
-//                    menuItem.setIcon(Converter.convertLayoutToImage(HomeActivity.this, cart_count, R.drawable.ic_shopping_cart_white));
-//                }
-//
-//                @Override
-//                protected String doInBackground(String... params) {
-//
-//                    String urls = getResources().getString(R.string.base_url).concat("getItemCount/");
-//                    try {
-//                        URL url = new URL(urls);
-//                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-//                        httpURLConnection.setRequestMethod("POST");
-//                        httpURLConnection.setDoInput(true);
-//                        httpURLConnection.setDoOutput(true);
-//                        OutputStream outputStream = httpURLConnection.getOutputStream();
-//                        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-//                        String post_Data = URLEncoder.encode("login_id", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8");
-//
-//                        bufferedWriter.write(post_Data);
-//                        bufferedWriter.flush();
-//                        bufferedWriter.close();
-//                        outputStream.close();
-//                        InputStream inputStream = httpURLConnection.getInputStream();
-//                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//                        String result = "", line = "";
-//                        while ((line = bufferedReader.readLine()) != null) {
-//                            result += line;
-//                        }
-//                        return result;
-//                    } catch (Exception e) {
-//                        return e.toString();
-//                    }
-//                }
-//            }
-//            //creating asynctask object and executing it
-//            GetCartItemCount catItemObj = new GetCartItemCount();
-//            catItemObj.execute(sp.getString("loginid", null));
         }
 
         SearchManager searchManager =
