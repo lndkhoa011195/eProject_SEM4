@@ -25,6 +25,7 @@ import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CartResult;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
+import com.tai.project4.util.NumberManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,13 +102,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
                             double p_sp = CartResultList.get(i).getSellingPrice();
                             double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
                             int p_dp_i = (int) p_dp;
-                            ;
                             int p_qty = CartResultList.get(i).getQuantity();
                             savings = savings + ((p_mrp - p_sp) * p_qty);
                             payable_amt = payable_amt + (p_sp * p_qty);
                         }
-                        tvSavings.setText( Double.toString(savings));
-                        tvPayableAmt.setText(Double.toString(payable_amt));
+                        tvSavings.setText(NumberManager.getInstance().format(savings) + "đ");
+                        tvPayableAmt.setText(NumberManager.getInstance().format(payable_amt) + "đ");
 
                         l1.setVisibility(View.VISIBLE);
                         l2.setVisibility(View.VISIBLE);

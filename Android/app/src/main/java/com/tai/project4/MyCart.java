@@ -27,6 +27,7 @@ import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CartResult;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
+import com.tai.project4.util.NumberManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,8 +110,8 @@ public class MyCart extends AppCompatActivity {
                         savings = savings + ((p_mrp - p_sp) * p_qty);
                         payable_amt = payable_amt + (p_sp * p_qty);
                     }
-                    tvSavings.setText(Double.toString(savings));
-                    tvPayableAmt.setText(Double.toString(payable_amt));
+                    tvSavings.setText(NumberManager.getInstance().format(savings) + "đ");
+                    tvPayableAmt.setText(NumberManager.getInstance().format(payable_amt) + "đ");
 
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
@@ -118,7 +119,7 @@ public class MyCart extends AppCompatActivity {
 
                     RecyclerView cart_item_recyclerview = findViewById(R.id.recyclerview_item_products);
                     cart_item_recyclerview.setLayoutManager(new LinearLayoutManager(MyCart.this));
-                    cart_item_recyclerview.setAdapter(new CartAdapter(cartResults, tvSavings, tvPayableAmt, MyCart.this));
+                    cart_item_recyclerview.setAdapter(new CartAdapter(MyCart.this, cartResults, tvSavings, tvPayableAmt, MyCart.this));
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                     empty.setVisibility(View.VISIBLE);

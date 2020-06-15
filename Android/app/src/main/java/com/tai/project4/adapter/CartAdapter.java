@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,8 @@ import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CartRequest;
 import com.tai.project4.models.CartResult;
+import com.tai.project4.util.LoadingDialog;
+import com.tai.project4.util.NumberManager;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -47,8 +51,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
     private TextView total_saving;
     private TextView total_pamt;
     APIInterface apiInterface;
+    Activity activity;
 
-    public CartAdapter(List<CartResult> list, TextView total_saving, TextView total_pamt, Context context) {
+    public CartAdapter(Activity activity, List<CartResult> list, TextView total_saving, TextView total_pamt, Context context) {
+        this.activity = activity;
         this.list = list;
         this.context = context;
         this.total_saving = total_saving;
@@ -69,8 +75,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
         String name = list.get(position).getName();
         String desc = list.get(position).getDescription();
         String img = list.get(position).getImageURL();
-        String price = String.valueOf(list.get(position).getOriginalPrice());
-        String selling_price = String.valueOf(list.get(position).getSellingPrice());
+        int originalPrice = (int)list.get(position).getOriginalPrice();
+        int sellingPrice = (int)list.get(position).getSellingPrice();
         String brand = list.get(position).getManufacturerName();
 
         double p_mrp = list.get(position).getOriginalPrice();
@@ -78,14 +84,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
         double p_dp = (p_mrp - p_sp) / (p_mrp / 100);
         int p_dp_i = (int) p_dp;
         String discount = String.valueOf(p_dp_i);
-        ;
         String qty = String.valueOf(list.get(position).getQuantity());
 
         holder.pro_id.setText(id);
         holder.pro_name.setText(name);
         holder.pro_desc.setText(desc);
-        holder.pro_price.setText(price);
-        holder.pro_sp.setText(selling_price);
+        holder.pro_price.setText(NumberManager.getInstance().format(originalPrice) + "đ");
+        holder.pro_sp.setText(NumberManager.getInstance().format(sellingPrice) + "đ");
         holder.pro_brand.setText(brand);
         holder.pro_discount.setText(discount + " %   OFF");
         holder.pro_qty.setText(qty);
@@ -93,7 +98,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
         if (Integer.parseInt(discount) <= 0) {
             holder.pro_discount.setVisibility(View.GONE);
         }
-        if (selling_price.trim().equals(price.trim())) {
+        if (originalPrice == sellingPrice) {
             holder.pro_price.setVisibility(View.GONE);
         }
 
@@ -157,6 +162,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final LoadingDialog loadingDialog = new LoadingDialog(activity);
+                    loadingDialog.showLoadingDialog();
                     sp = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
                     String loginid = sp.getString("loginid", null);
                     apiInterface = APIClient.getClient().create(APIInterface.class);
@@ -167,29 +174,47 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
                         public void onResponse(Call<String> call, Response<String> response) {
                             if (!response.isSuccessful())
                                 return;
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadingDialog.dismissLoadingDialog();
+                                }
+                            }, 500);
                             Toast.makeText(context, "Increase product quantity successfully", Toast.LENGTH_SHORT).show();
 
                             String result = response.body();
                             int qtyi = Integer.parseInt(pro_qty.getText().toString());
                             qtyi++;
                             pro_qty.setText(Integer.toString(qtyi));
-                            double gsp = Double.parseDouble(pro_sp.getText().toString().substring(2).trim());
-                            double gmrp = Double.parseDouble(pro_price.getText().toString().substring(2).trim());
 
-                            double profit = gmrp - gsp;
+                            String sOriginalPrice = pro_price.getText().toString().replace(".","");
+                            int OriginalPrice = Integer.parseInt(sOriginalPrice.substring(0, sOriginalPrice.length()-1));
+                            String sSellingPrice = pro_sp.getText().toString().replace(".","");
+                            int SellingPrice = Integer.parseInt(sSellingPrice.substring(0, sSellingPrice.length()-1));
+                            int profit = OriginalPrice - SellingPrice;
 
-                            double old_samt = Double.parseDouble(total_saving.getText().toString().substring(1).trim());
-                            double new_samt = old_samt + profit;
-                            total_saving.setText("\u20B9" + new_samt);
+                            String sOldSaving = total_saving.getText().toString().replace(".","");
+                            int oldSaving = Integer.parseInt(sOldSaving.substring(0, sOldSaving.length()-1));
+                            int newSaving = oldSaving + profit;
+                            total_saving.setText(NumberManager.getInstance().format(newSaving) + "đ");
 
-                            double old_pamt = Double.parseDouble(total_pamt.getText().toString().substring(1).trim());
-                            double new_pamt = old_pamt + gsp;
-                            total_pamt.setText("\u20B9" + new_pamt);
+                            String sOldTotal = total_pamt.getText().toString().replace(".","");
+                            int oldTotal = Integer.parseInt(sOldTotal.substring(0, sOldTotal.length()-1));
+                            int newTotal = oldTotal + SellingPrice;
+                            total_pamt.setText(NumberManager.getInstance().format(newTotal) + "đ");
                         }
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
                             call.cancel();
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadingDialog.dismissLoadingDialog();
+                                }
+                            }, 500);
                         }
                     });
                 }
@@ -200,6 +225,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
                 public void onClick(View v) {
                     int qtyi = Integer.parseInt(pro_qty.getText().toString());
                     if (qtyi != 1) {
+                        final LoadingDialog loadingDialog = new LoadingDialog(activity);
+                        loadingDialog.showLoadingDialog();
                         sp = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
                         String loginid = sp.getString("loginid", null);
                         apiInterface = APIClient.getClient().create(APIInterface.class);
@@ -210,6 +237,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (!response.isSuccessful())
                                     return;
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadingDialog.dismissLoadingDialog();
+                                    }
+                                }, 500);
                                 Toast.makeText(context, "Decrease product quantity successfully", Toast.LENGTH_SHORT).show();
                                 int qtyi = Integer.parseInt(pro_qty.getText().toString());
                                 if (qtyi != 1) {
@@ -217,25 +251,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ProductsViewHo
                                     pro_qty.setText(Integer.toString(qtyi));
                                 }
 
-                                double gsp = Double.parseDouble(pro_sp.getText().toString().substring(2).trim());
-                                double gmrp = Double.parseDouble(pro_price.getText().toString().substring(2).trim());
+                                String sOriginalPrice = pro_price.getText().toString().replace(".","");
+                                int OriginalPrice = Integer.parseInt(sOriginalPrice.substring(0, sOriginalPrice.length()-1));
+                                String sSellingPrice = pro_sp.getText().toString().replace(".","");
+                                int SellingPrice = Integer.parseInt(sSellingPrice.substring(0, sSellingPrice.length()-1));
+                                int profit = OriginalPrice - SellingPrice;
 
-                                double profit = gmrp - gsp;
+                                String sOldSaving = total_saving.getText().toString().replace(".","");
+                                int oldSaving = Integer.parseInt(sOldSaving.substring(0, sOldSaving.length()-1));
+                                int newSaving = oldSaving - profit;
+                                total_saving.setText(NumberManager.getInstance().format(newSaving) + "đ");
 
-                                double old_samt = Double.parseDouble(total_saving.getText().toString().substring(1).trim());
-                                double new_samt = old_samt - profit;
-                                total_saving.setText("\u20B9" + new_samt);
-
-                                double old_pamt = Double.parseDouble(total_pamt.getText().toString().substring(1).trim());
-                                double new_pamt = old_pamt - gsp;
-                                total_pamt.setText("\u20B9" + new_pamt);
-
-
+                                String sOldTotal = total_pamt.getText().toString().replace(".","");
+                                int oldTotal = Integer.parseInt(sOldTotal.substring(0, sOldTotal.length()-1));
+                                int newTotal = oldTotal - SellingPrice;
+                                total_pamt.setText(NumberManager.getInstance().format(newTotal) + "đ");
                             }
 
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
                                 call.cancel();
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadingDialog.dismissLoadingDialog();
+                                    }
+                                }, 500);
                             }
                         });
 

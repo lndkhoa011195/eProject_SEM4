@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,8 @@ import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CategoryResult;
 import com.tai.project4.models.ProductResponse;
+import com.tai.project4.util.LoadingDialog;
+import com.tai.project4.util.NumberManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +68,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         view = findViewById(R.id.product_page);
         mProgressBar = findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
-        addToCart=new AddToCart(ProductDetailActivity.this);
+        addToCart=new AddToCart(ProductDetailActivity.this, ProductDetailActivity.this);
         Bundle extras = getIntent().getExtras();
         p_id = extras.getString("p_id");
 
@@ -132,9 +135,16 @@ public class ProductDetailActivity extends AppCompatActivity {
                 String loginid = sp.getString("loginid", null);
                 if (loginid != null) {
                     addToCart.addToCart(product_id.getText().toString(),tvQty.getText().toString());
-                    Intent intent = new Intent(getApplicationContext(), MyCart.class);
-                    startActivity(intent);
-                    finish();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(getApplicationContext(), MyCart.class);
+                            finish();
+                            startActivity(intent);
+                        }
+                    }, 500);
+
                 } else {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this);
@@ -200,8 +210,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                     tvDesc.setText(productDetails.getDescription());
                     tvBrand.setText(productDetails.getManufacturerName());
                     tvUnittype.setText(productDetails.getUnitName());
-                    tvMRP.setText(String.valueOf(productDetails.getOriginalPrice()));
-                    tvPrice.setText(String.valueOf(productDetails.getSellingPrice()));
+                    tvMRP.setText(NumberManager.getInstance().format(productDetails.getOriginalPrice()) + "đ");
+                    tvPrice.setText(NumberManager.getInstance().format(productDetails.getSellingPrice()) + "đ");
                     product_id.setText(String.valueOf(productDetails.getId()));
                     tvQty.setText("1");
                     Picasso.with(ProductDetailActivity.this).load(productDetails.getImageURL()).placeholder(R.drawable.watermark_icon).into(ivProductImage);
@@ -214,7 +224,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     int p_dp_i = (int) p_dp;
                     int p_dp_p_i = (int) p_dp_p;
 
-                    tvSaved.setText(String.valueOf(p_dp_i));
+                    tvSaved.setText(NumberManager.getInstance().format(p_dp_i) + "đ");
                     tvSavedPer.setText("(" + p_dp_p_i + "%)");
                     mProgressBar.setVisibility(View.GONE);
                     view.setVisibility(View.VISIBLE);
@@ -252,4 +262,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             builder.show();
         }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd8653c32ebba1ec038b50797fd411d554c648d8
 }

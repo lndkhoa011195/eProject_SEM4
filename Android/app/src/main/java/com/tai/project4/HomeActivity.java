@@ -362,6 +362,7 @@ public class HomeActivity extends AppCompatActivity
                 Product detail = new Product();
                 detail.startProductDetailActivity(bsp_id_list.get(position), HomeActivity.this);
                 finish();
+
             }
         });
 
@@ -387,7 +388,7 @@ public class HomeActivity extends AppCompatActivity
                     RecyclerView product_recyclerview = findViewById(R.id.recyclerview_best_deals);
                     product_recyclerview.setNestedScrollingEnabled(false);
                     product_recyclerview.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
-                    product_recyclerview.setAdapter(new ProductAdapter(BestSellingProductsList, HomeActivity.this));
+                    product_recyclerview.setAdapter(new ProductAdapter(HomeActivity.this, BestSellingProductsList, HomeActivity.this));
 
                 }
 
@@ -534,6 +535,7 @@ public class HomeActivity extends AppCompatActivity
                     call.cancel();
                 }
             });
+
         }
 
         SearchManager searchManager =
