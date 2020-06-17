@@ -19,7 +19,7 @@
         android:padding="13sp"
         android:background="@color/colorBackgound"
         android:text="Update"
-        android:textColor="@color/partial_transparent"
+        android:textColor="@color/white"
         android:textSize="23sp"
         android:textStyle="bold" />
 

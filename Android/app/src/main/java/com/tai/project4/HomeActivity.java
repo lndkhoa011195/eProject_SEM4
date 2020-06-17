@@ -361,8 +361,6 @@ public class HomeActivity extends AppCompatActivity
 
                 Product detail = new Product();
                 detail.startProductDetailActivity(bsp_id_list.get(position), HomeActivity.this);
-                finish();
-
             }
         });
 

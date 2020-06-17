@@ -6,59 +6,58 @@
     android:background="#fff"
     tools:context=".ProductDetailActivity">
 
+    <RelativeLayout
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorBackgound"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@id/product_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/backdetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_arrow_back_black"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@id/product_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:text="@string/app_name"
+            android:gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+    </RelativeLayout>
+
     <ScrollView
         android:id="@+id/product_page"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
+        android:layout_below="@+id/name"
         android:visibility="visible">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
-
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:background="@color/colorBackgound"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@id/product_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="false"
-                    android:visibility="gone" />
-
-                <ImageButton
-                    android:id="@+id/backdetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_arrow_back_black"
-                    android:clickable="true"
-                    android:focusable="true" />
-
-                <TextView
-                    android:id="@id/product_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="false"
-                    android:text="@string/app_name"
-                    android:gravity="center_horizontal"
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
-
-            </RelativeLayout>
-
             <FrameLayout
                 android:id="@+id/productimage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/name"
                 android:elevation="4dp"
                 android:visibility="visible">
 

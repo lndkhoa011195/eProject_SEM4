@@ -18,7 +18,7 @@
         android:gravity="center|top"
         android:paddingTop="13sp"
         android:text="Register"
-        android:textColor="@color/partial_transparent"
+        android:textColor="@color/white"
         android:textSize="23sp"
         android:textStyle="bold" />
 
