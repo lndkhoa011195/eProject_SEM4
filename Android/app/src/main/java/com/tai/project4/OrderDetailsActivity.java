@@ -23,6 +23,8 @@ import com.tai.project4.adapter.OrderDetailAdapter;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CartResult;
+import com.tai.project4.models.CheckOutRequest;
+import com.tai.project4.models.OrderDetail;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
 import com.tai.project4.util.NumberManager;
@@ -53,7 +55,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     SharedPreferences sp;
     double savings = 0;
     double payable_amt = 0;
-    TextView tvSavings, tvPayableAmt;
+    TextView tvSavings, tvPayableAmt, tvShipName, tvShipPhone, tvShipAddress, tvShipNote;
     LinearLayout l1, l2;
     private ProgressBar mProgressBar;
     public String order_id;
@@ -78,14 +80,18 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         tvSavings = findViewById(R.id.total_discount);
         tvPayableAmt = findViewById(R.id.total_amount);
+        tvShipName = findViewById(R.id.shipName);
+        tvShipPhone = findViewById(R.id.shipPhone);
+        tvShipAddress = findViewById(R.id.shipAddress);
+        tvShipNote = findViewById(R.id.shipNote);
         mProgressBar = findViewById(R.id.progressBar);
         l1 = findViewById(R.id.ll_item_products);
         l2 = findViewById(R.id.ll_item);
 
         mProgressBar.setVisibility(View.VISIBLE);
-
+        
         apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<RequestResult> call = apiInterface.GetOrderDetails(order_id);
+        Call<RequestResult> call = apiInterface.GetOrderDetailsTest(order_id);
         call.enqueue(new Callback<RequestResult>() {
             @Override
             public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
@@ -94,8 +100,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                 } else {
                     Gson gson = new Gson();
-                    CartResult[] CartResultArray = gson.fromJson(result.getContent(), CartResult[].class);
-                    List<CartResult> CartResultList = new ArrayList<>(Arrays.asList(CartResultArray));
+                    OrderDetail orderDetail = gson.fromJson(result.getContent(), OrderDetail.class);
+                    List<CartResult> CartResultList = orderDetail.getDetails();
                     if (CartResultList.size() != 0) {
                         for (int i = 0; i < CartResultList.size(); i++) {
                             double p_mrp = CartResultList.get(i).getOriginalPrice();
@@ -108,7 +114,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         }
                         tvSavings.setText(NumberManager.getInstance().format(savings) + "đ");
                         tvPayableAmt.setText(NumberManager.getInstance().format(payable_amt) + "đ");
-
+                        tvShipName.setText(orderDetail.getShipName());
+                        tvShipPhone.setText(orderDetail.getShipPhone());
+                        tvShipAddress.setText(orderDetail.getShipAddress());
+                        tvShipNote.setText(orderDetail.getShipNote());
                         l1.setVisibility(View.VISIBLE);
                         l2.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);

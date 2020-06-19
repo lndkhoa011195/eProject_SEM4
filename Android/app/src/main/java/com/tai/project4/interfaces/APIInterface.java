@@ -60,6 +60,9 @@ public interface APIInterface {
     @POST("/api/Customer/GetOrderDetails")
     Call<RequestResult> GetOrderDetails(@Query("OrderCode") String OrderCode);
 
+    @POST("/api/Customer/GetOrderDetailsTest")
+    Call<RequestResult> GetOrderDetailsTest(@Query("OrderCode") String OrderCode);
+
     //Product
     @GET("/api/Product/GetProductsByName")
     Call<List<ProductResponse>> GetProductsByName(@Query("name") String name);
