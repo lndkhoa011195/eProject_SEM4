@@ -815,7 +815,42 @@ namespace eProject.API.Controllers
             }
         }
 
-
+        [HttpPost("CancelOrder")]
+        public async Task<RequestResult> CancelOrder(string OrderCode)
+        {
+            try
+            {
+                //Tìm kiếm orderId dựa vào OrderCode
+                var order = _context.Orders.SingleOrDefault(x => x.OrderCode == OrderCode);
+                if (order != null)
+                {
+                    //cập nhật lại trạng thái
+                    order.Status = 0;
+                    _context.Orders.Update(order);
+                    return new RequestResult
+                    {
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Success,
+                        Content = "Success"
+                    };
+                }
+                else
+                {
+                    return new RequestResult
+                    {
+                        StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
+                        Content = "Can not find order Id"
+                    };
+                }
+            }
+            catch
+            {
+                return new RequestResult
+                {
+                    StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
+                    Content = "Failed"
+                };
+            }
+        }
 
 
     }
