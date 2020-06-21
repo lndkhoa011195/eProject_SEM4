@@ -214,7 +214,7 @@ namespace eProject.API.Controllers
                        join manufacturer in manufacturers on product.ManufacturerId equals manufacturer.Id
                        join unit in units on product.UnitId equals unit.Id
                        where product.IsActive == 1
-                       orderby (product.OriginalPrice - product.SellingPrice) descending
+                       orderby ((double)(product.OriginalPrice - product.SellingPrice) / product.OriginalPrice * 100) descending
                        select new ProductResponse
                        {
                            Id = product.Id,

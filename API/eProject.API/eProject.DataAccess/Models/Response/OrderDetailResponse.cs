@@ -10,6 +10,7 @@ namespace eProject.DataAccess.Models.Response
         public string ShipPhone { get; set; }
         public string ShipAddress { get; set; }
         public string ShipNote { get; set; }
+        public int OrderStatus { get; set; }
         public List<CartResponse> Details { get; set; }
     }
 }

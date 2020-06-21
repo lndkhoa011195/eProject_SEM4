@@ -789,6 +789,7 @@ namespace eProject.API.Controllers
                     orderDetail.ShipPhone = order.ShipPhone;
                     orderDetail.ShipAddress = order.ShipAddress;
                     orderDetail.ShipNote = order.ShipNote;
+                    orderDetail.OrderStatus = order.Status;
                     orderDetail.Details = new List<CartResponse>(list);
                     return new RequestResult
                     {
