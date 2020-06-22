@@ -7,6 +7,7 @@ public class OrderDetail {
     private String ShipPhone;
     private String ShipAddress;
     private String ShipNote;
+    private Integer OrderStatus;
     private List<CartResult> Details;
 
     public String getShipName() {
@@ -41,6 +42,14 @@ public class OrderDetail {
         ShipNote = shipNote;
     }
 
+    public Integer getOrderStatus() {
+        return OrderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        OrderStatus = orderStatus;
+    }
+
     public List<CartResult> getDetails() {
         return Details;
     }
@@ -49,11 +58,12 @@ public class OrderDetail {
         Details = details;
     }
 
-    public OrderDetail(String shipName, String shipPhone, String shipAddress, String shipNote, List<CartResult> details) {
+    public OrderDetail(String shipName, String shipPhone, String shipAddress, String shipNote, Integer orderStatus, List<CartResult> details) {
         ShipName = shipName;
         ShipPhone = shipPhone;
         ShipAddress = shipAddress;
         ShipNote = shipNote;
+        OrderStatus = orderStatus;
         Details = details;
     }
 }

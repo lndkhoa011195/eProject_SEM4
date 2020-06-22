@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -56,9 +57,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
     double savings = 0;
     double payable_amt = 0;
     TextView tvSavings, tvPayableAmt, tvShipName, tvShipPhone, tvShipAddress, tvShipNote;
+    Button btnCancel;
     LinearLayout l1, l2;
     private ProgressBar mProgressBar;
     public String order_id;
+    AlertDialog.Builder builder;
 
     APIInterface apiInterface;
 
@@ -85,6 +88,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         tvShipAddress = findViewById(R.id.shipAddress);
         tvShipNote = findViewById(R.id.shipNote);
         mProgressBar = findViewById(R.id.progressBar);
+        btnCancel = findViewById(R.id.btnCancel);
         l1 = findViewById(R.id.ll_item_products);
         l2 = findViewById(R.id.ll_item);
 
@@ -121,10 +125,65 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         l1.setVisibility(View.VISIBLE);
                         l2.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);
-
                         RecyclerView order_detail_item_recyclerview = findViewById(R.id.recyclerview_item_orders);
                         order_detail_item_recyclerview.setLayoutManager(new LinearLayoutManager(OrderDetailsActivity.this));
                         order_detail_item_recyclerview.setAdapter(new OrderDetailAdapter(CartResultList, OrderDetailsActivity.this));
+                        if (orderDetail.getOrderStatus() == 1){
+                            btnCancel.setEnabled(true);
+                            btnCancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    builder = new AlertDialog.Builder(OrderDetailsActivity.this);
+                                    builder.setMessage("Do you want to cancel an order ?")
+                                            .setCancelable(false)
+                                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    Call<RequestResult> call = apiInterface.CancelOrder(order_id);
+                                                    call.enqueue(new Callback<RequestResult>() {
+                                                        @Override
+                                                        public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                                                            if (!response.isSuccessful())
+                                                                return;
+                                                            RequestResult result = response.body();
+                                                            if (result.getStatusCode() == StatusCode.FAILED) {
+                                                                Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
+                                                            } else {
+
+                                                                Toast.makeText(getApplicationContext(), "you choose yes action for alertbox",
+                                                                        Toast.LENGTH_SHORT).show();
+                                                                finish();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<RequestResult> call, Throwable t) {
+                                                            call.cancel();
+                                                        }
+                                                    });
+
+//                                                    finish();
+//                                                    Toast.makeText(getApplicationContext(),"you choose yes action for alertbox",
+//                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    //  Action for 'NO' Button
+                                                    dialog.cancel();
+//                                                    Toast.makeText(getApplicationContext(),"you choose no action for alertbox",
+//                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                    //Creating dialog box
+                                    AlertDialog alert = builder.create();
+                                    //Setting the title manually
+                                    alert.setTitle("Cancel Oder");
+                                    alert.show();
+                                }
+                            });
+                        }else {
+                            btnCancel.setEnabled(false);
+                        }
                     } else {
                         mProgressBar.setVisibility(View.GONE);
                     }

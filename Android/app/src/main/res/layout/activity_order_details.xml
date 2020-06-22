@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/ll_item"
         android:layout_width="fill_parent"
-
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:background="@color/holo_red_dark"
         android:gravity="bottom|end">
@@ -77,12 +77,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/imageIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/iconmap"/>
+
             <TextView
                 android:id="@+id/info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Information line:" />
+                android:layout_toRightOf="@+id/imageIcon"
+                android:text="Information line:"
+                android:textStyle="italic"/>
 
             <TextView
                 android:id="@+id/shipName"
@@ -143,5 +152,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cancel Order"
+        android:background="@drawable/box51"/>
 
 </LinearLayout>
