@@ -47,6 +47,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.CustomerView
         int TotalPaid = (int)(list.get(position).getSellingSum());
         String OrderStatus = "";
         switch (list.get(position).getStatus()){
+            case 0:
+                OrderStatus = "CANCELED";
+                break;
             case 1:
                 OrderStatus = "NEW";
                 break;

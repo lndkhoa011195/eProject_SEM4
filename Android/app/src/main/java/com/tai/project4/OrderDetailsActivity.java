@@ -144,15 +144,15 @@ public class OrderDetailsActivity extends AppCompatActivity {
                                                         public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                                                             if (!response.isSuccessful())
                                                                 return;
-                                                            RequestResult result = response.body();
-                                                            if (result.getStatusCode() == StatusCode.FAILED) {
-                                                                Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
-                                                            } else {
+//                                                            RequestResult result = response.body();
+//                                                            if (result.getStatusCode() == StatusCode.FAILED) {
+//                                                                Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
+//                                                            } else {
 
-                                                                Toast.makeText(getApplicationContext(), "you choose yes action for alertbox",
+                                                                Toast.makeText(getApplicationContext(), "Cancel Success",
                                                                         Toast.LENGTH_SHORT).show();
                                                                 finish();
-                                                            }
+//                                                            }
                                                         }
 
                                                         @Override
