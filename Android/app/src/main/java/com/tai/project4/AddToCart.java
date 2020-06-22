@@ -51,7 +51,7 @@ public class AddToCart {
         loadingDialog.showLoadingDialog();
         String loginid = sp.getString("loginid", null);
         count=Integer.parseInt(qty);
-        //count++;
+        count++;
 
         try {
             apiInterface = APIClient.getClient().create(APIInterface.class);
