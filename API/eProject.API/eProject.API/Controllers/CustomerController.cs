@@ -828,6 +828,7 @@ namespace eProject.API.Controllers
                     //cập nhật lại trạng thái
                     order.Status = 0;
                     _context.Orders.Update(order);
+                    _context.SaveChanges();
                     return new RequestResult
                     {
                         StatusCode = DataAccess.Models.Enum.StatusCode.Success,
@@ -852,6 +853,7 @@ namespace eProject.API.Controllers
                 };
             }
         }
+
 
 
     }
