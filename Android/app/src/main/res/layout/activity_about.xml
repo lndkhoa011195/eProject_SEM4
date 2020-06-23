@@ -23,7 +23,12 @@
             android:textColor="@color/black"
             android:textSize="24dp"
             android:textStyle="bold" />
-
+        <TextView
+            android:id="@+id/infoStoreOwner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,16 +37,16 @@
             android:textSize="18dp" />
 
         <TextView
+            android:id="@+id/infoStoreEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/store_email"
             android:textColor="@color/black"
             android:textSize="18dp" />
 
         <TextView
+            android:id="@+id/infoStorePhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/store_phone"
             android:textColor="@color/black"
             android:textSize="18dp" />
     </LinearLayout>

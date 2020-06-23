@@ -23,6 +23,10 @@ import retrofit2.http.Query;
 public interface APIInterface {
 
     //Category
+    @GET("/api/Home/GetStoreInfo")
+    Call<RequestResult> GetStoreInfo();
+
+    //Category
     @GET("/api/Category/GetCategoryAndSubCategory")
     Call<List<CategoryResult>> GetCategoryAndSubCategory();
 
