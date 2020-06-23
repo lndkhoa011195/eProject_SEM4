@@ -1,6 +1,9 @@
 package com.tai.project4;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -69,7 +72,25 @@ public class ChangePassword extends AppCompatActivity {
                             if (result.getStatusCode() == StatusCode.FAILED) {
                                 Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(ChangePassword.this, "Change Password successful.", Toast.LENGTH_LONG).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ChangePassword.this);
+                                builder.setTitle("Successful")
+                                        .setMessage("Change Password Successfully. \n please Login again")
+                                        .setIcon(R.drawable.ic_check_black)
+                                        .setCancelable(false)
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);        // Specify any activity here e.g. home or splash or login etc
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                intent.putExtra("EXIT", true);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        });
+                                builder.show();
                             }
                         }
 

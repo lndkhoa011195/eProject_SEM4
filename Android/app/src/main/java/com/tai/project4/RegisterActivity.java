@@ -67,18 +67,27 @@ public class RegisterActivity extends AppCompatActivity {
                 Helper helper = new Helper();
                 if ((!Name.equals("")) && (!Email.equals("")) && (!Phone.equals("")) && (!Address.equals("")) && (!Password.equals("")) && (!cpassword.equals(""))) {
                     Account account = new Account(0, Name, Email, Phone, Password, Address);
-                    if(!cpassword.equals(Password))
+                    if (!cpassword.equals(Password))
                     {
                         Toast.makeText(getApplicationContext(), "Password and confirm password not matches.", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    else if(!helper.isValidEmail(etEmail.getText().toString()))
+                    else if (!helper.isValidEmail(etEmail.getText().toString()))
                     {
                         Toast.makeText(RegisterActivity.this, "Enter Valid Email Address", Toast.LENGTH_SHORT).show();
-                    }else if(!helper.validateLetters(etName.getText().toString()))
+                    }
+                    else if (!helper.validateLetters(etName.getText().toString()))
                     {
                         Toast.makeText(RegisterActivity.this, "Enter Valid Name", Toast.LENGTH_SHORT).show();
-                    }else {
+                    }
+                    else if (!helper.validatePhone(etMobile.getText().toString())){
+                        Toast.makeText(RegisterActivity.this, "Enter Valid Phone", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (!helper.validateAddress(etAddress.getText().toString()))
+                    {
+                        Toast.makeText(RegisterActivity.this, "Enter Valid Address", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
                         Call<RequestResult> call = apiInterface.SignUp(account);
                         call.enqueue(new Callback<RequestResult>() {
                             @Override
@@ -111,6 +120,5 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }

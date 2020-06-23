@@ -20,5 +20,21 @@ public class Helper {
 
     }
 
+    public static boolean validatePhone(String txt) {
 
+        String regx = "[0-9]{10,}";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(txt);
+        return matcher.find();
+
+    }
+
+    public static boolean validateAddress(String txt) {
+
+        String regx = ".{0,200}";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(txt);
+        return matcher.find();
+
+    }
 }
