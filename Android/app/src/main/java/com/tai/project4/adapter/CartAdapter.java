@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.os.AsyncTask;
 import android.os.Handler;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-import com.tai.project4.Cart_Item_Adapter;
 import com.tai.project4.Product;
 import com.tai.project4.R;
 import com.tai.project4.interfaces.APIClient;
@@ -28,15 +25,6 @@ import com.tai.project4.models.CartResult;
 import com.tai.project4.util.LoadingDialog;
 import com.tai.project4.util.NumberManager;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.List;
 
 import retrofit2.Call;
