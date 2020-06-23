@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -106,6 +107,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         order_detail_item_recyclerview.setLayoutManager(new LinearLayoutManager(OrderDetailsActivity.this));
                         order_detail_item_recyclerview.setAdapter(new OrderDetailAdapter(CartResultList, OrderDetailsActivity.this));
                         if (orderDetail.getOrderStatus() == 1){
+                            btnCancel.setBackgroundResource(R.color.background);
+                            btnCancel.setTextColor(Color.WHITE);
                             btnCancel.setEnabled(true);
                             btnCancel.setOnClickListener(new View.OnClickListener() {
                                 @Override
