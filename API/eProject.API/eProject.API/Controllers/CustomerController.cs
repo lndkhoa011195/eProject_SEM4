@@ -163,15 +163,26 @@ namespace eProject.API.Controllers
                 {
                     if (customer.Password.Equals(request.OldPassword)) //OldPassword trùng password cũ
                     {
-                        customer.Password = request.NewPassword;
-                        _context.Update(customer);
-                        _context.SaveChanges();
-                        customer = _context.Customers.Find(request.CustomerId);
-                        return new RequestResult
+                        if (customer.Password.Equals(request.NewPassword))
                         {
-                            StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
-                            Content = JsonConvert.SerializeObject(customer)
-                        };
+                            return new RequestResult
+                            {
+                                StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
+                                Content = "New password is the same as old password."
+                            };
+                        }
+                        else
+                        {
+                            customer.Password = request.NewPassword;
+                            _context.Update(customer);
+                            _context.SaveChanges();
+                            customer = _context.Customers.Find(request.CustomerId);
+                            return new RequestResult
+                            {
+                                StatusCode = DataAccess.Models.Enum.StatusCode.Failed,
+                                Content = JsonConvert.SerializeObject(customer)
+                            };
+                        }
                     }
                     else
                     {
