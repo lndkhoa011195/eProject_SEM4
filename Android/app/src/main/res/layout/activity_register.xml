@@ -93,6 +93,7 @@
                     android:drawableStart="@drawable/ic_call_black"
                     android:drawablePadding="5sp"
                     android:hint=" Number"
+                    android:maxLength="20"
                     android:imeOptions="actionUnspecified"
                     android:inputType="number"
                     android:maxLines="1"

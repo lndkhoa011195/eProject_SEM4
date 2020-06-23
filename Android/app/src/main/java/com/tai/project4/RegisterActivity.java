@@ -75,6 +75,9 @@ public class RegisterActivity extends AppCompatActivity {
                     else if(!helper.isValidEmail(etEmail.getText().toString()))
                     {
                         Toast.makeText(RegisterActivity.this, "Enter Valid Email Address", Toast.LENGTH_SHORT).show();
+                    }else if(!helper.validateLetters(etName.getText().toString()))
+                    {
+                        Toast.makeText(RegisterActivity.this, "Enter Valid Name", Toast.LENGTH_SHORT).show();
                     }else {
                         Call<RequestResult> call = apiInterface.SignUp(account);
                         call.enqueue(new Callback<RequestResult>() {
