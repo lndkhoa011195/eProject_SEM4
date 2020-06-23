@@ -118,11 +118,20 @@
                 android:layout_below="@id/shipPhone"/>
 
             <TextView
+                android:id="@+id/tvNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Note:"
+                android:layout_marginStart="8dp"
+                android:layout_below="@id/shipAddress"/>
+
+            <TextView
                 android:id="@+id/shipNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Note"
                 android:layout_marginStart="8dp"
+                android:layout_toRightOf="@+id/tvNote"
                 android:layout_below="@id/shipAddress"/>
 
         </RelativeLayout>
@@ -157,6 +166,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="cancel Order"
-        android:background="@drawable/box51"/>
+        android:textColor="@color/blue_grey" />
 
 </LinearLayout>

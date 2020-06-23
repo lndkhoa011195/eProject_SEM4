@@ -4,49 +4,27 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.tai.project4.adapter.OrderDetailAdapter;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CartResult;
-import com.tai.project4.models.CheckOutRequest;
 import com.tai.project4.models.OrderDetail;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
 import com.tai.project4.util.NumberManager;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,7 +51,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Order Details");
-
 
         sp = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String login_id = sp.getString("loginid", null);
@@ -144,15 +121,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
                                                         public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                                                             if (!response.isSuccessful())
                                                                 return;
-//                                                            RequestResult result = response.body();
-//                                                            if (result.getStatusCode() == StatusCode.FAILED) {
-//                                                                Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
-//                                                            } else {
-
                                                                 Toast.makeText(getApplicationContext(), "Cancel Success",
                                                                         Toast.LENGTH_SHORT).show();
                                                                 finish();
-//                                                            }
                                                         }
 
                                                         @Override
@@ -161,17 +132,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
                                                         }
                                                     });
 
-//                                                    finish();
-//                                                    Toast.makeText(getApplicationContext(),"you choose yes action for alertbox",
-//                                                            Toast.LENGTH_SHORT).show();
                                                 }
                                             })
                                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int id) {
                                                     //  Action for 'NO' Button
                                                     dialog.cancel();
-//                                                    Toast.makeText(getApplicationContext(),"you choose no action for alertbox",
-//                                                            Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                     //Creating dialog box

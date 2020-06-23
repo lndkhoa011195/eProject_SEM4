@@ -14,6 +14,8 @@ import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.model.Account;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
+import com.tai.project4.util.Helper;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Password = etPassword.getText().toString();
                 cpassword = etcPassword.getText().toString();
 
+                Helper helper = new Helper();
                 if ((!Name.equals("")) && (!Email.equals("")) && (!Phone.equals("")) && (!Address.equals("")) && (!Password.equals("")) && (!cpassword.equals(""))) {
                     Account account = new Account(0, Name, Email, Phone, Password, Address);
                     if(!cpassword.equals(Password))
@@ -69,7 +72,10 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Password and confirm password not matches.", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    else {
+                    else if(!helper.isValidEmail(etEmail.getText().toString()))
+                    {
+                        Toast.makeText(RegisterActivity.this, "Enter Valid Email Address", Toast.LENGTH_SHORT).show();
+                    }else {
                         Call<RequestResult> call = apiInterface.SignUp(account);
                         call.enqueue(new Callback<RequestResult>() {
                             @Override

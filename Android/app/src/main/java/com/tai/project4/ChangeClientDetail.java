@@ -73,7 +73,7 @@ public class ChangeClientDetail extends AppCompatActivity{
                         if (result.getStatusCode() == StatusCode.FAILED) {
                             Toast.makeText(getApplicationContext(), result.getContent(), Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Register successful.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Update successful.", Toast.LENGTH_LONG).show();
                         }
                     }
 
