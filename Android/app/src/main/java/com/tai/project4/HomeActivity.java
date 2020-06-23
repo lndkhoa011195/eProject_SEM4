@@ -1,13 +1,11 @@
 package com.tai.project4;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+import android.provider.SearchRecentSuggestions;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,13 +22,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.google.gson.Gson;
 import com.mikepenz.itemanimators.AlphaCrossFadeAnimator;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -48,32 +44,16 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.tai.project4.adapter.ProductAdapter;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
-import com.tai.project4.models.CartRequest;
 import com.tai.project4.models.CategoryResult;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
+import com.tai.project4.util.MySuggestionProvider;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -121,12 +101,13 @@ public class HomeActivity extends AppCompatActivity
         }
 
         final Intent i = new Intent(this, ProfileActivity.class);
-
+        final Intent aboutIntent = new Intent(this, AboutActivity.class);
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
                 .withHeaderBackground(R.color.colorBackgound)
-                .addProfiles(profile)
+                .addProfiles(profile,
+                        new ProfileSettingDrawerItem().withName("About us").withTag("ABOUT"))
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
 
 
@@ -135,8 +116,10 @@ public class HomeActivity extends AppCompatActivity
                         //sample usage of the onProfileChanged listener
                         //if the clicked item has the identifier 1 add a new profile ;)
                         if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getTag().equals("CUSTOMER")) {
-//                            headerResult.removeProfile(profile);
                             startActivity(i);
+                        } else if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getTag().equals("ABOUT")) {
+                            startActivity(aboutIntent);
+
                         }
                         return false;
                     }
@@ -176,6 +159,9 @@ public class HomeActivity extends AppCompatActivity
                                 cart_count = 0;
                                 invalidateOptionsMenu();
                                 editor.clear().apply();
+                                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(HomeActivity.this,
+                                        MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+                                suggestions.clearHistory();
                                 Intent i = new Intent(HomeActivity.this, LoginActivity.class);
                                 startActivity(i);
                                 finish();
@@ -507,8 +493,14 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.home, menu);
 
         final MenuItem menuItem = menu.findItem(R.id.cart);
@@ -598,10 +590,12 @@ public class HomeActivity extends AppCompatActivity
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
+            suggestions.saveRecentQuery(query, null);
             Intent i = new Intent(this, SearchResultsActivity.class);
             i.putExtra("search_text", query);
             startActivity(i);
-            //use the query to search your data somehow
         }
     }
 

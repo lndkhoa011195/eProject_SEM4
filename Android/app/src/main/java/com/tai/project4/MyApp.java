@@ -3,6 +3,7 @@ package com.tai.project4;
 import android.app.Application;
 import android.os.SystemClock;
 
+
 public class MyApp extends Application {
 
     private static MyApp mInstance;

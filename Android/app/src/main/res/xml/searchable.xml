@@ -3,4 +3,8 @@
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:label="@string/app_name"
     android:hint="Search Products"
-    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer" />
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
+    android:voiceLanguage="en"
+    android:searchSuggestAuthority="com.tai.project4.util.MySuggestionProvider"
+    android:searchSuggestSelection=" ?"
+    android:searchSuggestThreshold="1"/>
