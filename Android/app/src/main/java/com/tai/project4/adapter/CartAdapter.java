@@ -16,7 +16,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-import com.tai.project4.Product;
+import com.tai.project4.models.Product;
 import com.tai.project4.R;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;

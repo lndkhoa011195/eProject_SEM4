@@ -2,12 +2,10 @@ package com.tai.project4;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +18,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
-import com.tai.project4.model.Account;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
 import com.tai.project4.models.StoreInfo;

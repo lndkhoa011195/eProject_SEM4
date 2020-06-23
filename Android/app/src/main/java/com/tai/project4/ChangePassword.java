@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
@@ -17,8 +18,7 @@ import android.widget.Toast;
 
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
-import com.tai.project4.model.Account;
-import com.tai.project4.model.ChangePass;
+import com.tai.project4.models.ChangePass;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
 
@@ -33,7 +33,6 @@ public class ChangePassword extends AppCompatActivity {
     public static final String PREFS = "PREFS";
     SharedPreferences sp;
     SharedPreferences.Editor edit;
-//    String oldPassword,newPassword , cpPassword;
     APIInterface apiInterface;
 
     @Override
@@ -41,6 +40,10 @@ public class ChangePassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
 
+        Toolbar toolbar = findViewById(R.id.mytoolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Change Password");
         tvOldPsw = findViewById(R.id.otp);
         tvNewPsw = findViewById(R.id.new_psw);
         tvConfPsw = findViewById(R.id.conf_psw);
@@ -81,7 +84,7 @@ public class ChangePassword extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);        // Specify any activity here e.g. home or splash or login etc
+                                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

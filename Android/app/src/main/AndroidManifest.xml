@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
-        android:name=".MyApp"
+        android:name=".MyAppActivity"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -55,7 +55,7 @@
         </receiver>
 
         <activity
-            android:name=".Splash"
+            android:name=".SplashActivity"
             android:noHistory="true"
             android:theme="@style/MyTheme.AppBarOverlay">
             <intent-filter>
@@ -80,7 +80,7 @@
         </activity>
         <activity android:name=".ProductDetailActivity" />
         <activity
-            android:name=".MyCart"
+            android:name=".MyCartActivity"
             android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -122,14 +122,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tai.project4.HomeActivity" />
         </activity>
-        <activity android:name=".ChangePassword" />
-        <activity android:name=".ChangeClientDetail" />
-        <activity
-            android:name=".CheckOutActivity"
-            android:parentActivityName=".MyCart">
+        <activity android:name=".ChangePassword"
+            android:parentActivityName=".ProfileActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.tai.project4.MyCart" />
+                android:value="com.tai.project4.ProfileActivity" />
+        </activity>
+        <activity android:name=".ChangeClientDetail"
+            android:parentActivityName=".ProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tai.project4.ProfileActivity" />
+        </activity>
+        <activity
+            android:name=".CheckOutActivity"
+            android:parentActivityName=".MyCartActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tai.project4.MyCartActivity" />
         </activity>
     </application>
 

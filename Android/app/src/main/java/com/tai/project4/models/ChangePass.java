@@ -1,4 +1,4 @@
-package com.tai.project4.model;
+package com.tai.project4.models;
 
 public class ChangePass {
     Integer customerId;

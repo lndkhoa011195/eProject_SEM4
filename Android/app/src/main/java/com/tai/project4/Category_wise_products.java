@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,21 +24,9 @@ import android.widget.ProgressBar;
 import com.tai.project4.adapter.ProductAdapter;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
+import com.tai.project4.models.Converter;
 import com.tai.project4.models.ProductResponse;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.List;
 
 import retrofit2.Call;
@@ -302,7 +289,7 @@ public class Category_wise_products extends AppCompatActivity implements AddorRe
         if (id == R.id.cart) {
 
             if (sp.getString("loginid", null) != null) {
-                Intent i = new Intent(this, MyCart.class);
+                Intent i = new Intent(this, MyCartActivity.class);
                 startActivity(i);
                 return true;
             } else {

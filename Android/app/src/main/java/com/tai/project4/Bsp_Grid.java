@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tai.project4.models.GridItem;
 
 import java.util.ArrayList;
 

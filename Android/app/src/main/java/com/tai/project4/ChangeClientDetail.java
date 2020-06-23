@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
-import com.tai.project4.model.Account;
+import com.tai.project4.models.Account;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
 import com.tai.project4.util.Helper;
@@ -36,6 +37,10 @@ public class ChangeClientDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_client_detail);
 
+        Toolbar toolbar = findViewById(R.id.mytoolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Update");
         sp = getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE);
         edit = sp.edit();
         etName = findViewById(R.id.name);

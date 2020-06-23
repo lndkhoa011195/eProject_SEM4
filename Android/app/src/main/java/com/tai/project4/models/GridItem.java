@@ -1,4 +1,4 @@
-package com.tai.project4;
+package com.tai.project4.models;
 
 public class GridItem {
     private String image;

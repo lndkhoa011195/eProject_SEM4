@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-import com.tai.project4.Product;
+import com.tai.project4.models.Product;
 import com.tai.project4.R;
 import com.tai.project4.models.CartResult;
 import com.tai.project4.util.NumberManager;

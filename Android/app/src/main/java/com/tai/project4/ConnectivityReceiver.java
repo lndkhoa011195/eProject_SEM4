@@ -17,7 +17,7 @@ public class ConnectivityReceiver
 
     public static boolean isConnected() {
         ConnectivityManager
-                cm = (ConnectivityManager) MyApp.getInstance().getApplicationContext()
+                cm = (ConnectivityManager) MyAppActivity.getInstance().getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null

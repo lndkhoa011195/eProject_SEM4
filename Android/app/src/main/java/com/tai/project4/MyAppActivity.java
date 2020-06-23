@@ -4,11 +4,11 @@ import android.app.Application;
 import android.os.SystemClock;
 
 
-public class MyApp extends Application {
+public class MyAppActivity extends Application {
 
-    private static MyApp mInstance;
+    private static MyAppActivity mInstance;
 
-    public static synchronized MyApp getInstance() {
+    public static synchronized MyAppActivity getInstance() {
         return mInstance;
     }
 

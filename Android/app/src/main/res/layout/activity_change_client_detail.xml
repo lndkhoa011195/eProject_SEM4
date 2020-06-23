@@ -10,18 +10,7 @@
     tools:context="com.tai.project4.RegisterActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center|top"
-        android:padding="13sp"
-        android:background="@color/colorBackgound"
-        android:text="Update"
-        android:textColor="@color/white"
-        android:textSize="23sp"
-        android:textStyle="bold" />
+    <include layout="@layout/toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"

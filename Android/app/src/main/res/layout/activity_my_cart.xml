@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.tai.project4.MyCart">
+    tools:context="com.tai.project4.MyCartActivity">
 
     <include layout="@layout/toolbar" />
 

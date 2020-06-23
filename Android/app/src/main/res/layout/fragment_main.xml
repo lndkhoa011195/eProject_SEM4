@@ -5,21 +5,29 @@
     android:orientation="vertical"
     tools:context=".MainFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/colorBackgound">
+        android:background="@color/colorBackgound"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:background="@drawable/ic_arrow_back_black"
             android:clickable="true"
             android:focusable="true" />
-    </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:text="Profile"
+            android:textSize="20dp"
+            android:textColor="@color/color_white"
+            android:gravity="center_horizontal" />
+    </RelativeLayout>
 
     <include layout="@layout/profile" />
 

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
-import com.tai.project4.model.Account;
+import com.tai.project4.models.Account;
 import com.tai.project4.models.RequestResult;
 import com.tai.project4.models.StatusCode;
 import com.tai.project4.util.Helper;

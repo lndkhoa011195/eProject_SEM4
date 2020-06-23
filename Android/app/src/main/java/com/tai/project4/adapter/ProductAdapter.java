@@ -20,10 +20,9 @@ import com.squareup.picasso.Picasso;
 import com.tai.project4.AddToCart;
 import com.tai.project4.AddorRemoveCallbacks;
 import com.tai.project4.LoginActivity;
-import com.tai.project4.Product;
+import com.tai.project4.models.Product;
 import com.tai.project4.R;
 import com.tai.project4.models.ProductResponse;
-import com.tai.project4.util.LoadingDialog;
 import com.tai.project4.util.NumberManager;
 
 import java.util.List;

@@ -1,7 +1,9 @@
-package com.tai.project4;
+package com.tai.project4.models;
 
 import android.content.Context;
 import android.content.Intent;
+
+import com.tai.project4.ProductDetailActivity;
 
 public class Product {
     public void startProductDetailActivity(String product_id, Context context) {

@@ -1,4 +1,4 @@
-package com.tai.project4;
+package com.tai.project4.models;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.tai.project4.R;
 
 public class Converter {
 

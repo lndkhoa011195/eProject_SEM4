@@ -15,7 +15,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Splash extends FragmentActivity {
+public class SplashActivity extends FragmentActivity {
     public static final String PREFS = "PREFS";
     SharedPreferences sp;
     private Animation animation;

@@ -60,7 +60,6 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 Intent i=new Intent(context,ChangeClientDetail.class);
                 startActivity(i);
-                getActivity().finish();
             }
         });
 

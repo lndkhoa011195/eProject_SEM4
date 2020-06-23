@@ -1,12 +1,8 @@
 package com.tai.project4;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,36 +15,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tai.project4.adapter.CartAdapter;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CartResult;
-import com.tai.project4.models.RequestResult;
-import com.tai.project4.models.StatusCode;
 import com.tai.project4.util.NumberManager;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyCart extends AppCompatActivity {
+public class MyCartActivity extends AppCompatActivity {
     public static final String PREFS = "PREFS";
     SharedPreferences sp;
     double savings = 0;
@@ -118,8 +98,8 @@ public class MyCart extends AppCompatActivity {
                     mProgressBar.setVisibility(View.GONE);
 
                     RecyclerView cart_item_recyclerview = findViewById(R.id.recyclerview_item_products);
-                    cart_item_recyclerview.setLayoutManager(new LinearLayoutManager(MyCart.this));
-                    cart_item_recyclerview.setAdapter(new CartAdapter(MyCart.this, cartResults, tvSavings, tvPayableAmt, MyCart.this));
+                    cart_item_recyclerview.setLayoutManager(new LinearLayoutManager(MyCartActivity.this));
+                    cart_item_recyclerview.setAdapter(new CartAdapter(MyCartActivity.this, cartResults, tvSavings, tvPayableAmt, MyCartActivity.this));
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                     empty.setVisibility(View.VISIBLE);
@@ -139,7 +119,7 @@ public class MyCart extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent checkOutIntent = new Intent(MyCart.this, CheckOutActivity.class);
+                Intent checkOutIntent = new Intent(MyCartActivity.this, CheckOutActivity.class);
                 startActivity(checkOutIntent);
             }
         });

@@ -45,6 +45,9 @@ import com.tai.project4.adapter.ProductAdapter;
 import com.tai.project4.interfaces.APIClient;
 import com.tai.project4.interfaces.APIInterface;
 import com.tai.project4.models.CategoryResult;
+import com.tai.project4.models.Converter;
+import com.tai.project4.models.GridItem;
+import com.tai.project4.models.Product;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
 import com.tai.project4.util.MySuggestionProvider;
@@ -152,7 +155,7 @@ public class HomeActivity extends AppCompatActivity
                                 startActivity(i);
 
                             } else if (drawerItem.getTag().toString().equals("MY_CART")) {
-                                Intent i = new Intent(HomeActivity.this, MyCart.class);
+                                Intent i = new Intent(HomeActivity.this, MyCartActivity.class);
                                 startActivity(i);
 
                             } else if (drawerItem.getTag().toString().equals("LOG_OUT")) {
@@ -544,7 +547,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.cart) {
 
             if (sp.getString("loginid", null) != null) {
-                Intent i = new Intent(this, MyCart.class);
+                Intent i = new Intent(this, MyCartActivity.class);
                 startActivity(i);
                 return true;
             } else {
