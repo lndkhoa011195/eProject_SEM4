@@ -1,13 +1,14 @@
 package com.tai.project4.interfaces;
 
 
-import com.tai.project4.model.Account;
-import com.tai.project4.model.ChangePass;
-import com.tai.project4.model.Login;
+
+import com.tai.project4.models.Account;
 import com.tai.project4.models.CartRequest;
 import com.tai.project4.models.CartResult;
 import com.tai.project4.models.CategoryResult;
+import com.tai.project4.models.ChangePass;
 import com.tai.project4.models.CheckOutRequest;
+import com.tai.project4.models.Login;
 import com.tai.project4.models.ProductResponse;
 import com.tai.project4.models.Promotion;
 import com.tai.project4.models.RequestResult;
