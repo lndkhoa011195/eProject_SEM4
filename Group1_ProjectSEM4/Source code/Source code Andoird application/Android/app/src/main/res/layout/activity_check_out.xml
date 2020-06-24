@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".CheckOutActivity">
+    <include layout="@layout/toolbar" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp">
+        <Switch
+            android:id="@+id/swLoadInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use my information"
+            android:switchPadding="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp">
+
+        <EditText
+            android:id="@+id/ShipName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/box"
+            android:drawablePadding="5sp"
+            android:drawableStart="@drawable/ic_person_black"
+            android:hint=" Receiver's Name"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:paddingBottom="10dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:maxLength="50"
+            android:textColor="@color/blue_grey" />
+
+
+
+        <EditText
+            android:id="@+id/ShipPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/box"
+            android:drawablePadding="5sp"
+            android:drawableStart="@drawable/ic_call_black"
+            android:hint=" Receiver's Phone"
+            android:imeOptions="actionUnspecified"
+            android:inputType="number"
+            android:maxLines="1"
+            android:paddingBottom="10dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:maxLength="20"
+            android:textColor="@color/blue_grey" />
+
+        <EditText
+            android:id="@+id/ShipAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/box"
+            android:drawablePadding="5sp"
+            android:drawableStart="@drawable/ic_home_black"
+            android:hint=" Receiver's Address"
+            android:imeOptions="actionUnspecified"
+            android:maxLines="1"
+            android:paddingBottom="10dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:maxLength="200"
+            android:textColor="@color/blue_grey" />
+        <EditText
+            android:id="@+id/ShipNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/box"
+            android:drawableStart="@drawable/ic_message_black"
+            android:drawablePadding="5sp"
+            android:hint=" Note"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="10dp"
+            android:paddingTop="9dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
+            android:singleLine="true"
+            android:maxLength="200"
+            android:textColor="@color/blue_grey" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <androidx.recyclerview.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/recyclerview_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_item"
+        android:layout_width="fill_parent"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:background="@color/holo_red_dark"
+        android:gravity="bottom|end">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:background="@drawable/box6"
+            android:baselineAligned="false"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:text="Total Savings : "
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/checkout_total_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView3"
+                app:layout_constraintStart_toStartOf="@+id/checkout_total_amount" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:text="Payable Amount : "
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/checkout_total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginStart="8dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+                app:layout_constraintStart_toEndOf="@+id/textView5" />
+
+            <Button
+                android:id="@+id/btnCheckOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/btn_background"
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/color_black_light"
+                android:text="Place Order"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</LinearLayout>

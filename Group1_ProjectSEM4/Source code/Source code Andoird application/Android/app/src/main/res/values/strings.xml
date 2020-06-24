@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HKTT Store</string>
+    <string name="store_address">Address: 590 Cach Mang Thang 8, District 3, Ho Chi Minh City, Viet Nam</string>
+    <string name="store_email">Email: support@hkttstore.com</string>
+    <string name="store_phone">Tel: 09123456789</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="cart">Cart</string>
+    <string name="title_activity_about">About us</string>
+
+</resources>

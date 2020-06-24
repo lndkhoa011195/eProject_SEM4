@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95ec5444-8319-48c6-ac86-59e54e4b60ed">
+	<property name="ireport.zoom" value="3.1384283767210035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[select top 10 Customer.Name, Customer.Email, Customer.Phone, COUNT(*) as TotalOrders
+from Orders,  Customer
+where Orders.Status != 0
+and Orders.CustomerId = Customer.Id
+group by Customer.Name, Customer.Email, Customer.Phone
+Order by TotalOrders desc]]>
+	</queryString>
+	<field name="Name" class="java.lang.String"/>
+	<field name="Email" class="java.lang.String"/>
+	<field name="Phone" class="java.lang.String"/>
+	<field name="TotalOrders" class="java.lang.Integer"/>
+	<variable name="Sum" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{TotalOrders}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="552" height="95" backcolor="#FFFFFF" uuid="7b371c59-2206-49f8-9fe8-e78daea03ea8"/>
+				<staticText>
+					<reportElement x="72" y="0" width="127" height="28" uuid="7103a3f3-8d6c-4188-a427-34e59087949e"/>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<text><![CDATA[HKTT Store]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="72" y="28" width="352" height="12" uuid="1114ccf3-0c4b-442f-9413-dfeebdd8a01d"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Address: 590 Cach Mang Thang 8, District 3, Ho Chi Minh City]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="72" y="40" width="100" height="12" uuid="173f586a-8ea0-4c58-a3f3-6f2d5c318755"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Tel: 09123456789]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Title" x="2" y="52" width="550" height="33" forecolor="#000000" uuid="9b75e7e7-2152-4556-a2e6-30585996dab5"/>
+					<textElement textAlignment="Center">
+						<font size="24" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOP 10 BUYERS]]></text>
+				</staticText>
+				<image>
+					<reportElement x="2" y="0" width="68" height="42" uuid="01e96bb0-0068-48cc-b66d-b12c5387227b"/>
+					<imageExpression><![CDATA["C:\\Users\\ASUS\\Desktop\\HTKKStoreAdmin2206Ver2\\HTKKStoreAdmin\\src\\main\\webapp\\report\\icon.png"]]></imageExpression>
+				</image>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="100" width="552" height="32" forecolor="#000000" backcolor="#0B7542" uuid="82eac881-7fc3-44cb-8fe8-68b914328a45"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="398" y="12" width="144" height="20" forecolor="#FFFFFF" uuid="318cb8bd-dbb0-42d9-8baf-e134ecba682b"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="0" y="7" width="138" height="18" forecolor="#000000" uuid="4a984078-534b-4289-bf39-dd5513f4b1b4"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="138" y="7" width="138" height="18" forecolor="#000000" uuid="32e532c1-df82-4495-9773-99c3be860711"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="276" y="7" width="138" height="18" forecolor="#000000" uuid="766b5ad8-263b-489c-926a-39b62c55c385"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Phone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="414" y="7" width="138" height="18" forecolor="#000000" uuid="71b8756c-5494-4682-a64c-98a5f23f3c5d"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[TotalOrders]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="18" uuid="ae42778c-23c6-405c-8faf-35332bbe337c"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" positionType="Float" x="0" y="0" width="138" height="18" uuid="90620a59-c048-4347-82b8-838d951d6d53"/>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" positionType="Float" x="138" y="0" width="138" height="18" uuid="67c3d2f3-6e57-4152-8451-4f6b772f2c9a"/>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Email}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" positionType="Float" x="276" y="0" width="138" height="18" uuid="1b98fe20-d9a8-451b-aea7-ed2f1d4d6b3b"/>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Phone}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" positionType="Float" x="414" y="0" width="138" height="18" uuid="dc35c5fb-c06d-4185-b399-7c4f336be6cd"/>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TotalOrders}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="bf36f6a1-a644-451b-ab4e-d9a77f973f72"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="1" width="555" height="24" forecolor="#D0B48E" backcolor="#000000" uuid="02b121ef-e00c-4d89-8148-e26a4a6e963c"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="513" y="0" width="40" height="20" forecolor="#FFFFFF" uuid="8712b1d3-1b51-435c-be4b-e7f963a75fb4"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="433" y="0" width="80" height="20" forecolor="#FFFFFF" uuid="72efe602-c265-4ab4-b7b2-72abfafc5df9"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="1" width="197" height="20" forecolor="#FFFFFF" uuid="f151be42-13c6-4f88-a99d-970433e82412"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="350" y="5" width="74" height="20" uuid="ada0730d-0d70-45d1-8696-2ae9364b6a67"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Sum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="333" y="5" width="35" height="20" uuid="2a46c3e9-6c89-4a49-934a-8db6014216d8"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
